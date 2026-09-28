@@ -124,7 +124,7 @@ function Table({ tableRow, tableCol, minHeight = "390px", HeaderPY }: TableProps
               {tableCol.map((col: any, index: number) => (
                 <th
                   key={String(col.key)}
-                  className={` ${HeaderPY ? HeaderPY : "py-3"} text-base font-bold text-sky-800 px-2
+                  className={` ${HeaderPY ? HeaderPY : "py-3"} text-sm font-bold text-neutral-800 px-2
                    ${col.width} ${index === 0 && "pr-3"} ${index === 6 && "pl-3"
                     }`}
                 >

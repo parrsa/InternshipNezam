@@ -10,7 +10,7 @@ function RequstTracking() {
         <div>
 
 
-            <div className="w-[97%] flex flex-col gap-2 mt-2  px-5 p-2 pt-7  rounded-2xl border-2  shadow-xs border-neutral-200  bg-white  mx-auto">
+            <div className="w-[97%] flex flex-col gap-2  rounded-2xl border-2  shadow-xs border-neutral-200  bg-white mt-2 px-5 p-2 pt-7  mx-auto">
                 <HeaderPart />
                 <StepsPart />
             </div>
