@@ -127,7 +127,7 @@ export const USER_MENU: UserMenuItem[] = [
     icon: UserPlus,
   },
   {
-    label: "پیگیری درخواست",
+    label: "پیگیری درخواست کارآموزی ",
     href: "/users/request-tracking",
     icon: FileText,
     tag: "فعال", 
