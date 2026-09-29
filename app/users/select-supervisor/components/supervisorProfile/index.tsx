@@ -108,7 +108,7 @@ export function SupervisorProfileModal({
         },
     ];
 
-    const tableRow = projects.map((p) => ({ ...p, _rowClassName: "odd:bg-white" }));
+    const tableRow = projects.map((p) => ({ ...p, _rowClassName: "odd:bg-white " }));
 
     const header = (
         <div className="flex items-center gap-4 py-1">
