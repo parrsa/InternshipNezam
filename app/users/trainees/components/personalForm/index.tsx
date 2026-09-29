@@ -126,8 +126,6 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <Input
-
-
                         labelClassName={labelClassName}
                         className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
 
