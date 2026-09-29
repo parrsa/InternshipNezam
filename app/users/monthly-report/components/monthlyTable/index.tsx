@@ -100,7 +100,7 @@ function MonthlyTable() {
                     variant="solid"
                     color="input"
                     rounded="lg"
-                    leftIcon={<Plus size={12} />}
+                    leftIcon={<Plus size={19} />}
                     textSize="xs"
                     className={cn(
                         "h-9  py-0"
