@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Input } from "@/app/components/ui/input";
@@ -83,7 +82,7 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                     <h3 className="text-s font-bold text-gray-800">اطلاعات شخصی</h3>
                 </div>
 
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+                <span className="rounded-full bg-gray-100 px-2 py-1 text-2xs border border-neutral-400 font-medium text-gray-600">
                     الزامی
                 </span>
             </div>
@@ -109,11 +108,8 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                     </div>
                     <div className="w-[35%]">
                         <Input
-
                             labelClassName={labelClassName}
-
                             className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
-
                             variant="default"
                             inputSize="sm"
                             name="membershipNumber"

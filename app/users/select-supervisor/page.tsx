@@ -5,6 +5,7 @@
 import { useMemo, useState } from "react";
 import { Supervisor, SupervisorCard } from "./components/supervisorCard";
 import { SupervisorFilterBar } from "./components/supervisorFilterBar";
+import { SendRequestBanner } from "./components/sendRequstBanner";
 
 
 
@@ -85,7 +86,7 @@ export default function SupervisorParent() {
     setSelectedId((prev) => (prev === id ? null : id));
 
   return (
-    <div  className="flex w-full flex-col gap-6 p-4">
+    <div className="flex w-full flex-col gap-6 p-4">
       <SupervisorFilterBar
         selectedName={selected?.name}
         fieldValue={field}
@@ -103,6 +104,9 @@ export default function SupervisorParent() {
           />
         ))}
       </div>
+
+      <SendRequestBanner />
+      
     </div>
   );
 }

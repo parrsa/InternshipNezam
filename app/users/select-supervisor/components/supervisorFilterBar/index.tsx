@@ -1,8 +1,8 @@
 "use client";
 import { Search } from "lucide-react";
-import { SelectOption } from "@/app/components/ui/input/SelectSilde";
-import { Input, Select } from "@/app/components/ui/input";
+import { Select, SelectOption } from "@/app/components/ui/input/SelectSilde";
 import { useState } from "react";
+import { Input } from "@/app/components/ui/input";
 
 
 interface SupervisorFilterBarProps {
@@ -23,7 +23,7 @@ export function SupervisorFilterBar({ selectedName, fieldValue, fieldOptions, on
 
   return (
     <div className="flex w-full flex-col gap-5">
-   
+
       <div className="flex w-full items-center justify-between gap-4 rounded-xl border-r-4 border-orange-500 bg-[#FFFBEA] px-5 py-2">
         <p className="text-xs text-gray-700">
           برای ارسال درخواست به سازمان، باید یک سرپرست انتخاب کنید. سرپرست انتخاب‌شده درخواست شما را بررسی و در صورت تأیید، به سازمان ارسال می‌کند.
@@ -35,25 +35,30 @@ export function SupervisorFilterBar({ selectedName, fieldValue, fieldOptions, on
         )}
       </div>
 
-      <div className="flex w-full items-center gap-3">
+      <div className="flex w-1/2 items-center gap-3">
         <div className="flex-1">
           <Input
-            variant="outline"
-            rounded="lg"
-            placeholder="جستجوی سرپرست بر اساس نام یا رشته..."
-            rightIcon={<Search size={18} className="text-gray-600" />}
-            className="h-11 border-gray-200 bg-[#FCFBF8] text-sm text-gray-700"
+            variant="default"
+            color="input"
+            inputSize="sm"
+            placeholder=" جستجوی سرپرست بر اساس نام یا رشته "
+            className=" mt-2 w-full border-none border-neutral-200 border  shadow-xs bg-neutral-50  placeholder:text-neutral-500   placeholder:text-xs "
+            rightIcon={
+              <Search size={18}
+                className=" mt-2 text-neutral-500"
+              />
+            }
           />
-        </div>
 
-        <div className="">
+        </div>
+        
+        <div className="mt-2">
           <Select
             placeholder="همه رشته ها"
-
             options={gradeOptions}
             value={grade}
             onChange={setGrade as any}
-            className=" h-11 w-30 text-nowrap text-s border-gray-200 bg-[#FCFBF8]"
+            className=" h-9 w-40 text-nowrap text-2xs  border-gray-200 bg-[#FCFBF8]"
           />
         </div>
       </div>

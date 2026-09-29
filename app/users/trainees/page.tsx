@@ -11,7 +11,6 @@ function Trainees() {
             <EducationInfo/>
             <LicenseStatus/>
             <CommitmentAgreement
-
             />
         </div>
     );

@@ -2,7 +2,7 @@
 
 import { Button } from "@/app/components/ui/Button";
 import { cn } from "@/lib/cn";
-import * as React from "react";
+import { useState } from "react";
 
 
 interface CommitmentAgreementProps {
@@ -22,7 +22,7 @@ export function CommitmentAgreement({
   onSubmit,
   onSaveDraft,
 }: CommitmentAgreementProps) {
-  const [accepted, setAccepted] = React.useState(false);
+  const [accepted, setAccepted] = useState(false);
 
   return (
     <div

@@ -111,7 +111,6 @@ function Briefing() {
 
                             {session.status === "upcoming" && (
 
-
                                 <Button
                                     leftIcon={
                                         <CheckCircle2 size={18} strokeWidth={1.75} />

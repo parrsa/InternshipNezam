@@ -2,6 +2,8 @@
 import { Star, Eye, UserCheck, CircleCheck, Building2 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { Button } from "@/app/components/ui/Button";
+import { useState } from "react";
+import { SupervisorProfileModal } from "../supervisorProfile";
 
 export interface Supervisor {
   id: string;
@@ -32,6 +34,9 @@ export function SupervisorCard({
   onSelect,
   onViewProfile,
 }: SupervisorCardProps) {
+
+  const [profileOpen, setProfileOpen] = useState(false);
+
   const isLegal = s.type === "legal";
 
   return (
@@ -98,7 +103,8 @@ export function SupervisorCard({
           variant="outline"
           color="input"
           leftIcon={<Eye size={18} />}
-          onClick={() => onViewProfile?.(s.id)}
+          onClick={() => { setProfileOpen(true); onViewProfile?.(s.id); }}
+
           className="h-9 flex-1 border-gray-200 bg-[#FDFCF8] py-0 font-semibold text-gray-900 hover:border-gray-300 hover:bg-gray-50"
           textSize="xs"
         >
@@ -121,6 +127,15 @@ export function SupervisorCard({
           {active ? "انتخاب شد" : "انتخاب سرپرست"}
         </Button>
       </div>
+
+      <SupervisorProfileModal
+        supervisor={s}
+        isOpen={profileOpen}
+        active={active}
+        onClose={() => setProfileOpen(false)}
+        onSelect={onSelect}
+      />
+
     </div>
   );
 }
