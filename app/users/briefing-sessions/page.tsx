@@ -54,7 +54,6 @@ const statusConfig: Record<Status, { label: string; className: string }> = {
 function Briefing() {
     return (
         <div
-            dir="rtl"
             className="w-full flex flex-col gap-5 px-5 p-2 items-center justify-center"
         >
             <div className="w-full rounded-xl border-r-4 border-input-500 bg-blue-50 px-5 py-2 text-xs leading-6 text-input-900">
