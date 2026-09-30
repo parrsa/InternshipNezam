@@ -218,7 +218,7 @@ export const ADMIN_MENU: OrgMenuItem[] = [
   },
   {
     label: "درخواست های کارآموزی",
-    href: "/supervisor/courses",
+    href: "/supervisor/interns-request",
     icon: BookOpen,
     badge: 2,
   },
