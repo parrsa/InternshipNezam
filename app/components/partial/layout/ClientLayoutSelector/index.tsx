@@ -810,8 +810,8 @@ export default function ClientLayoutSelector({
   }
 
   const isAdminRoute =
-    pathname === "/admin" ||
-    pathname.startsWith("/admin/");
+    pathname === "/supervisor" ||
+    pathname.startsWith("/supervisor/");
 
   if (isAdminRoute) {
     return (

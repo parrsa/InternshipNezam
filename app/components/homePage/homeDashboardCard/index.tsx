@@ -70,7 +70,7 @@ const CARDS: DashboardCard[] = [
     description:
       "۷ نمای تعاملی شامل درخواست‌ها، کارآموزان، گزارش‌های ماهانه و نهایی، تنظیمات ظرفیت",
     icon: UserCog,
-    href: "/admin",
+    href: "/supervisor",
     tags: ["Approvals", "Capacity", "Reports"],
     viewLabel: "view ۷",
     theme: {
