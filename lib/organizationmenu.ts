@@ -229,12 +229,12 @@ export const ADMIN_MENU: OrgMenuItem[] = [
   },
   {
     label: "گزارش های ماهانه",
-    href: "/supervisor/performance",
+    href: "/supervisor/monthly-report",
     icon: TrendingUp,
   },
   {
     label: "گزارش های نهایی",
-    href: "/supervisor/certificates",
+    href: "/supervisor/final-report",
     icon: Award,
     badge: 3,
   },
