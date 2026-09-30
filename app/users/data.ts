@@ -28,7 +28,7 @@ export type MessageItem = {
 
 export const statCards: StatCard[] = [
 
- 
+
   {
     title: "گواهی‌ها",
     value: "۳",

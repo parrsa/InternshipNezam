@@ -4,9 +4,7 @@ import { Input } from "@/app/components/ui/input/Input";
 import { Select } from "@/app/components/ui/input/SelectSilde";
 
 const supervisorOptions = [
-    { label: "دکتر احمدی", value: "ahmadi" },
     { label: "مهندس رضایی", value: "rezaei" },
-    { label: "دکتر محمدی", value: "mohammadi" },
     { label: "مهندس کریمی", value: "karimi" },
 ];
 
