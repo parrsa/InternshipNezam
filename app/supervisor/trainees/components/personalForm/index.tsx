@@ -8,6 +8,7 @@ import { Button } from "@/app/components/ui/Button";
 import EducationInfo from "../educationInfo";
 import LicenseStatus from "../licenseStatus";
 import CommitmentAgreement from "../commitmentAgreement";
+import RegistrationCOnditions from "../RegistrationConditions";
 
 
 const user = {
@@ -262,6 +263,7 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
                         </div>
                         <EducationInfo />
                         <LicenseStatus />
+                        <RegistrationCOnditions />
                         <CommitmentAgreement />
                     </Form>
                 );
