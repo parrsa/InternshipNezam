@@ -49,6 +49,9 @@ export default function Supervisor() {
                 <p className="text-neutral-500 text-xs font-medium">خلاصه فعالیت‌های سرپرستی</p>
             </div>
         )
+        return () => {
+            setAction(null)
+        }
     }, [])
     return (
         <div className="w-full px-4">

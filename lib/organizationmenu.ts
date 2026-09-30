@@ -224,7 +224,7 @@ export const ADMIN_MENU: OrgMenuItem[] = [
   },
   {
     label: "کارآموزان",
-    href: "/supervisor/reports",
+    href: "/supervisor/apprentices",
     icon: FileBarChart,
   },
   {

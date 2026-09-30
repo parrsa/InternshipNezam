@@ -1,6 +1,8 @@
 'use client'
 import Table from "@/app/components/ui/Table"
+import { useHeaderAction } from "@/core/provider/HeaderActionProvider/HeaderAction"
 import { CircleCheck } from "lucide-react"
+import { useEffect } from "react"
 
 const infoData = [
     {
@@ -69,6 +71,7 @@ const HandelStatus = (status: any) => {
 }
 
 export default function MonthlyReport() {
+    const { setAction } = useHeaderAction()
 
     const tabelCols = [
         {
@@ -125,6 +128,18 @@ export default function MonthlyReport() {
         },
 
     ]
+    useEffect(() => {
+        setAction(
+            <div className="text-sm flex justify-start items-start flex-col gap-1">
+                <p className="text-black font-bold ">گزارش‌های ماهانه</p>
+                <p className="text-neutral-500 text-xs font-medium">بازبینی و تأیید گزارش‌ها</p>
+            </div>
+        )
+        return () => {
+            setAction(null)
+        }
+    }, [])
+
     return (
         <div className="p-4">
             <div className="w-full grid grid-cols-3 grid-rows-[150px] gap-4">
