@@ -51,7 +51,7 @@ interface CourseCardProps {
 const categoryStyles: Record<CourseCategory, string> = {
     نظری: "border-blue-600 bg-blue-100 text-blue-900",
     مهارتی: "border-blue-600 bg-blue-100 text-blue-900",
-    "بازدید پروژه": "border-emerald-200 bg-emerald-50 text-emerald-600",
+    "بازدید پروژه": "border-emerald-200 bg-emerald-100 text-emerald-900",
     حقوق: "border-amber-600 bg-orange-100 text-amber-900",
 };
 
@@ -145,7 +145,7 @@ function CourseCard({
                     />
                 </div>
 
-                <div dir="ltr" className="mt-5 flex items-center justify-between gap-3">
+                <div dir="ltr" className="mt-3 flex items-center justify-between gap-3">
                     {course.isRegistered ? (
                         <Button
                             type="button"

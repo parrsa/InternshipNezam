@@ -80,12 +80,12 @@ function CourseRegistrationModal({
                 </div>
 
                 <div
-                    className="mt-5 gap-2 flex flex-col rounded-xl border border-emerald-300 bg-emerald-50/60 px-4 py-4"
+                    className="mt-5 gap-2 flex flex-col rounded-lg border border-emerald-300 bg-emerald-50/80 px-4 py-3"
                 >
                     <span className="text-2xs text-green-900">
                         مبلغ قابل پرداخت
                     </span>
-                    <div className="flex items-center gap-2 text-sm font-bold text-emerald-600">
+                    <div className="flex items-center gap-2 text-sm font-bold text-emerald-800">
                         {course.isFree
                             ? "رایگان (کارآموز فعال)"
                             : course.price}

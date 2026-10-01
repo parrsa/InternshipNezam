@@ -54,6 +54,20 @@ const coursesData: Course[] = [
     },
 
     {
+        id: 4,
+        title: "بازدید برج پارسیان",
+        category: "بازدید پروژه",
+        status: "active",
+        date: "۱۴۰۵/۰۵/۲۵",
+        duration: "۴ ساعت",
+        participants: "۱۵ نفر",
+        description:
+            "بازدید فنی از پروژه برج پارسیان (۳۰ طبقه) با کالبدشکافی ایمنی و کفش کار، آشنایی با فرآیند اجرای اسکلت فولادی و سیستم جانبی.",
+        registered: 8,
+        capacity: 15,
+        price: "۵۰۰,۰۰۰ تومان",
+    },
+    {
         id: 3,
         title: "ایمنی کارگاه",
         category: "نظری",
@@ -69,20 +83,6 @@ const coursesData: Course[] = [
         isFree: true,
     },
 
-    {
-        id: 4,
-        title: "بازدید برج پارسیان",
-        category: "بازدید پروژه",
-        status: "active",
-        date: "۱۴۰۵/۰۵/۲۵",
-        duration: "۴ ساعت",
-        participants: "۱۵ نفر",
-        description:
-            "بازدید فنی از پروژه برج پارسیان (۳۰ طبقه) با کالبدشکافی ایمنی و کفش کار، آشنایی با فرآیند اجرای اسکلت فولادی و سیستم جانبی.",
-        registered: 8,
-        capacity: 15,
-        price: "۵۰۰,۰۰۰ تومان",
-    },
 ];
 
 const tabs: {
@@ -163,7 +163,6 @@ function MyCourses() {
 
     const filteredCourses = useMemo(() => {
         const normalizedSearch = search
-            .trim()
             .toLocaleLowerCase("fa-IR");
 
         return courses.filter((course) => {
