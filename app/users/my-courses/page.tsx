@@ -244,7 +244,6 @@ function MyCourses() {
           lg:justify-between
         "
             >
-                {/* Filters */}
                 <div
                     className="
             flex
@@ -310,14 +309,9 @@ function MyCourses() {
                 </div>
             </div>
 
-            {/* =======================
-          Statistics
-      ======================== */}
             <DashboardStatCards cards={stats} />
 
-            {/* =======================
-          Courses
-      ======================== */}
+         
             {filteredCourses.length > 0 ? (
                 <div
                     className="
@@ -363,9 +357,6 @@ function MyCourses() {
                 </div>
             )}
 
-            {/* =======================
-          Registration Modal
-      ======================== */}
             <CourseRegistrationModal
                 isOpen={isRegisterModalOpen}
                 course={selectedCourse}

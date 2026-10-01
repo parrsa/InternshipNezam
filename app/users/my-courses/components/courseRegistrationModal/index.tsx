@@ -2,104 +2,100 @@
 
 import React from "react";
 import {
-  CalendarDays,
-  Clock3,
-  MapPin,
-  CheckCircle2,
+    CalendarDays,
+    Clock3,
+    MapPin,
+    CheckCircle2,
 } from "lucide-react";
 import { Course } from "../coursesCards";
 import Modal from "@/app/components/ui/Modal";
 import { CustomCheckbox } from "@/app/components/ui/input/Checkbox";
+import { Button } from "@/app/components/ui/Button";
 
 
 
 interface CourseRegistrationModalProps {
-  isOpen: boolean;
-  course: Course | null;
-  onClose: () => void;
-  onConfirm: () => void;
+    isOpen: boolean;
+    course: Course | null;
+    onClose: () => void;
+    onConfirm: () => void;
 }
 
 function CourseRegistrationModal({
-  isOpen,
-  course,
-  onClose,
-  onConfirm,
+    isOpen,
+    course,
+    onClose,
+    onConfirm,
 }: CourseRegistrationModalProps) {
-  const [accepted, setAccepted] = React.useState(false);
+    const [accepted, setAccepted] = React.useState(false);
 
-  React.useEffect(() => {
-    if (!isOpen) {
-      setAccepted(false);
-    }
-  }, [isOpen]);
+    React.useEffect(() => {
+        if (!isOpen) {
+            setAccepted(false);
+        }
+    }, [isOpen]);
 
-  if (!course) return null;
+    if (!course) return null;
 
-  return (
-    <Modal
-      isOpen={isOpen}
-      closeModal={onClose}
-      title="تایید ثبت‌نام در دوره/بازدید"
-      size="lg"
-      className="max-w-[600px]"
-    >
-      <div
-        dir="rtl"
-        className="flex flex-col"
-      >
-        {/* Description */}
-        <p className="text-sm leading-7 text-slate-500">
-          قبل از ادامه، اطلاعات دوره را بررسی کرده و
-          شرایط را بپذیرید.
-        </p>
+    return (
+        <Modal
+            isOpen={isOpen}
+            title="تایید ثبت‌نام در دوره/بازدید"
+            closeModal={onClose}
+            size="lg"
+        >
+            <div
+                dir="rtl"
+                className="flex flex-col"
+            >
+                <p className="text-xs text-slate-700">
+                    قبل از ادامه، اطلاعات دوره را بررسی کرده و
+                    شرایط را بپذیرید.
+                </p>
 
-        {/* Course title */}
-        <h2
-          className="
+                <h2
+                    className="
             mt-5
             text-right
-            text-lg
+            text-s
             font-bold
             text-slate-900
           "
-        >
-          {course.title}
-        </h2>
+                >
+                    {course.title}
+                </h2>
 
-        {/* Course meta */}
-        <div
-          className="
+                <div
+                    className="
             mt-4
             grid
             grid-cols-1
             gap-4
             sm:grid-cols-3
           "
-        >
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <CalendarDays size={17} />
-            <span>{course.date}</span>
-          </div>
+                >
+                    <div className="flex items-center gap-2 text-2xs text-slate-500">
+                        <CalendarDays size={14} />
+                        <span>{course.date}</span>
+                    </div>
 
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <Clock3 size={17} />
-            <span>{course.duration}</span>
-          </div>
+                    <div className="flex items-center gap-2 text-2xs text-slate-500">
+                        <Clock3 size={14} />
+                        <span>{course.duration}</span>
+                    </div>
 
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <MapPin size={17} />
-            <span>سالن اجتماعات سازمان</span>
-          </div>
-        </div>
+                    <div className="flex items-center gap-2 text-2xs text-slate-500">
+                        <MapPin size={14} />
+                        <span>سالن اجتماعات سازمان</span>
+                    </div>
+                </div>
 
-        {/* Price */}
-        <div
-          className="
+                <div
+                    className="
             mt-5
+            gap-2
             flex
-            items-center
-            justify-between
+            flex-col
             rounded-xl
             border
             border-emerald-300
@@ -107,82 +103,72 @@ function CourseRegistrationModal({
             px-4
             py-4
           "
-        >
-          <span className="text-sm text-slate-600">
-            مبلغ قابل پرداخت
-          </span>
+                >
+                    <span className="text-2xs text-green-900">
+                        مبلغ قابل پرداخت
+                    </span>
+                    <div className="flex items-center gap-2 text-base font-bold text-emerald-600">
+                        {course.isFree
+                            ? "رایگان (کارآموز فعال)"
+                            : course.price}
+                        <CheckCircle2 size={17} />
+                    </div>
 
-          <div className="flex items-center gap-2 text-base font-bold text-emerald-600">
-            <CheckCircle2 size={19} />
-            {course.isFree
-              ? "رایگان (کارآموز فعال)"
-              : course.price}
-          </div>
-        </div>
+                </div>
 
-        {/* Agreement */}
-        <div className="mt-5">
-          <CustomCheckbox
-            checked={accepted}
-            onChange={setAccepted}
-            label="با شرایط ثبت‌نام و الزامات دوره/بازدید موافقت می‌کنم."
-            LableClassName="text-sm font-medium text-slate-700"
-            className="gap-3"
-          />
-        </div>
+                <div className="mt-5">
+                    <CustomCheckbox
+                        checked={accepted}
+                        onChange={setAccepted}
+                        label="با شرایط ثبت‌نام و الزامات دوره/بازدید موافقت می‌کنم."
+                        LableClassName="text-xs font-semibold text-slate-900"
+                        className="gap-2 "
+                    />
+                </div>
 
-        {/* Actions */}
-        <div
-          className="
+                <div
+                    className="
             mt-6
             flex
             items-center
-            justify-start
+            justify-end
             gap-3
           "
-        >
-          <button
-            type="button"
-            onClick={onConfirm}
-            disabled={!accepted}
-            className="
-              h-10
-              rounded-lg
-              bg-[#1645b5]
-              px-5
-              text-sm
-              font-semibold
-              text-white
-              transition-all
-              disabled:cursor-not-allowed
-              disabled:bg-[#9db1df]
-              hover:bg-[#123b9d]
-              disabled:hover:bg-[#9db1df]
-            "
-          >
-            ثبت‌نام
-          </button>
+                >
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="
-              h-10
-              rounded-lg
-              px-4
-              text-sm
-              font-medium
-              text-slate-700
-              transition-colors
-              hover:bg-slate-100
-            "
-          >
-            انصراف
-          </button>
-        </div>
-      </div>
-    </Modal>
-  );
+                    <Button
+                        type="button"
+                        variant="solid"
+                        color="input"
+                        size="xs"
+                        rounded="lg"
+                        onClick={onConfirm}
+                        disabled={!accepted}
+                        className="
+                                    h-8
+                                    items-center
+                                    justify-center
+                                    rounded-lg
+                                    px-4
+                                    text-xs
+                                    font-semibold
+                                  "
+                    >
+                        ثبت‌نام
+                    </Button>
+
+
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="  h-10  rounded-lg  px-3   text-xs font-medium  text-slate-700 transition-colors  hover:bg-teal-100"
+                    >
+                        انصراف
+                    </button>
+                </div>
+            </div>
+        </Modal>
+    );
 }
 
 export default CourseRegistrationModal;

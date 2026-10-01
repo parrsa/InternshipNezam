@@ -2,281 +2,273 @@
 
 import React from "react";
 import {
-  CalendarDays,
-  Clock3,
-  UsersRound,
-  CheckCircle2,
-  CreditCard,
+    CalendarDays,
+    Clock3,
+    UsersRound,
+    CheckCircle2,
+    CreditCard,
 } from "lucide-react";
+import { Button } from "@/app/components/ui/Button";
 
 export type CourseCategory =
-  | "نظری"
-  | "مهارتی"
-  | "بازدید پروژه"
-  | "حقوق";
+    | "نظری"
+    | "مهارتی"
+    | "بازدید پروژه"
+    | "حقوق";
 
 export type CourseStatus =
-  | "active"
-  | "waiting"
-  | "registered";
+    | "active"
+    | "waiting"
+    | "registered";
 
 export interface Course {
-  id: number;
-  title: string;
-  category: CourseCategory;
-  status: CourseStatus;
+    id: number;
+    title: string;
+    category: CourseCategory;
+    status: CourseStatus;
 
-  date: string;
-  duration: string;
-  participants: string;
+    date: string;
+    duration: string;
+    participants: string;
 
-  description: string;
+    description: string;
 
-  registered: number;
-  capacity: number;
+    registered: number;
+    capacity: number;
 
-  price: string;
+    price: string;
 
-  isRegistered?: boolean;
-  isFree?: boolean;
+    isRegistered?: boolean;
+    isFree?: boolean;
 }
 
 interface CourseCardProps {
-  course: Course;
-  onRegister: (course: Course) => void;
+    course: Course;
+    onRegister: (course: Course) => void;
 }
 
 const categoryStyles: Record<CourseCategory, string> = {
-  نظری: "border-blue-200 bg-blue-50 text-blue-600",
-  مهارتی: "border-blue-200 bg-blue-50 text-blue-600",
-  "بازدید پروژه": "border-emerald-200 bg-emerald-50 text-emerald-600",
-  حقوق: "border-amber-200 bg-amber-50 text-amber-600",
+    نظری: "border-blue-600 bg-blue-100 text-blue-900",
+    مهارتی: "border-blue-600 bg-blue-100 text-blue-900",
+    "بازدید پروژه": "border-emerald-200 bg-emerald-50 text-emerald-600",
+    حقوق: "border-amber-600 bg-orange-100 text-amber-900",
 };
 
 const statusStyles: Record<CourseStatus, string> = {
-  active: "border-emerald-200 bg-emerald-50 text-emerald-600",
-  waiting: "border-amber-200 bg-amber-50 text-amber-600",
-  registered: "border-emerald-200 bg-emerald-50 text-emerald-600",
+    active: "border-emerald-600 bg-emerald-100 text-emerald-900",
+    waiting: "border-amber-200 bg-orange-100 text-amber-900",
+    registered: "border-emerald-200 bg-emerald-50 text-emerald-600",
 };
 
 function CourseCard({
-  course,
-  onRegister,
+    course,
+    onRegister,
 }: CourseCardProps) {
-  const percentage = Math.round(
-    (course.registered / course.capacity) * 100
-  );
+    const percentage = Math.round(
+        (course.registered / course.capacity) * 100
+    );
 
-  const isFull = course.registered >= course.capacity;
+    const isFull = course.registered >= course.capacity;
 
-  return (
-    <article
-      dir="rtl"
-      className="
-        group
+    return (
+        <article
+            dir="rtl"
+            className="
         flex
-        min-h-[347px]
         flex-col
         rounded-2xl
         border
         border-slate-200
         bg-white
         px-5
-        py-4
+        py-11
         shadow-sm
         transition-all
-        duration-200
-        hover:-translate-y-[1px]
+        duration-500
         hover:shadow-md
       "
-    >
-      {/* Header */}
-      <div className="flex items-start justify-between gap-3">
-        <span
-          className={`
-            inline-flex
+        >
+            <div className="flex items-start justify-between gap-3">
+                <span
+                    className={`
             items-center
             rounded-full
             border
-            px-3
-            py-1
-            text-xs
+            px-1.5
+            py-0.5
+            text-2xs
             font-medium
             ${categoryStyles[course.category]}
           `}
-        >
-          {course.category}
-        </span>
+                >
+                    {course.category}
+                </span>
 
-        <span
-          className={`
+                <span
+                    className={`
             inline-flex
             items-center
             rounded-full
             border
-            px-3
-            py-1
-            text-xs
+            px-2
+            py-0.5
+            text-2xs
             font-medium
             ${statusStyles[course.status]}
           `}
-        >
-          {course.status === "registered"
-            ? "ثبت‌نام شده"
-            : course.status === "waiting"
-              ? "در انتظار"
-              : "فعال"}
-        </span>
-      </div>
+                >
+                    {course.status === "registered"
+                        ? "ثبت‌نام شده"
+                        : course.status === "waiting"
+                            ? "در انتظار"
+                            : "فعال"}
+                </span>
+            </div>
 
-      {/* Title */}
-      <h2
-        className="
-          mt-6
-          text-[20px]
+            <h2
+                className="
+          mt-3
+          text-sm
           font-bold
-          leading-8
           text-slate-900
         "
-      >
-        {course.title}
-      </h2>
+            >
+                {course.title}
+            </h2>
 
-      {/* Meta */}
-      <div
-        className="
-          mt-4
+            <div
+                className="
+          mt-3
           grid
           grid-cols-3
           gap-3
-          text-xs
+          text-2xs
           text-slate-500
         "
-      >
-        <div className="flex items-center gap-1.5">
-          <CalendarDays size={16} strokeWidth={1.7} />
-          <span>{course.date}</span>
-        </div>
+            >
+                <div className="flex items-center gap-1.5">
+                    <CalendarDays size={14} strokeWidth={1.7} />
+                    <span>{course.date}</span>
+                </div>
 
-        <div className="flex items-center gap-1.5">
-          <Clock3 size={16} strokeWidth={1.7} />
-          <span>{course.duration}</span>
-        </div>
+                <div className="flex items-center gap-1.5">
+                    <Clock3 size={14} strokeWidth={1.7} />
+                    <span>{course.duration}</span>
+                </div>
 
-        <div className="flex items-center gap-1.5">
-          <UsersRound size={16} strokeWidth={1.7} />
-          <span>{course.participants}</span>
-        </div>
-      </div>
+                <div className="flex items-center gap-1.5">
+                    <UsersRound size={14} strokeWidth={1.7} />
+                    <span>{course.participants}</span>
+                </div>
+            </div>
 
-      {/* Description */}
-      <p
-        className="
+            <p
+                className="
           mt-5
-          min-h-[48px]
-          text-sm
-          leading-7
+          text-3xs
+          mb-3
           text-slate-600
         "
-      >
-        {course.description}
-      </p>
+            >
+                {course.description}
+            </p>
 
-      {/* Progress */}
-      <div className="mt-auto">
-        <div className="mb-2 flex items-center justify-between text-xs">
-          <span className="text-slate-500">
-            ثبت‌نام شده
-          </span>
+            <div className="mt-3">
+                <div className="mb-2 flex items-center justify-between text-2xs">
+                    <span className="text-slate-500">
+                        ثبت‌نام شده
+                    </span>
 
-          <span className="font-medium text-slate-600">
-            ({course.registered}/{course.capacity}) {percentage}%
-          </span>
-        </div>
+                    <span className="font-medium text-slate-900">
+                        {percentage}% ({course.capacity} /{course.registered})
+                    </span>
+                </div>
 
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#d8e1f4]">
-          <div
-            className="
+                <div className="h-1.5 w-full  flex justify-end overflow-hidden rounded-full bg-[#d8e1f4]">
+                    <div
+                        className="
               h-full
-              rounded-full
               bg-[#2047b8]
               transition-all
               duration-300
             "
-            style={{
-              width: `${Math.min(percentage, 100)}%`,
-            }}
-          />
-        </div>
+                        style={{
+                            width: `${Math.min(percentage, 100)}%`,
+                        }}
+                    />
+                </div>
 
-        {/* Bottom */}
-        <div className="mt-5 flex items-center justify-between gap-3">
-          {course.isRegistered ? (
-            <button
-              type="button"
-              disabled
-              className="
-                inline-flex
-                h-10
+                <div dir="ltr" className="mt-5 flex items-center justify-between gap-3">
+                    {course.isRegistered ? (
+                        <Button
+                            type="button"
+                            variant="solid"
+                            color="input"
+                            size="xs"
+                            rounded="lg"
+                            rightIcon={
+                                <CheckCircle2 size={15} />
+                            }
+                            disabled
+                            className="
+                h-8
                 items-center
                 gap-1.5
                 rounded-lg
-                border
-                border-emerald-200
-                bg-white
+                bg-neutral-100
                 px-4
-                text-sm
+                text-xs
                 font-medium
-                text-emerald-600
+                text-neutral-400
               "
-            >
-              <CheckCircle2 size={17} />
-              ثبت‌نام شده
-            </button>
-          ) : course.status === "waiting" || isFull ? (
-            <button
-              type="button"
-              disabled
-              className="
-                inline-flex
-                h-10
+                        >
+                            ثبت‌نام شده
+                        </Button>
+                    ) : course.status === "waiting" || isFull ? (
+                        <Button
+                            type="button"
+                            disabled
+                            variant="solid"
+                            color="input"
+                            size="xs"
+                            rounded="lg"
+                            className="
+                h-8
                 items-center
                 rounded-lg
                 bg-slate-100
                 px-5
-                text-sm
+                text-xs
                 font-medium
                 text-slate-400
               "
-            >
-              در انتظار
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => onRegister(course)}
-              className="
-                inline-flex
-                h-10
+                        >
+                            در انتظار
+                        </Button>
+                    ) : (
+                        <Button
+                            type="button"
+                            variant="solid"
+                            color="input"
+                            size="xs"
+                            rounded="lg"
+                            onClick={() => onRegister(course)}
+                            className="
+                h-8
                 items-center
                 justify-center
                 rounded-lg
-                bg-[#1645b5]
-                px-5
-                text-sm
+                px-4
+                text-xs
                 font-semibold
-                text-white
-                transition-colors
-                hover:bg-[#123b9d]
-                active:scale-[0.98]
               "
-            >
-              ثبت‌نام
-            </button>
-          )}
+                        >
+                            ثبت‌نام
+                        </Button>
+                    )}
 
-          <span
-            className={`
+                    <span
+                        className={`
               inline-flex
               items-center
               gap-1.5
@@ -286,29 +278,28 @@ function CourseCard({
               py-1.5
               text-xs
               font-medium
-              ${
-                course.isFree
-                  ? "border-emerald-200 bg-emerald-50 text-emerald-600"
-                  : "border-amber-200 bg-amber-50 text-amber-700"
-              }
+              ${course.isFree
+                                ? "border-emerald-200 py-[5px] text-3xs bg-emerald-50 text-emerald-800"
+                                : "border-amber-200 bg-amber-50 text-amber-700"
+                            }
             `}
-          >
-            {course.isFree ? (
-              <>
-                <CheckCircle2 size={14} />
-                رایگان (کارآموز فعال)
-              </>
-            ) : (
-              <>
-                <CreditCard size={14} />
-                {course.price}
-              </>
-            )}
-          </span>
-        </div>
-      </div>
-    </article>
-  );
+                    >
+                        {course.isFree ? (
+                            <>
+                                <CheckCircle2 size={14} />
+                                رایگان (کارآموز فعال)
+                            </>
+                        ) : (
+                            <>
+                                <CreditCard size={14} />
+                                {course.price}
+                            </>
+                        )}
+                    </span>
+                </div>
+            </div>
+        </article>
+    );
 }
 
 export default CourseCard;
