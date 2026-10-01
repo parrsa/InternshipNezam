@@ -51,15 +51,15 @@ export default function LowProgressInterns() {
                             </div>
 
                             {/* نوار پیشرفت و درصد (سمت چپ) */}
-                            <div className="flex items-center gap-4 shrink-0">
-                                <div className="w-[120px] h-2 rounded-full bg-[#D3D9EC] overflow-hidden">
+                            <div className="flex items-center gap-4 shrink-0 rout">
+                                <div className="w-30 rotate-180 h-2 rounded-full bg-[#D3D9EC] overflow-hidden">
                                     <div
                                         className="h-full rounded-full bg-blue-800"
                                         style={{ width: `${item.progress}%` }}
                                     />
                                 </div>
                                 <span
-                                    className={`${getBadgeStyle(item.progress)} text-xs px-2 py-1 rounded-xl border min-w-[44px] text-center`}
+                                    className={`${getBadgeStyle(item.progress)} text-xs px-2 py-1 rounded-xl border min-w-11 text-center`}
                                 >
                                     {item.progress.toLocaleString("fa-IR")}٪
                                 </span>
