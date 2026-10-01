@@ -246,7 +246,7 @@ export const ADMIN_MENU: OrgMenuItem[] = [
   },
   {
     label: "تنظیمات ظرفیت",
-    href: "/admin/profile",
+    href: "/supervisor/settings",
     icon: Building2,
   },
 ];
