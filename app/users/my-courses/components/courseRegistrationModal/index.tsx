@@ -6,6 +6,7 @@ import {
     Clock3,
     MapPin,
     CheckCircle2,
+    Check,
 } from "lucide-react";
 import { Course } from "../coursesCards";
 import Modal from "@/app/components/ui/Modal";
@@ -80,12 +81,12 @@ function CourseRegistrationModal({
                 </div>
 
                 <div
-                    className="mt-5 gap-2 flex flex-col rounded-lg border border-emerald-300 bg-emerald-50/80 px-4 py-3"
+                    className="mt-5 gap-2 flex flex-col rounded-xl border border-emerald-300 bg-emerald-50/60 px-4 py-4"
                 >
                     <span className="text-2xs text-green-900">
                         مبلغ قابل پرداخت
                     </span>
-                    <div className="flex items-center gap-2 text-sm font-bold text-emerald-800">
+                    <div className="flex items-center gap-2 text-sm font-bold text-emerald-600">
                         {course.isFree
                             ? "رایگان (کارآموز فعال)"
                             : course.price}
@@ -95,13 +96,30 @@ function CourseRegistrationModal({
                 </div>
 
                 <div className="mt-5">
-                    <CustomCheckbox
+                    {/* <CustomCheckbox
                         checked={accepted}
                         onChange={setAccepted}
                         label="با شرایط ثبت‌نام و الزامات دوره/بازدید موافقت می‌کنم."
                         LableClassName="text-xs font-semibold text-slate-900"
                         className="gap-2 "
-                    />
+                    /> */}
+                    <button
+                        type="button"
+                        role="checkbox"
+                        aria-checked={accepted}
+                        onClick={() => setAccepted((prev) => !prev)}
+                        className="mt-5 flex items-center gap-2 text-right text-2xs font-semibold text-slate-900"
+                    >
+                        <span
+                            className={`flex h-5 w-5  items-center justify-center rounded-md border transition-colors ${accepted
+                                ? "border-inpuy-800 bg-input-800 text-white"
+                                : "border-slate-300 bg-white"
+                                }`}
+                        >
+                            {accepted && <Check size={13} strokeWidth={3} />}
+                        </span>
+                        با شرایط ثبت‌نام و الزامات دوره/بازدید موافقت می‌کنم.
+                    </button>
                 </div>
 
                 <div
@@ -113,6 +131,7 @@ function CourseRegistrationModal({
                         textSize="sm"
                         variant="solid"
                         type="button"
+                        onClick={onClose}
                         className={cn("flex w-[8%]  px-3   h-10 items-center justify-center bg-amber-50/40  text-nowrap text-xs font-bold text-neutral-900 transition-colors active:text-neutral-950 active:bg-teal-50 hover:text-neutral-950 hover:bg-teal-50")}
                     >
                         انصراف

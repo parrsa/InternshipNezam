@@ -12,6 +12,7 @@ import CourseCard, { Course } from "./components/coursesCards";
 import DashboardStatCards from "./components/stateCards";
 import { Input } from "@/app/components/ui/input";
 import CourseRegistrationModal from "./components/courseRegistrationModal";
+import CoursePaymentModal from "./components/coursePaymentModal";
 
 type FilterType =
     | "all"
@@ -66,6 +67,8 @@ const coursesData: Course[] = [
         registered: 8,
         capacity: 15,
         price: "۵۰۰,۰۰۰ تومان",
+        time: "۰۸:۰۰",
+        location: "پارکینگ سازمان (محل حرکت)",
     },
     {
         id: 3,
@@ -163,6 +166,7 @@ function MyCourses() {
 
     const filteredCourses = useMemo(() => {
         const normalizedSearch = search
+            .trim()
             .toLocaleLowerCase("fa-IR");
 
         return courses.filter((course) => {
@@ -279,7 +283,7 @@ function MyCourses() {
 
             <DashboardStatCards cards={stats} />
 
-         
+
             {filteredCourses.length > 0 ? (
                 <div
                     className="grid w-full grid-cols-1 gap-5 xl:grid-cols-2"
@@ -309,7 +313,14 @@ function MyCourses() {
             )}
 
             <CourseRegistrationModal
-                isOpen={isRegisterModalOpen}
+                isOpen={isRegisterModalOpen && Boolean(selectedCourse?.isFree)}
+                course={selectedCourse}
+                onClose={closeRegisterModal}
+                onConfirm={handleRegister}
+            />
+
+            <CoursePaymentModal
+                isOpen={isRegisterModalOpen && !selectedCourse?.isFree}
                 course={selectedCourse}
                 onClose={closeRegisterModal}
                 onConfirm={handleRegister}

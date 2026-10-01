@@ -143,7 +143,7 @@ export default function Modal({
             >
                 <div className="flex items-center w-full justify-between p-4 sm:p-5 pb-2 sm:pb-3 border-b border-neutral-100 shrink-0">
                     {typeof title === "string" ? (
-                        <h1 className="font-bold text-lg sm:text-xl">{title}</h1>
+                        <h1 className="font-bold text-lg sm:text-base">{title}</h1>
                     ) : (
                         title
                     )}

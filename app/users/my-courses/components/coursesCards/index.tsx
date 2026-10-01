@@ -6,6 +6,7 @@ import {
     UsersRound,
     CheckCircle2,
     CreditCard,
+    ArrowLeft,
 } from "lucide-react";
 import { Button } from "@/app/components/ui/Button";
 
@@ -38,6 +39,9 @@ export interface Course {
     capacity: number;
 
     price: string;
+
+    time?: string;
+    location?: string;
 
     isRegistered?: boolean;
     isFree?: boolean;
@@ -183,7 +187,14 @@ function CourseCard({
                             onClick={() => onRegister(course)}
                             className="h-8 items-center justify-center rounded-lg px-4 text-xs font-semibold"
                         >
-                            ثبت‌نام
+                            {course.isFree ? (
+                                "ثبت‌نام"
+                            ) : (
+                                <span className="flex items-center gap-1.5">
+                                    <ArrowLeft size={14} />
+                                    پرداخت و ثبت‌نام
+                                </span>
+                            )}
                         </Button>
                     )}
 
