@@ -153,50 +153,19 @@ function MonthlyWorkChart() {
   return (
     <div
       dir="rtl"
-      className="
-        rounded-xl
-        border
-        border-slate-200
-        bg-white
-        px-7.75
-        w-[65%]
-        py-5
-        shadow-sm
-      "
+      className="rounded-xl border border-slate-200 bg-white px-7.75 w-[65%] py-5 shadow-sm"
     >
       <div
-        className="
-          flex
-          items-center
-          justify-between
-          gap-4
-        "
+        className="flex items-center justify-between gap-4"
       >
         <h2
-          className="
-            text-s
-            font-bold
-            text-slate-900
-          "
+          className="text-s font-bold text-slate-900"
         >
           ساعت کارآموزی ماهانه
         </h2>
 
         <span
-          className="
-            inline-flex
-            items-center
-            gap-1
-            rounded-full
-            border
-            border-emerald-400
-            bg-emerald-100
-            px-2
-            py-0.5
-            text-2xs
-            font-medium
-            text-emerald-900
-          "
+          className="inline-flex items-center gap-1 rounded-full border border-emerald-400 bg-emerald-100 px-2 py-0.5 text-2xs font-medium text-emerald-900"
         >
           <span>↗</span>
           <span>۱۶.۲٪</span>
@@ -204,11 +173,7 @@ function MonthlyWorkChart() {
       </div>
 
       <div
-        className="
-          mt-9.75
-          h-65
-          w-[95%]
-        "
+        className="mt-9.75 h-65 w-[95%]"
       >
         <Bar
           data={chartData}

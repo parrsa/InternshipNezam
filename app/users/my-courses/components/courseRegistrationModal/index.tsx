@@ -11,6 +11,7 @@ import { Course } from "../coursesCards";
 import Modal from "@/app/components/ui/Modal";
 import { CustomCheckbox } from "@/app/components/ui/input/Checkbox";
 import { Button } from "@/app/components/ui/Button";
+import { cn } from "@/lib/cn";
 
 
 
@@ -54,25 +55,13 @@ function CourseRegistrationModal({
                 </p>
 
                 <h2
-                    className="
-            mt-5
-            text-right
-            text-s
-            font-bold
-            text-slate-900
-          "
+                    className="mt-5 text-right text-s font-bold text-slate-900"
                 >
                     {course.title}
                 </h2>
 
                 <div
-                    className="
-            mt-4
-            grid
-            grid-cols-1
-            gap-4
-            sm:grid-cols-3
-          "
+                    className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3"
                 >
                     <div className="flex items-center gap-2 text-2xs text-slate-500">
                         <CalendarDays size={14} />
@@ -91,27 +80,16 @@ function CourseRegistrationModal({
                 </div>
 
                 <div
-                    className="
-            mt-5
-            gap-2
-            flex
-            flex-col
-            rounded-xl
-            border
-            border-emerald-300
-            bg-emerald-50/60
-            px-4
-            py-4
-          "
+                    className="mt-5 gap-2 flex flex-col rounded-xl border border-emerald-300 bg-emerald-50/60 px-4 py-4"
                 >
                     <span className="text-2xs text-green-900">
                         مبلغ قابل پرداخت
                     </span>
-                    <div className="flex items-center gap-2 text-base font-bold text-emerald-600">
+                    <div className="flex items-center gap-2 text-sm font-bold text-emerald-600">
                         {course.isFree
                             ? "رایگان (کارآموز فعال)"
                             : course.price}
-                        <CheckCircle2 size={17} />
+                        <CheckCircle2 size={15} />
                     </div>
 
                 </div>
@@ -127,14 +105,19 @@ function CourseRegistrationModal({
                 </div>
 
                 <div
-                    className="
-            mt-6
-            flex
-            items-center
-            justify-end
-            gap-3
-          "
+                    className="mt-6 flex items-center justify-end gap-3"
                 >
+                    <Button
+                        size="xs"
+                        rounded="lg"
+                        textSize="sm"
+                        variant="solid"
+                        type="button"
+                        className={cn("flex w-[8%]  px-3   h-10 items-center justify-center bg-amber-50/40  text-nowrap text-xs font-bold text-neutral-900 transition-colors active:text-neutral-950 active:bg-teal-50 hover:text-neutral-950 hover:bg-teal-50")}
+                    >
+                        انصراف
+
+                    </Button>
 
                     <Button
                         type="button"
@@ -144,27 +127,10 @@ function CourseRegistrationModal({
                         rounded="lg"
                         onClick={onConfirm}
                         disabled={!accepted}
-                        className="
-                                    h-8
-                                    items-center
-                                    justify-center
-                                    rounded-lg
-                                    px-4
-                                    text-xs
-                                    font-semibold
-                                  "
+                        className="h-8 items-center justify-center rounded-lg px-4 text-xs font-semibold"
                     >
                         ثبت‌نام
                     </Button>
-
-
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="  h-10  rounded-lg  px-3   text-xs font-medium  text-slate-700 transition-colors  hover:bg-teal-100"
-                    >
-                        انصراف
-                    </button>
                 </div>
             </div>
         </Modal>

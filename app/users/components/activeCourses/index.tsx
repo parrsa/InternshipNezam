@@ -7,23 +7,10 @@ function ActiveCourses() {
   return (
     <div
       dir="rtl"
-      className="
-        rounded-xl
-        border
-        border-slate-200
-        bg-white
-        px-7.5
-        w-[35%]
-        py-7.75
-        shadow-sm
-      "
+      className="rounded-xl border border-slate-200 bg-white px-7.5 w-[35%] py-7.75 shadow-sm"
     >
       <h2
-        className="
-          text-s
-          font-bold
-          text-slate-900
-        "
+        className="text-s font-bold text-slate-900"
       >
         دوره‌های در حال انجام
       </h2>
@@ -32,53 +19,23 @@ function ActiveCourses() {
         {progressCourses.map((course) => (
           <div key={course.title}>
             <div
-              className="
-                mb-1.75
-                flex
-                items-center
-                justify-between
-                gap-3
-              "
+              className="mb-1.75 flex items-center justify-between gap-3"
             >
               <span
-                className="
-                  text-2xs
-                  font-semibold
-                  text-slate-900
-                "
+                className="text-2xs font-semibold text-slate-900"
               >
                 {course.title}
               </span>
 
               <span
-                className="
-                  
-                  justify-center
-                  rounded-full
-                  border
-                  border-emerald-700
-                  bg-emerald-100
-                  px-2
-                  py-0.5
-                  text-3xs
-                  font-medium
-                  text-emerald-800
-                "
+                className="justify-center rounded-full border border-emerald-700 bg-emerald-100 px-2 py-0.5 text-3xs font-medium text-emerald-800"
               >
                 {course.percent}٪
               </span>
             </div>
 
             <div
-              className="
-                h-2
-                flex
-                justify-end
-                w-full
-                overflow-hidden
-                rounded-full
-                bg-indigo-100
-              "
+              className="h-2 flex justify-end w-full overflow-hidden rounded-full bg-indigo-100"
               role="progressbar"
               aria-label={`پیشرفت ${course.title}`}
               aria-valuemin={0}
@@ -86,12 +43,7 @@ function ActiveCourses() {
               aria-valuenow={course.percent}
             >
               <div
-                className="
-                  h-full
-                  bg-input-800
-                  transition-[width]
-                  duration-500
-                "
+                className="h-full bg-input-800 transition-[width] duration-500"
                 style={{
                   width: `${course.percent}%`,
                 }}

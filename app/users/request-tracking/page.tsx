@@ -16,7 +16,7 @@ function RequstTracking() {
             </div>
 
             <div className="w-full  px-5 p-2 rounded-2xl mx-auto">
-            <CurrentActionPart />
+                <CurrentActionPart />
             </div>
 
         </div>

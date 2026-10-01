@@ -1,5 +1,3 @@
-
-
 import { statCards } from "@/app/users/data";
 import React from "react";
 export type DashboardStatCard = {
@@ -18,106 +16,43 @@ function DashboardStatCards({cards = statCards,}: DashboardStatCardsProps) {
   return (
     <div
       dir="ltr"
-      className="
-        grid
-        w-full
-        grid-cols-1
-        gap-4
-        sm:grid-cols-2
-        xl:grid-cols-3
-      "
+      className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3"
     >
       {cards.map((card) => {
         const Icon = card.icon;
 
         return (
-          <article
+          <div
             key={card.title}
-            className="
-              h-27.5
-              rounded-xl
-              border
-              border-slate-300
-              bg-white
-              px-5
-              py-3
-              shadow-xs
-            "
+            className="h-27.5 rounded-xl border border-slate-300 bg-white px-5 py-3 shadow-xs"
           >
             <div
-              className="
-                flex
-                h-full
-                items-start
-                justify-between
-                gap-4
-              "
+              className="flex h-full items-start justify-between gap-4"
             >
               <div
-                className="
-                  flex
-                  min-w-0
-                  flex-1
-                  flex-col
-                  items-end
-                  text-right
-                "
+                className="flex min-w-0 flex-1 flex-col items-end text-right"
               >
                 <h3
-                  className="
-                    text-2xs
-                    font-medium
-                    leading-6
-                    text-slate-600
-                  "
+                  className="text-2xs font-medium leading-6 text-slate-600"
                 >
                   {card.title}
                 </h3>
 
                 <div
-                  className="
-                    
-                    text-xl
-                    font-bold
-                    leading-9
-                    tracking-tight
-                    text-slate-950
-                  "
+                  className="text-xl font-bold leading-9 tracking-tight text-slate-950"
                 >
                   {card.value}
                 </div>
 
                 <span
-                  className={`
-                    
-                    inline-flex
-                    w-fit
-                    items-center
-                    rounded-full
-                    border
-                    px-2
-                    py-0.5
-                    text-[9px]
-                    font-medium
-                    leading-4
-                    ${card.badgeClass}
-                  `}
+                  className={`inline-flex w-fit items-center rounded-full border px-2 py-0.5 text-[9px] font-medium leading-4 ${card.badgeClass}`}
                 >
                   {card.badge}
                 </span>
               </div>
 
               <div
-                className="
-                  flex
-                  h-10.5
-                  w-10.75
-                  mt-1
-                  items-center
-                  justify-center
-                  rounded-lg
-                  bg-indigo-50
-                "
+                className="flex h-10.5 w-10.75 mt-1 items-center justify-center rounded-lg bg-indigo-50"
               >
                 <Icon
                   size={22}
@@ -126,7 +61,7 @@ function DashboardStatCards({cards = statCards,}: DashboardStatCardsProps) {
                 />
               </div>
             </div>
-          </article>
+          </div>
         );
       })}
     </div>

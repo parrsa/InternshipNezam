@@ -225,35 +225,13 @@ function MyCourses() {
 
     return (
         <div
-            className="
-        flex
-        w-full
-        flex-col
-        gap-5
-        px-5
-        py-4
-      "
+            className="flex w-full flex-col gap-5 px-5 py-4"
         >
 
-            <div className="
-          flex
-          w-full
-          gap-4
-          lg:flex-row
-          lg:items-center
-          lg:justify-between
-        "
+            <div className="flex w-full gap-4 lg:flex-row lg:items-center lg:justify-between"
             >
                 <div
-                    className="
-            flex
-            w-full
-            items-center
-            gap-2
-            overflow-x-auto
-            pb-1
-            lg:w-auto
-          "
+                    className=" flex w-full items-center gap-2 overflow-x-auto pb-1 lg:w-auto "
                 >
                     {tabs.map((tab) => {
                         const isActive = activeFilter === tab.key;
@@ -265,19 +243,10 @@ function MyCourses() {
                                 onClick={() =>
                                     setActiveFilter(tab.key)
                                 }
-                                className={`
-                  rounded-full
-                  border
-                  px-3
-                  py-1.5
-                  text-xs
-                  font-medium
-                  transition-all
-                  ${isActive
+                                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${isActive
                                         ? "border-[#1645b5] bg-[#1645b5] text-white shadow-sm"
                                         : "border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-                                    }
-                `}
+                                    }`}
                             >
                                 {tab.label}
                             </button>
@@ -314,13 +283,7 @@ function MyCourses() {
          
             {filteredCourses.length > 0 ? (
                 <div
-                    className="
-            grid
-            w-full
-            grid-cols-1
-            gap-5
-            xl:grid-cols-2
-          "
+                    className="grid w-full grid-cols-1 gap-5 xl:grid-cols-2"
                 >
                     {filteredCourses.map((course) => (
                         <CourseCard
@@ -332,18 +295,7 @@ function MyCourses() {
                 </div>
             ) : (
                 <div
-                    className="
-            flex
-            min-h-[250px]
-            w-full
-            items-center
-            justify-center
-            rounded-2xl
-            border
-            border-dashed
-            border-slate-300
-            bg-white
-          "
+                    className="flex min-h-62.5 w-full items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white"
                 >
                     <div className="text-center">
                         <p className="text-base font-semibold text-slate-700">
