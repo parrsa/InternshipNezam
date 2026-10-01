@@ -256,7 +256,7 @@ export default function InternsRequest() {
                 ))}
             </div>
 
-            <div className="w-full flex justify-center bg-white items-center flex-col gap-3 p-4 rounded-xl border border-neutral-300 mt-8">
+            <div className="w-full flex justify-center bg-white items-center flex-col gap-3 p-4 rounded-xl border border-neutral-300 mt-4">
                 <div className="w-full flex justify-between items-center">
                     <div className="w-full text-right text-black font-bold text-xs">
                         <p>درخواست‌های کارآموزی دریافت‌شده</p>

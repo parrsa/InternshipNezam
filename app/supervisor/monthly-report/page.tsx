@@ -151,13 +151,13 @@ export default function MonthlyReport() {
                 ))}
             </div>
 
-            <div className="w-full bg-white p-5 mt-8 rounded-xl  border border-neutral-300 shadow-lg">
+            <div className="w-full bg-white p-5 mt-4 rounded-xl  border border-neutral-300 shadow-lg">
                 <div>
                     <p className="text-black text-xs font-bold">گزارش های ماهانه کارآموزان</p>
                 </div>
 
                 <div className="mt-8">
-                    <Table tableCol={tabelCols} tableRow={tabelRow} />
+                    <Table minHeight="100px" tableCol={tabelCols} tableRow={tabelRow} />
                 </div>
             </div>
         </div>

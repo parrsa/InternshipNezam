@@ -243,7 +243,7 @@ export default function Profile() {
                         </div>}
                 </div>
             </div>
-            <div dir="rtl" className="flex w-full flex-col gap-5 mt-8 rounded-2xl border-2 shadow-xs border-neutral-200 p-5 sm:p-6  bg-white ">
+            <div dir="rtl" className="flex w-full flex-col gap-5 mt-4 rounded-2xl border-2 shadow-xs border-neutral-200 p-5 sm:p-6  bg-white ">
 
                 <div className="flex items-center mb-7 gap-2 justify-between w-full">
                     <div className="flex justify-start items-start gap-2 flex-col text-xs">
@@ -264,7 +264,7 @@ export default function Profile() {
 
             </div >
 
-            <div dir="rtl" className="w-full flex flex-col gap-4 mt-8 rounded-2xl border-2 shadow-xs border-neutral-200 p-5 sm:p-6 bg-white">
+            <div dir="rtl" className="w-full flex flex-col gap-4 mt-4 rounded-2xl border-2 shadow-xs border-neutral-200 p-5 sm:p-6 bg-white">
                 <div className="flex justify-start items-center gap-2 text-sm font-bold text-black mb-4">
                     <ArrowUpToLine size={18} />
                     <span>فایل رزومه</span>
@@ -344,7 +344,7 @@ export default function Profile() {
             </div>
 
             <div className="w-full flex justify-end items-center">
-                <Button leftIcon={<Save />} className="text-xs mt-5 h-9" size="sm" rounded="lg" variant="solid" color="input">ذخیره پروفایل</Button>
+                <Button leftIcon={<Save />} className="text-xs mt-4 h-9" size="sm" rounded="lg" variant="solid" color="input">ذخیره پروفایل</Button>
             </div>
         </div>
     )

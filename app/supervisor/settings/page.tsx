@@ -82,7 +82,7 @@ export default function Settings() {
                 ))}
             </div>
 
-            <div className="w-full p-8 bg-white border border-neutral-300 mt-8 rounded-xl shadow-lg flex justify-center items-center gap-8 flex-col">
+            <div className="w-full p-8 bg-white border border-neutral-300 mt-4 rounded-xl shadow-lg flex justify-center items-center gap-8 flex-col">
                 <div className="w-full text-right font-bold text-black text-sm">
                     <p>تنظیمات ظرفیت پذیرش</p>
                 </div>
@@ -139,7 +139,7 @@ export default function Settings() {
                 </Formik>
             </div>
 
-            <div className="w-full p-8 bg-white border border-neutral-300 mt-8 rounded-xl shadow-xl flex flex-col gap-4">
+            <div className="w-full p-8 bg-white border border-neutral-300 mt-4 rounded-xl shadow-xl flex flex-col gap-4">
                 <div className="w-full text-right font-bold text-black text-sm">
                     <p>تنظیمات پذیرش خودکار</p>
                 </div>

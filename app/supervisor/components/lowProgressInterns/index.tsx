@@ -21,7 +21,7 @@ function getBadgeStyle(progress: number) {
 
 export default function LowProgressInterns() {
     return (
-        <div dir="rtl" className="w-full px-4 mt-5">
+        <div dir="rtl" className="w-full px-4 mt-4">
             <div className="w-full bg-white rounded-2xl border border-neutral-200 p-6 flex flex-col gap-4">
                 {/* هدر */}
                 <div className="flex items-center justify-between">
