@@ -213,7 +213,7 @@ export const ADMIN_MENU: OrgMenuItem[] = [
   },
   {
     label: "پروفایل من",
-    href: "/supervisor/supervisors",
+    href: "/supervisor/profile",
     icon: UserCog,
   },
   {
