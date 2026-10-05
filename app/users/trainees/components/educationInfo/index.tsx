@@ -1,7 +1,7 @@
 "use client";
 
 import { Select } from "@/app/components/ui/input/SelectSilde";
-import * as React from "react";
+import { useState } from "react";
 
 const degreeOptions = [
     { label: "کارشناسی", value: "bachelor" },
@@ -18,8 +18,8 @@ const majorOptions = [
 ];
 
 export default function EducationInfo() {
-    const [degree, setDegree] = React.useState("");
-    const [major, setMajor] = React.useState("");
+    const [degree, setDegree] = useState("");
+    const [major, setMajor] = useState("");
 
     return (
         <div
