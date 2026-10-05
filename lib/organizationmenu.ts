@@ -73,7 +73,7 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
   },
   {
     label: "کار اموزان",
-    href: "/organization/courses",
+    href: "/organization/trainees",
     icon: BookOpen,
     badge: 2,
   },
