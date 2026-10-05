@@ -1,10 +1,10 @@
 "use client";
-import * as React from "react";
 import { Award } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { Select } from "@/app/components/ui/input/SelectSilde";
 import { Input } from "@/app/components/ui/input";
 import { Button } from "@/app/components/ui/Button";
+import { useState } from "react";
 
 
 type CardStatus = "issued" | "pending" | "reviewing";
@@ -43,9 +43,9 @@ const gradeOptions = [
 ];
 
 export default function LicenseStatus() {
-    const [hasLicense, setHasLicense] = React.useState(true);
-    const [licenseNumber, setLicenseNumber] = React.useState("");
-    const [grade, setGrade] = React.useState<string | undefined>();
+    const [hasLicense, setHasLicense] = useState(true);
+    const [licenseNumber, setLicenseNumber] = useState("");
+    const [grade, setGrade] = useState<string | undefined>();
 
     return (
         <div dir="rtl" className="flex w-full flex-col gap-5 rounded-2xl border-2 shadow-xs border-neutral-200 p-5 sm:p-6  bg-white ">

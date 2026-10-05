@@ -51,10 +51,10 @@ export function Select({
                 disabled={disabled}
                 onClick={() => setOpen((prev) => !prev)}
                 className={cn(
-                    "flex h-9 w-full items-center text-s justify-evenly gap-2 rounded-lg border px-5  transition-colors",
+                    "flex h-9 w-full items-center text-s justify-between gap-2 rounded-lg border px-5  transition-colors",
                     disabled
                         ? "cursor-not-allowed  border-neutral-200 bg-neutral-50 text-neutral-800"
-                        : "border-neutral-300 bg-white text-gray-700 hover:border-neutral-400"
+                        : "border-neutral-200  shadow-xs bg-white text-gray-700 "
                 )}
             >
                 <ChevronDown
