@@ -61,37 +61,36 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
     icon: LayoutDashboard,
   },
   {
-    label: "کارآموزان",
-    href: "/organization/trainees",
+    label: "درخواست ها",
+    href: "/organization/interns-request",
     icon: Users,
     badge: 4,
   },
   {
-    label: "سرپرستان",
-    href: "/organization/supervisors",
+    label: "جلسات توجیهی",
+    href: "/organization/briefing-sessions",
     icon: UserCog,
   },
   {
-    label: "دوره‌ها",
+    label: "کار اموزان",
     href: "/organization/courses",
     icon: BookOpen,
     badge: 2,
   },
   {
-    label: "گزارش‌ها",
+    label: "سرپرستان",
     href: "/organization/reports",
     icon: FileBarChart,
+  },
+  {
+    label: "دوره ها",
+    href: "/organization/profile",
+    icon: Building2,
   },
   {
     label: "عملکرد سرپرستان",
     href: "/organization/performance",
     icon: TrendingUp,
-  },
-  {
-    label: "گواهی‌ها",
-    href: "/organization/certificates",
-    icon: Award,
-    badge: 3,
   },
   {
     label: "صندوق پیام",
@@ -100,9 +99,10 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
     badge: 5,
   },
   {
-    label: "پروفایل سازمان",
-    href: "/organization/profile",
-    icon: Building2,
+    label: "گواهی‌ها",
+    href: "/organization/certificates",
+    icon: Award,
+    badge: 3,
   },
 ];
 

@@ -29,34 +29,39 @@ export default function OrganizationSidebar() {
   return (
     <aside
       dir="rtl"
-      className="w-72 shrink-0 h-full bg-white rounded-xl shadow-[0_2px_4px_-1px_#0000000F,0_4px_6px_-1px_#0000001A] flex flex-col overflow-hidden"
+      className="w-72 shrink-0 h-full bg-[#f4f6ffe9]  flex flex-col border-l  border-neutral-300 overflow-hidden"
     >
-      <div className="px-5 pt-5 pb-4 border-b border-neutral-100">
-        <div className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-lg bg-orange-500/10 text-orange-600 flex items-center justify-center">
-            <Building2 size={20} />
+      <div className=" p-3   h-16  border-b border-neutral-300">
+        <div className="flex w-full  gap-2 ">
+          <div className="w-9 h-9  text-sm font-bold rounded-lg bg-[#1b4faf1d] text-input-900 flex items-center justify-center">
+            ن م
           </div>
-          <div>
-            <p className="text-sm font-bold text-neutral-800">
+          <div >
+            <p className="text-xs font-bold text-neutral-800">
               پنل سازمان
+
             </p>
-            <p className="text-xs text-neutral-400">
+            <p className="text-2xs text-neutral-400">
               داشبورد مدیریت سازمان
             </p>
           </div>
         </div>
 
-        <div className="mt-4 rounded-lg bg-neutral-50 px-3 py-2.5">
-          <p className="text-sm font-semibold text-neutral-700 truncate">
-            {user?.fullName || "سازمان"}
+      </div>
+
+      <div className=" p-3 border-b border-neutral-300">
+        <div className="mt-2 rounded-lg bg-[#6a93df1d] px-3 py-1.5 mb-2">
+          <p className="text-xs font-semibold text-neutral-700 truncate">
+            {user?.fullName || "کارآموز"}
           </p>
-          <p className=" text-2xs text-neutral-400">
-            سازمان
+          <p className="text-2xs text-neutral-400">
+            کارآموز
+
           </p>
         </div>
       </div>
 
-      <nav className="flex-1 overflow-y-auto no-scrollbar px-3 py-3 flex flex-col gap-1">
+      <nav className="flex-1 overflow-y-auto no-scrollbar p-2 flex flex-col gap-1">
         {ORGANIZATION_MENU.map((item) => {
           const active = isActivePath(pathname, item.href);
           const Icon = item.icon;
@@ -65,28 +70,27 @@ export default function OrganizationSidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-                active
-                  ? "bg-blue-800 text-white font-semibold"
-                  : "text-neutral-600 hover:bg-neutral-50"
-              }`}
+              className={`flex items-center justify-between gap-2 rounded-xl px-2 py-2.5  font-medium text-s transition-colors ${active
+                ? "bg-blue-800 py-2.5 text-white text-s"
+                : "text-neutral-900  hover:bg-input-100"
+                }`}
             >
               <span className="flex items-center gap-2.5">
                 <Icon size={18} />
                 {item.label}
               </span>
 
-              {!!item.badge && (
+              {/* {!!item.badge && (
                 <span
-                  className={` text-2xs w-5 h-5 rounded-full flex items-center justify-center ${
-                    active
-                      ? "bg-white/20 text-white"
-                      : "bg-orange-100 text-orange-600"
-                  }`}
+                  className={`text-2xs w-5 h-5 rounded-full flex items-center justify-center ${active
+                    ? "bg-white/20 text-white"
+                    : "bg-orange-100 text-orange-600"
+                    }`}
                 >
                   {item.badge}
                 </span>
-              )}
+              )} */}
+
             </Link>
           );
         })}
