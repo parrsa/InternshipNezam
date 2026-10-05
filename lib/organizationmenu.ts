@@ -16,7 +16,7 @@ import {
   FileCheck,
   Eye,
   Medal,
-  UserCircle ,
+  UserCircle,
   type LucideIcon,
 } from "lucide-react";
 
@@ -27,6 +27,12 @@ export interface OrgMenuItem {
   badge?: number;
 }
 
+export interface AdminMenuItem {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+  badge?: number;
+}
 
 export interface UserMenuItem {
   label: string;
@@ -130,7 +136,7 @@ export const USER_MENU: UserMenuItem[] = [
     label: "پیگیری درخواست کارآموزی ",
     href: "/users/request-tracking",
     icon: FileText,
-    tag: "فعال", 
+    tag: "فعال",
   },
   {
     label: "انتخاب سرپرست",
@@ -186,5 +192,61 @@ export const USER_MENU: UserMenuItem[] = [
     label: "پروفایل",
     href: "/users/profile",
     icon: UserCircle,
+  },
+];
+
+
+
+
+
+export const ADMIN_MENU: OrgMenuItem[] = [
+  {
+    label: "داشبورد",
+    href: "/supervisor",
+    icon: LayoutDashboard,
+  },
+  {
+    label: "ثبت نام سرپرست",
+    href: "/supervisor/trainees",
+    icon: Users,
+    badge: 4,
+  },
+  {
+    label: "پروفایل من",
+    href: "/supervisor/profile",
+    icon: UserCog,
+  },
+  {
+    label: "درخواست های کارآموزی",
+    href: "/supervisor/interns-request",
+    icon: BookOpen,
+    badge: 2,
+  },
+  {
+    label: "کارآموزان",
+    href: "/supervisor/apprentices",
+    icon: FileBarChart,
+  },
+  {
+    label: "گزارش های ماهانه",
+    href: "/supervisor/monthly-report",
+    icon: TrendingUp,
+  },
+  {
+    label: "گزارش های نهایی",
+    href: "/supervisor/final-report",
+    icon: Award,
+    badge: 3,
+  },
+  {
+    label: "صندوق پیام",
+    href: "/supervisor/messages",
+    icon: Mail,
+    badge: 5,
+  },
+  {
+    label: "تنظیمات ظرفیت",
+    href: "/supervisor/settings",
+    icon: Building2,
   },
 ];
