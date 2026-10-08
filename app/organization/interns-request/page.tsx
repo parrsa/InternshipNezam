@@ -146,20 +146,8 @@ const HandelPresence = (presence: any) => {
 }
 
 export default function InternsRequest() {
-    const [degree, setDegree] = useState("bachelor");
-    const { setAction } = useHeaderAction()
 
-    useEffect(() => {
-        setAction(
-            <div className="text-sm flex justify-start items-start flex-col gap-1">
-                <p className="text-black font-bold ">درخواست‌های کارآموزی</p>
-                <p className="text-neutral-500 text-xs font-medium">درخواست‌های ارسال‌شده از سمت کارآموزان انتخاب‌کننده</p>
-            </div>
-        )
-        return () => {
-            setAction(null)
-        }
-    }, [])
+    const [degree, setDegree] = useState("bachelor");
 
     const ColsData = [
         {

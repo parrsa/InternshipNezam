@@ -6,7 +6,7 @@ import StatCard from "./components/starCard";
 export default function OrganizationDashboardPage() {
   return (
     <div dir="rtl" className="p-5 flex flex-col gap-4">
-      <div className="bg-white rounded-xl p-5 shadow-[0_2px_4px_-1px_#0000000F,0_4px_6px_-1px_#0000001A]">
+      <div className="bg-white rounded-xl p-5 shadow-sm">
         <h2 className="font-bold text-neutral-800 mb-1">
           داشبورد سازمان
         </h2>
