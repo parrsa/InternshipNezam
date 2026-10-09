@@ -74,7 +74,7 @@ function SupervisorScoreChart({ scores }: SupervisorScoreChartProps) {
 
     return (
         <PerformanceCard title="امتیاز عملکرد سرپرستان">
-            <div dir="ltr" className="mt-6 w-full">
+            <div dir="ltr" className="mt-6 h-72.5 w-full">
                 <Bar data={data} options={options} />
             </div>
         </PerformanceCard>

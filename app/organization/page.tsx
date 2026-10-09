@@ -1,26 +1,33 @@
 "use client";
 
-import StatCard from "./components/starCard";
+import DashboardCardOrg from "./components/dashBoardCardOrg";
+import DistributionChart from "./components/distributionChart";
+import RecentRequests from "./components/recentRequests";
+import TrendChart from "./components/trendChart";
 
 
 export default function OrganizationDashboardPage() {
   return (
-    <div dir="rtl" className="p-5 flex flex-col gap-4">
-      <div className="bg-white rounded-xl p-5 shadow-sm">
-        <h2 className="font-bold text-neutral-800 mb-1">
-          داشبورد سازمان
-        </h2>
-        <p className="text-sm text-neutral-500">
-          خلاصه وضعیت کارآموزان، سرپرستان، دوره‌ها و گواهی‌ها اینجا نمایش داده می‌شود.
-        </p>
+    <div className="w-full flex flex-col gap-4  px-5 p-2 items-center justify-center">
+      <DashboardCardOrg />
+      <div className=" w-full flex items-center justify-center gap-5">
+        <div className="w-[65%]">
+          <TrendChart />
+        </div>
+        <div className="w-[35%]">
+          <DistributionChart />
+
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard label="کارآموزان فعال" value="—" />
-        <StatCard label="سرپرستان" value="—" />
-        <StatCard label="گواهی‌های صادر شده" value="—" />
+      <div className=" w-full flex items-center justify-center gap-5">
+        <div className="w-1/2">
+          <RecentRequests />
+        </div>
+        <div className="w-1/2">
+hhh
+        </div>
       </div>
-
 
     </div>
   );
