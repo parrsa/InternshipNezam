@@ -18,7 +18,7 @@ const REQUESTS: RequestItem[] = [
 const STATUS_STYLES: Record<RequestStatus, { label: string; className: string }> = {
   pending: {
     label: "در انتظار",
-    className: "border-amber-300 bg-amber-100 text-amber-800",
+    className: "border-amber-300 bg-orange-100 text-amber-800",
   },
   approved: {
     label: "تأیید شده",
@@ -28,35 +28,35 @@ const STATUS_STYLES: Record<RequestStatus, { label: string; className: string }>
 
 export default function RecentRequests() {
   return (
-    <section className="h-full rounded-2xl border border-gray-200 bg-white p-7 shadow-sm">
-      <header className="flex items-center justify-between">
-        <h2 className="text-base font-bold text-gray-900">درخواست‌های اخیر</h2>
-        <button type="button" className="text-sm font-medium text-gray-900 hover:text-indigo-600">
+    <div className="h-full rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+      <div className="flex p-2 items-center justify-between">
+        <h2 className="text-s font-bold text-gray-900">درخواست‌های اخیر</h2>
+        <p  className="text-xs font-medium text-gray-900 hover:text-indigo-600">
           همه
-        </button>
-      </header>
+        </p>
+      </div>
 
-      <ul className="mt-8">
+      <ul className="mt-6">
         {REQUESTS.map((item) => {
           const status = STATUS_STYLES[item.status];
           return (
             <li
               key={item.id}
-              className="flex items-center gap-4 border-b border-gray-200 py-3 first:pt-0 last:border-b-0 last:pb-0"
+              className="flex items-center gap-4 border-b border-gray-200 py-2  "
             >
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm text-indigo-700">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-sm text-indigo-700">
                 {item.student.charAt(0)}
               </div>
 
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-bold text-gray-900">{item.student}</p>
-                <p className="truncate text-[13px] text-gray-500">
+              <div className=" flex-1">
+                <p className="truncate text-xs font-bold text-gray-900">{item.student}</p>
+                <p className="truncate text-2xs text-gray-500">
                   {item.course} — {item.supervisor}
                 </p>
               </div>
 
               <span
-                className={`shrink-0 rounded-full border px-3 py-0.5 text-xs ${status.className}`}
+                className={` rounded-full border px-2 py-0.5 text-2xs ${status.className}`}
               >
                 {status.label}
               </span>
@@ -64,6 +64,6 @@ export default function RecentRequests() {
           );
         })}
       </ul>
-    </section>
+    </div>
   );
 }

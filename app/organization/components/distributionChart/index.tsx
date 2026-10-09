@@ -88,7 +88,7 @@ export default function DistributionChart() {
         توزیع رشته‌ای
       </h2>
 
-      <div dir="ltr" className="mt-10 h-[260px] w-full">
+      <div dir="ltr" className="mt-10 h-65 w-full">
         <Bar data={data} options={options} />
       </div>
     </section>

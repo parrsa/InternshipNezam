@@ -3,6 +3,7 @@
 import DashboardCardOrg from "./components/dashBoardCardOrg";
 import DistributionChart from "./components/distributionChart";
 import RecentRequests from "./components/recentRequests";
+import TopSupervisors from "./components/topSupervisors";
 import TrendChart from "./components/trendChart";
 
 
@@ -25,7 +26,7 @@ export default function OrganizationDashboardPage() {
           <RecentRequests />
         </div>
         <div className="w-1/2">
-hhh
+          <TopSupervisors />
         </div>
       </div>
 
