@@ -4,6 +4,8 @@ import { cn } from "@/lib/cn";
 import Table from "@/app/components/ui/Table";
 import SessionFilters from "./components/sessionFilters";
 import CardBriefing from "./components/cardBriefing";
+import { SessionSchedulingForm } from "./components/scheduleSession";
+import TraineeAttendanceList from "./components/traineeAttendanceList";
 
 type TabKey = "new" | "past";
 type SessionStatus = "upcoming" | "held" | "archived";
@@ -143,10 +145,10 @@ function BriefingSeason() {
                 </div>
             ) : (
                 <div className="w-full flex flex-col gap-4">
-                     <SessionFilters />
-                     <CardBriefing/>
-                    {/* <SessionForm /> */}
-                    {/* <SessionPreview />  */}
+                    <SessionFilters />
+                    <CardBriefing />
+                    <SessionSchedulingForm />
+                    <TraineeAttendanceList />
                 </div>
             )}
         </div>
