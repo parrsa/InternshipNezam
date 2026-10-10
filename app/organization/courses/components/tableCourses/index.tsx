@@ -111,7 +111,7 @@ function Badge({
   return (
     <span
       className={[
-        "inline-flex min-h-[27px] items-center justify-center",
+        "inline-flex min-h-6.75 items-center justify-center",
         "whitespace-nowrap rounded-full border px-3 py-1",
         "text-xs font-medium leading-4",
         variant,
@@ -143,7 +143,6 @@ function exportCourses() {
     course.status,
   ]);
 
-  // Prevent spreadsheet formula injection in exported values.
   const escapeCell = (value: string) => {
     const safeValue = /^[\s]*[=+\-@]/.test(value)
       ? `'${value}`
@@ -193,7 +192,7 @@ export default function TableCoursesPage() {
           </span>
           <span
             dir="ltr"
-            className="text-xs leading-[18px] text-[#6B7280]"
+            className="text-xs leading-4.5 text-[#6B7280]"
           >
             {course.code}
           </span>
@@ -273,8 +272,8 @@ export default function TableCoursesPage() {
       className=" bg-[#F5F6F8] "
     >
       <div className="mx-auto  h-127.5 w-full rounded-[18px] border border-[#D9DEE7] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.10)]">
-        <div className="flex h-[100px] items-start justify-between px-[30px] pt-[30px]">
-          <h1 className="pt-[10px] text-[14px] font-bold leading-5 text-[#111827]">
+        <div className="flex h-25 items-start justify-between px-7.5 pt-7.5">
+          <h1 className="pt-2.5 text-[14px] font-bold leading-5 text-[#111827]">
             دوره‌های تعریف‌شده
           </h1>
 
@@ -282,7 +281,7 @@ export default function TableCoursesPage() {
             type="button"
             onClick={handleExport}
             className={[
-              "inline-flex h-[40px] items-center justify-center gap-2",
+              "inline-flex h-10 items-center justify-center gap-2",
               "rounded-[11px] border border-[#D9DEE7] bg-white",
               "px-3 text-sm font-medium text-[#111827]",
               "shadow-[0_1px_2px_rgba(15,23,42,0.05)]",
