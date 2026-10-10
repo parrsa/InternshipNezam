@@ -1,4 +1,3 @@
-
 import * as Yup from "yup";
 
 export interface VisitOption {
@@ -67,11 +66,9 @@ export const visitValidationSchema: Yup.ObjectSchema<VisitFormValues> =
       .required("عنوان بازدید الزامی است")
       .max(150, "عنوان نباید بیشتر از ۱۵۰ کاراکتر باشد"),
 
-    projectType: Yup.string()
-      .required("نوع پروژه را انتخاب کنید"),
+    projectType: Yup.string().required("نوع پروژه را انتخاب کنید"),
 
-    manager: Yup.string()
-      .required("مسئول پروژه را انتخاب کنید"),
+    manager: Yup.string().required("مسئول پروژه را انتخاب کنید"),
 
     visitDate: Yup.string()
       .required("تاریخ بازدید الزامی است")
@@ -79,10 +76,7 @@ export const visitValidationSchema: Yup.ObjectSchema<VisitFormValues> =
 
     visitTime: Yup.string()
       .required("ساعت حرکت الزامی است")
-      .matches(
-        /^([01]\d|2[0-3]):[0-5]\d$/,
-        "ساعت معتبر نیست"
-      ),
+      .matches(/^([01]\d|2[0-3]):[0-5]\d$/, "ساعت معتبر نیست"),
 
     duration: Yup.string()
       .required("مدت بازدید الزامی است")
@@ -90,12 +84,10 @@ export const visitValidationSchema: Yup.ObjectSchema<VisitFormValues> =
       .test(
         "duration-range",
         "مدت بازدید باید بین ۱ تا ۲۴ ساعت باشد",
-        (value) =>
-          Boolean(value && Number(value) >= 1 && Number(value) <= 24)
+        (value) => Boolean(value && Number(value) >= 1 && Number(value) <= 24)
       ),
 
-    meetingLocation: Yup.string()
-      .required("محل حرکت را انتخاب کنید"),
+    meetingLocation: Yup.string().required("محل حرکت را انتخاب کنید"),
 
     projectAddress: Yup.string()
       .trim()
@@ -138,11 +130,7 @@ export const visitValidationSchema: Yup.ObjectSchema<VisitFormValues> =
 
     registrationDeadline: Yup.string()
       .required("مهلت ثبت‌نام الزامی است")
-      .test(
-        "valid-deadline",
-        "تاریخ مهلت ثبت‌نام معتبر نیست",
-        validDate
-      ),
+      .test("valid-deadline", "تاریخ مهلت ثبت‌نام معتبر نیست", validDate),
 
     requirements: Yup.string()
       .defined()

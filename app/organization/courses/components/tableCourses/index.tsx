@@ -268,11 +268,11 @@ export default function TableCoursesPage() {
   ];
 
   return (
-    <main
+    <div
       dir="rtl"
       className=" bg-[#F5F6F8] "
     >
-      <section className="mx-auto  h-127.5 w-full rounded-[18px] border border-[#D9DEE7] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.10)]">
+      <div className="mx-auto  h-127.5 w-full rounded-[18px] border border-[#D9DEE7] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.10)]">
         <div className="flex h-[100px] items-start justify-between px-[30px] pt-[30px]">
           <h1 className="pt-[10px] text-[14px] font-bold leading-5 text-[#111827]">
             دوره‌های تعریف‌شده
@@ -296,19 +296,17 @@ export default function TableCoursesPage() {
           </button>
         </div>
 
-        {/* Table */}
         <div className="w-full">
           <Table
             tableRow={courses}
             tableCol={columns}
             minHeight="390px"
-            HeaderPY="py-[17px]"
-            rowPY="py-[14px]"
+            HeaderPY="py-[15px]"
             fixed
-            className="[&_thead_th]:text-[14px] [&_tbody_td]:text-[14px]"
+           
           />
         </div>
-      </section>
-    </main>
+      </div>
+    </div>
   );
 }
