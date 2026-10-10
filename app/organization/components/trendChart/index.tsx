@@ -91,7 +91,7 @@ function LegendMarker({ color }: { color: string }) {
 function TrendChart() {
     return (
         <TrendChartPart title=" روند رشد کارآموزان و سرپرستان">
-            <div dir="ltr" className="mt-6 h-[260px]  w-full">
+            <div dir="ltr" className="mt-6 h-65  w-full">
                 <Line data={data} options={options} />
             </div>
 
