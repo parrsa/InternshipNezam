@@ -3,6 +3,7 @@ import { useState } from "react";
 import { cn } from "@/lib/cn";
 import Table from "@/app/components/ui/Table";
 import SessionFilters from "./components/sessionFilters";
+import CardBriefing from "./components/cardBriefing";
 
 type TabKey = "new" | "past";
 type SessionStatus = "upcoming" | "held" | "archived";
@@ -143,7 +144,7 @@ function BriefingSeason() {
             ) : (
                 <div className="w-full flex flex-col gap-4">
                      <SessionFilters />
-                    {/* <SessionStats /> */}
+                     <CardBriefing/>
                     {/* <SessionForm /> */}
                     {/* <SessionPreview />  */}
                 </div>

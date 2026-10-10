@@ -1,9 +1,4 @@
-import {
-  Award,
-  BookOpen,
-  CheckCircle2,
-  Clock3,
-} from "lucide-react";
+import { BookOpen, Clock3, Tv, User, UsersIcon } from "lucide-react";
 
 export type StatCard = {
   title: string;
@@ -17,43 +12,38 @@ export const statCards: StatCard[] = [
 
 
   {
-    title: "گواهی‌های صادر شده",
-    value: "127",
-    badge: "۱ در حال صدور",
-    icon: Award,
-    badgeClass:
-      "bg-blue-50 text-blue-900 border-blue-200",
-  },
-  {
-    title: "دوره‌های جاری",
-    value: "6",
-    badge: "۹۶٪ نرخ تأیید",
-    icon: CheckCircle2,
+    title: " کارآموزان حضور یافته",
+    value: "45",
+    badge: "ماه جاری",
+    icon: User,
     badgeClass:
       "bg-emerald-50 text-emerald-900 border-emerald-200",
+
   },
+
   {
-   title: "سرپرستان فعال",
-   value: "16",
-   badge: "۳ دوره نزد اتمام",
-   icon: BookOpen,
+   title: "جلسات برنامه‌ریزی شده",
+   value: "3",
+   badge: "این هفته",
+   icon: Tv,
    badgeClass:
-     "bg-amber-50 text-amber-900 border-amber-200",
+      "bg-blue-50 text-blue-900 border-blue-200",
+
  },
     {
-    title: " کل کارآموزان",
-    value: "89",
-    badge: "۴۸ ساعت این ماه",
-    icon: Clock3,
+    title: " کارآموزان نیازمند جلسه ",
+    value: "8",
+    badge: "ثبت‌نام شده، بدون جلسه",
+    icon: UsersIcon,
     badgeClass:
-      "bg-emerald-50 text-emerald-900 border-emerald-200",
+     "bg-orange-100 text-amber-900 border-amber-200",
   },
 ];
-function DashboardCardOrg() {
+function CardBriefing() {
   return (
     <div
-      dir="ltr"
-      className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+      dir="rtl"
+      className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3"
     >
       {statCards.map((card) => {
         const Icon = card.icon;
@@ -105,4 +95,4 @@ function DashboardCardOrg() {
   );
 }
 
-export default DashboardCardOrg;
+export default CardBriefing;
