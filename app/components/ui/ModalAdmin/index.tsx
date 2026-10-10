@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { cn } from "@/lib/cn"; 
+import { cn } from "@/lib/cn";
 import type { InputSize, InputVariant } from "../input/Input.js";
 
 
@@ -31,6 +31,8 @@ export interface SelectProps
 const sizeClasses: Record<InputSize, string> = {
     lg: "h-12 px-4 text-base",
     xl: "h-14 px-4 text-lg",
+    sm: "h-11 px-2 text-sm"
+
 };
 
 const roundedClasses = {

@@ -84,7 +84,7 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
   },
   {
     label: "دوره ها",
-    href: "/organization/profile",
+    href: "/organization/courses",
     icon: Building2,
   },
   {
