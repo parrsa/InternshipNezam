@@ -29,7 +29,7 @@ export default function UserPanelSidebar() {
     return (
         <aside
             dir="rtl"
-            className="w-72 shrink-0 h-full bg-[#f4f6ffe9]  flex flex-col border-l  border-neutral-300 overflow-hidden"
+            className="hidden md:flex w-72 shrink-0 h-full bg-[#f4f6ffe9] flex-col border-l border-neutral-300 overflow-hidden"
         >
             <div className=" p-3   h-16  border-b border-neutral-300">
                 <div className="flex w-full  gap-2 ">

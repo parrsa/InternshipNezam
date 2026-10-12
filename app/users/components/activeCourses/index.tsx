@@ -7,7 +7,7 @@ function ActiveCourses() {
   return (
     <div
       dir="rtl"
-      className="rounded-xl border border-slate-200 bg-white px-7.5 w-[35%] py-7.75 shadow-sm"
+      className="rounded-xl border border-slate-200 bg-white px-7.5  w-full lg:w-[35%] py-7.75 shadow-sm"
     >
       <h2
         className="text-s font-bold text-slate-900"

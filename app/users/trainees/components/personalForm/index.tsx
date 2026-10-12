@@ -12,7 +12,7 @@ interface PersonalInfoValues {
     fullName: string;
     membershipNumber: string;
     nationalId: string;
-    birthDate: string; 
+    birthDate: string;
     age: string;
     phone: string;
     birthPlace: string;
@@ -39,7 +39,7 @@ const validationSchema = Yup.object({
     birthDate: Yup.string()
         .required("تاریخ تولد الزامی است")
         .test("is-past-date", "تاریخ تولد باید قبل از امروز باشد", (value) => {
-            if (!value) return true; 
+            if (!value) return true;
             return isValidISODate(value) && value < toISODate(new Date());
         }),
     age: Yup.number()
@@ -61,7 +61,7 @@ interface PersonalInfoFormProps {
 const labelClassName = "text-2xs text-neutral-900  font-semibold";
 
 export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFormProps) {
-    const yesterday = useMemo(() => getYesterday(), []);
+    const yesterday = getYesterday();
 
     return (
         <Formik<PersonalInfoValues>
@@ -96,8 +96,8 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                         </div>
 
                         <div className="flex  flex-col gap-5">
-                            <div className=" flex gap-5">
-                                <div className="w-[70%]">
+                            <div className=" flex flex-col  gap-5 sm:flex-row sm:flex">
+                                <div className="sm:w-[70%] w-full">
                                     <Input
                                         labelClassName={labelClassName}
                                         className=" mt-2 placeholder:text-neutral-600   placeholder:text-xs "
@@ -108,7 +108,7 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                         {...bind("fullName")}
                                     />
                                 </div>
-                                <div className="w-[35%]">
+                                <div className="sm:w-[35%]  w-full">
                                     <Input
                                         labelClassName={labelClassName}
                                         className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
@@ -183,15 +183,15 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                 />
                             </div>
 
-                            <Input
-                                labelClassName={labelClassName}
-                                variant="default"
-                                inputSize="sm"
-                                className=" mt-2  w-[66%]  placeholder:text-neutral-600  placeholder:text-xs "
-                                label="نشانی"
-                                placeholder="تهران، خیابان ولیعصر، کوچه ..."
-                                {...bind("address")}
-                            />
+                                <Input
+                                    labelClassName={labelClassName}
+                                    variant="default"
+                                    inputSize="sm"
+                                    className=" mt-2  sm:w-[66%]  w-full placeholder:text-neutral-600  placeholder:text-xs "
+                                    label="نشانی"
+                                    placeholder="تهران، خیابان ولیعصر، کوچه ..."
+                                    {...bind("address")}
+                                />
                         </div>
                     </Form>
                 );
