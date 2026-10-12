@@ -38,11 +38,12 @@ export default function OrganizationSidebar() {
           </div>
           <div >
             <p className="text-xs font-bold text-neutral-800">
-              پنل سازمان
+              سامانه کارآموزی
 
             </p>
             <p className="text-2xs text-neutral-400">
-              داشبورد مدیریت سازمان
+              سازمان نظام مهندسی تهران
+
             </p>
           </div>
         </div>
@@ -51,12 +52,13 @@ export default function OrganizationSidebar() {
 
       <div className=" p-3 border-b border-neutral-300">
         <div className="mt-2 rounded-lg bg-[#6a93df1d] px-3 py-1.5 mb-2">
-          <p className="text-xs font-semibold text-neutral-700 truncate">
-            {user?.fullName || "کارآموز"}
-          </p>
-          <p className="text-2xs text-neutral-400">
-            کارآموز
+          <p className="text-xs  mb-1 font-semibold text-neutral-700 truncate">
+            {/* {user?.fullName || "اداره کارآموزی"} */}
+            { "اداره کارآموزی"}
 
+          </p>
+          <p className="text-2xs text-neutral-600">
+            مدیریت سازمان
           </p>
         </div>
       </div>
