@@ -151,7 +151,7 @@ export const SupportWidget = ({
                     label="پشتیبانی"
                     position={position}
                     color={color}
-                    variant="fabSupport"
+                    // variant="fabSupport"
                     onClick={() => setIsOpen(!isOpen)}
                     className={`
                         transition-all duration-300
