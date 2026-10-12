@@ -81,7 +81,7 @@ function Reports() {
     active: {
       label: "فعال",
       className:
-        "border-emerald-300 bg-emerald-100 text-emerald-700",
+        "border-emerald-300 bg-emerald-100 text-emerald-900",
     },
 
     inactive: {
@@ -93,27 +93,25 @@ function Reports() {
     review: {
       label: "نیازمند بررسی",
       className:
-        "border-amber-300 bg-amber-100 text-amber-700",
+        "border-amber-300 bg-orange-100 text-orange-900",
     },
   };
 
   return (
-    <main
+    <div
       className="
         min-h-screen
         w-full
         bg-[#f8f8f8]
-        px-[30px]
-        py-[32px]
+        p-7.5
       "
     >
-      <section
+      <div
         aria-label="گزارش مهندسان"
         className="
           mx-auto
           grid
           w-full
-          max-w-[1500px]
           grid-cols-1
           gap-5
           md:grid-cols-2
@@ -140,10 +138,9 @@ function Reports() {
           const currentStatus = statusConfig[status];
 
           return (
-            <article
+            <div
               key={id}
               className="
-                min-h-[367px]
                 w-full
                 rounded-[18px]
                 border
@@ -151,11 +148,10 @@ function Reports() {
                 bg-white
                 px-5
                 pb-5
-                pt-[50px]
-                shadow-[0_2px_5px_rgba(15,23,42,0.08)]
+                pt-11
+                shadow-sm
               "
             >
-              {/* Avatar */}
               <div className="flex justify-center">
                 <div
                   className="
@@ -176,11 +172,10 @@ function Reports() {
                 </div>
               </div>
 
-              {/* Engineer information */}
-              <div className="mt-[18px] text-center">
+              <div className="mt4 text-center">
                 <h2
                   className="
-                    text-[17px]
+                    text-xs
                     font-bold
                     leading-7
                     text-slate-950
@@ -192,7 +187,7 @@ function Reports() {
                 <p
                   className="
                     mt-0.5
-                    text-[13px]
+                    text-xs
                     font-normal
                     leading-6
                     text-slate-500
@@ -202,15 +197,14 @@ function Reports() {
                 </p>
               </div>
 
-              {/* Rating */}
               <div
                 className="
-                  mt-[10px]
+                  mt-2.5
                   flex
                   items-center
                   justify-center
                   gap-1
-                  text-[16px]
+                  text-xs
                   font-medium
                   text-slate-950
                 "
@@ -219,7 +213,6 @@ function Reports() {
                   {toPersianDigits(rating)}
                 </span>
 
-                {/* Star */}
                 <svg
                   width="19"
                   height="19"
@@ -249,23 +242,21 @@ function Reports() {
                 </svg>
               </div>
 
-              {/* Divider */}
               <div
                 className="
-                  my-[17px]
+                  my-4
                   h-px
                   w-full
                   bg-slate-200
                 "
               />
 
-              {/* Trainees information */}
               <div
                 className="
                   flex
                   items-center
                   justify-between
-                  text-[13px]
+                  text-xs
                   leading-5
                   text-slate-600
                 "
@@ -284,11 +275,10 @@ function Reports() {
                 </span>
               </div>
 
-              {/* Progress bar */}
               <div
                 className="
-                  mt-[7px]
-                  h-[7px]
+                  mt-1.75
+                  h-1.75
                   w-full
                   overflow-hidden
                   rounded-full
@@ -315,18 +305,17 @@ function Reports() {
                 />
               </div>
 
-              {/* Status */}
-              <div className="mt-[5px] flex justify-center">
+              <div className="mt-3 flex justify-center">
                 <span
                   className={`
                     inline-flex
-                    min-h-[28px]
+                   
                     items-center
                     justify-center
                     rounded-full
                     border
-                    px-[13px]
-                    text-[12px]
+                    px-3
+                    text-2xs
                     font-medium
                     leading-5
                     ${currentStatus.className}
@@ -335,11 +324,11 @@ function Reports() {
                   {currentStatus.label}
                 </span>
               </div>
-            </article>
+            </div>
           );
         })}
-      </section>
-    </main>
+      </div>
+    </div>
   );
 }
 
