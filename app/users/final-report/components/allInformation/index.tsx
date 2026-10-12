@@ -1,5 +1,4 @@
 "use client";
-import { useMemo } from "react";
 import { useField } from "formik";
 import { Input } from "@/app/components/ui/input/Input";
 import { Select } from "@/app/components/ui/input/SelectSilde";
@@ -18,8 +17,7 @@ function AllInformation() {
     const [date, dateMeta, dateHelpers] = useField<string>("deliveryDate");
     const [sup, supMeta, supHelpers] = useField<string>("supervisor");
 
-    const today = useMemo(() => getToday(), []);
-
+    const today = getToday();
     return (
         <div className="w-full rounded-2xl border border-neutral-200 bg-white px-7 py-7 shadow-sm">
             <h2 className="mb-8 text-s font-semibold text-neutral-900">اطلاعات کلی گزارش</h2>

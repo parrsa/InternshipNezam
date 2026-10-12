@@ -21,7 +21,6 @@ const TABS: { key: TabKey; label: string }[] = [
     { key: "new", label: "تعریف دوره" },
 ];
 
-
 const MANAGERS: VisitOption[] = [
     { label: "مهندس رضایی", value: "manager-1" },
     { label: "مهندس احمدی", value: "manager-2" },

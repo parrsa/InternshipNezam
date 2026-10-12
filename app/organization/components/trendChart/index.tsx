@@ -1,20 +1,20 @@
 "use client"
 
-
-import { memo } from "react";
 import { Line } from "react-chartjs-2";
 import {
     CategoryScale,
     Chart as ChartJS,
+    Filler,
     LinearScale,
     LineElement,
     PointElement,
     Tooltip,
 } from "chart.js";
-import type { ChartData, ChartOptions } from "chart.js";
+import type { ChartData, ChartOptions, ScriptableContext } from "chart.js";
+import { TrendingUp } from "lucide-react";
 import TrendChartPart from "../parentPartofChart";
 
-ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Tooltip);
+ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Filler);
 
 const FONT_FAMILY = "";
 const TICK_COLOR = "#94a3b8";
@@ -34,11 +34,24 @@ const createDataset = (label: string, values: number[], color: string) => ({
     borderColor: color,
     borderWidth: 2,
     tension: 0.4,
-    pointRadius: 4,
+    fill: true,
+    backgroundColor: (context: ScriptableContext<"line">) => {
+        const { chart } = context;
+        const area = chart.chartArea;
+        if (!area) return `${color}1a`;
+        const gradient = chart.ctx.createLinearGradient(0, area.top, 0, area.bottom);
+        gradient.addColorStop(0, `${color}40`);
+        gradient.addColorStop(1, `${color}00`);
+        return gradient;
+    },
+    pointRadius: 0,
     pointHoverRadius: 5,
     pointBorderWidth: 2,
     pointBorderColor: color,
     pointBackgroundColor: "#ffffff",
+    pointHoverBackgroundColor: "#ffffff",
+    pointHoverBorderColor: color,
+    pointHoverBorderWidth: 2,
 });
 
 const data: ChartData<"line"> = {
@@ -68,7 +81,7 @@ const options: ChartOptions<"line"> = {
             min: 0,
             max: 100,
             ticks: { stepSize: 25, color: TICK_COLOR, font: TICK_FONT, padding: 8 },
-            border: { display: false, dash: [4, 4] },
+            border: { display: true, color: AXIS_COLOR, dash: [4, 4] },
             grid: { color: GRID_COLOR },
         },
     },
@@ -88,23 +101,33 @@ function LegendMarker({ color }: { color: string }) {
     );
 }
 
-function TrendChart() {
+function UpwardTrendBadge() {
     return (
-        <TrendChartPart title=" روند رشد کارآموزان و سرپرستان">
-            <div dir="ltr" className="mt-6 h-65  w-full">
+        <span
+            dir="ltr"
+            className="inline-flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-900"
+        >
+            <TrendingUp size={12} aria-hidden="true" />
+            <span dir="rtl">روند صعودی</span>
+        </span>
+    );
+}
+
+export default function TrendChart() {
+    return (
+        <TrendChartPart title="روند رشد کارآموزان و سرپرستان" badge={<UpwardTrendBadge />}>
+            <div dir="ltr" className="mt-6 h-65 w-full">
                 <Line data={data} options={options} />
             </div>
 
-            <ul className="mt-3 flex items-center justify-center gap-4 text-xs">
+            <ul dir="ltr" className="mt-3 flex items-center justify-center gap-4 text-xs">
                 {LEGEND.map(({ label, color }) => (
                     <li key={label} className="flex items-center gap-1" style={{ color }}>
-                        <LegendMarker color={color} />
                         <span>{label}</span>
+                        <LegendMarker color={color} />
                     </li>
                 ))}
             </ul>
         </TrendChartPart>
     );
 }
-
-export default memo(TrendChart);
