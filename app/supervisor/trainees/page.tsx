@@ -1,6 +1,4 @@
-import CommitmentAgreement from "./components/commitmentAgreement";
-import EducationInfo from "./components/educationInfo";
-import LicenseStatus from "./components/licenseStatus";
+
 import PersonalInfoForm from "./components/personalForm";
 
 

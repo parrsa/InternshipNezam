@@ -7,12 +7,12 @@ import ActivitySummary from "./components/activitySummary";
 import AttachmentFile from "./components/attachmentFile";
 import { Button } from "@/app/components/ui/Button";
 import { cn } from "@/lib/cn";
-;
+import { isValidISODate, toISODate } from "@/lib/date-utils";
 
 interface ReportFormValues {
     title: string;
     supervisor: string;
-    deliveryDate: string;
+    deliveryDate: string; 
     summary: string;
     totalHours: string;
     technicalVisits: string;
@@ -39,7 +39,14 @@ const numberField = (label: string, min: number) =>
 const validationSchema = Yup.object({
     title: Yup.string().min(3, "عنوان گزارش حداقل ۳ کاراکتر باشد").required("عنوان گزارش الزامی است"),
     supervisor: Yup.string().required("انتخاب سرپرست الزامی است"),
-    deliveryDate: Yup.string().required("تاریخ تحویل الزامی است"),
+    deliveryDate: Yup.string()
+        .required("تاریخ تحویل الزامی است")
+        .test("is-valid-date", "تاریخ تحویل معتبر نیست", (value) => !value || isValidISODate(value))
+        .test(
+            "is-not-past",
+            "تاریخ تحویل نمی‌تواند قبل از امروز باشد",
+            (value) => !value || !isValidISODate(value) || value >= toISODate(new Date())
+        ),
     summary: Yup.string().min(10, "خلاصه فعالیت حداقل ۱۰ کاراکتر باشد").required("خلاصه فعالیت الزامی است"),
     totalHours: numberField("ساعت کل کارآموزی", 1),
     technicalVisits: numberField("تعداد بازدید فنی", 0),
@@ -87,7 +94,7 @@ function FinalReport() {
                         >
                             ذخیره پیش‌نویس
                         </Button>
-                  
+
                     </div>
                 </Form>
             )}

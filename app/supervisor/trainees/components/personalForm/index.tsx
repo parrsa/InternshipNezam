@@ -1,21 +1,24 @@
 "use client";
 
-import { Form, Formik, useFormik } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Input } from "@/app/components/ui/input";
-import { useState } from "react";
-import { Button } from "@/app/components/ui/Button";
+import { useMemo, useState } from "react";
+import { getYesterday, isValidISODate, toISODate } from "@/lib/date-utils";
+import JalaliDatePicker from "@/lib/jalaliDatePicker";
+
 import EducationInfo from "../educationInfo";
 import LicenseStatus from "../licenseStatus";
 import CommitmentAgreement from "../commitmentAgreement";
 import RegistrationCOnditions from "../RegistrationConditions";
 
+type UserType = "User" | "legal";
 
 const user = {
     FullName: "",
     LicenseNumber: "",
     NationalCode: "",
-    Birthday: "",
+    Birthday: "", 
     Birthplace: "",
     PhoneNumber: ""
 }
@@ -24,12 +27,12 @@ const legal = {
     CompanyName: "",
     LicenseNumber: "",
     NationalCode: "",
-    Birthday: "",
+    Birthday: "", 
     Birthplace: "",
     PhoneNumber: ""
 }
 
-const usersType = [
+const usersType: { id: number; title: string; type: UserType }[] = [
     {
         id: 1,
         title: "شخص حقیقی",
@@ -48,7 +51,13 @@ const commonShape = {
         .trim()
         .required("کد ملی الزامی است")
         .matches(/^[0-9۰-۹]{10}$/, "کد ملی باید ۱۰ رقم باشد"),
-    Birthday: Yup.string().trim().required("تاریخ تولد الزامی است"),
+    Birthday: Yup.string()
+        .trim()
+        .required("تاریخ تولد الزامی است")
+        .test("is-past-date", "تاریخ تولد باید قبل از امروز باشد", (value) => {
+            if (!value) return true; // پیام required خودش نمایش داده می‌شود
+            return isValidISODate(value) && value < toISODate(new Date());
+        }),
     Birthplace: Yup.string().trim().required("محل تولد الزامی است"),
     PhoneNumber: Yup.string()
         .trim()
@@ -71,7 +80,9 @@ const labelClassName = "text-2xs text-neutral-900  font-semibold";
 
 
 export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
-    const [userType, setUserType] = useState<"legal" | "User">("User")
+    const [userType, setUserType] = useState<UserType>("User")
+    const yesterday = useMemo(() => getYesterday(), []);
+
     return (
         <Formik
             enableReinitialize
@@ -80,13 +91,37 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
             onSubmit={(value) => {
                 console.log(value)
             }}>
-            {({ getFieldProps, errors, touched }) => {
+            {({ getFieldProps, errors, touched, values, setFieldValue, setFieldTouched }) => {
                 const f = (name: string) => ({
                     name,
                     field: getFieldProps(name),
                     error: !!((touched as any)[name] && (errors as any)[name]),
                     errorMessage: (errors as any)[name] as string | undefined,
                 });
+
+                const birthdayPicker = (
+                    <JalaliDatePicker
+                        label="تاریخ تولد"
+                        variant="default"
+                        labelClassName="mb-2 text-xs"
+                        placeholder="۱۳۷۰/۰۱/۰۱"
+                        inputSize="sm"
+                        name="Birthday"
+                        value={(values as any).Birthday ?? ""}
+                        maxDate={yesterday}
+                        error={!!((touched as any).Birthday && (errors as any).Birthday)}
+                        errorMessage={
+                            (touched as any).Birthday
+                                ? ((errors as any).Birthday as string | undefined)
+                                : undefined
+                        }
+                        onChange={(iso) => {
+                            setFieldTouched("Birthday", true, false);
+                            setFieldValue("Birthday", iso, true);
+                        }}
+                        onBlur={() => setFieldTouched("Birthday", true, false)}
+                    />
+                );
 
                 return (
                     <Form className="w-full flex justify-center items-center flex-col gap-4">
@@ -111,11 +146,14 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
                                     <p className="text-3xs text-black font-bold">نوع شخص</p>
                                     <div className="w-full flex justify-center items-center gap-3 ">
                                         {usersType.map((item) => (
-                                            <div
-                                                onClick={() => setUserType(item.type as any)}
-                                                className={`w-1/2 h-11 flex justify-center items-center text-center border border-neutral-300 rounded-lg text-xs cursor-pointer p-2 hover:bg-blue-300 transition-all duration-500 hover:text-white ${userType === item.type ? "bg-blue-700 text-white" : ""}`}>
+                                            <button
+                                                key={item.id}
+                                                type="button"
+                                                onClick={() => setUserType(item.type)}
+                                                className={`w-1/2 h-11 flex justify-center items-center text-center border border-neutral-300 rounded-lg text-xs cursor-pointer p-2 hover:bg-blue-300 transition-all duration-500 hover:text-white ${userType === item.type ? "bg-blue-700 text-white" : ""}`}
+                                            >
                                                 <p>{item.title}</p>
-                                            </div>
+                                            </button>
                                         ))}
                                     </div>
                                 </div>
@@ -156,14 +194,7 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
                                                 />
                                             </div>
                                             <div className="w-1/3">
-                                                <Input
-                                                    label="تاریخ تولد"
-                                                    variant="default"
-                                                    labelClassName="mb-2 text-xs"
-                                                    placeholder="012345-6"
-                                                    inputSize="sm"
-                                                    {...f("Birthday")}
-                                                />
+                                                {birthdayPicker}
                                             </div>
                                             <div className="w-1/3">
                                                 <Input
@@ -225,14 +256,7 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
                                                 />
                                             </div>
                                             <div className="w-1/3">
-                                                <Input
-                                                    label="تاریخ تولد"
-                                                    variant="default"
-                                                    labelClassName="mb-2 text-xs"
-                                                    placeholder="012345-6"
-                                                    inputSize="sm"
-                                                    {...f("Birthday")}
-                                                />
+                                                {birthdayPicker}
                                             </div>
                                             <div className="w-1/3">
                                                 <Input

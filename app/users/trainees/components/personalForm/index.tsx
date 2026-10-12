@@ -1,14 +1,18 @@
 "use client";
 
+import { useMemo } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Input } from "@/app/components/ui/input";
+import { getYesterday, isValidISODate, toISODate } from "@/lib/date-utils";
+import JalaliDatePicker from "@/lib/jalaliDatePicker";
+
 
 interface PersonalInfoValues {
     fullName: string;
     membershipNumber: string;
     nationalId: string;
-    birthDate: string;
+    birthDate: string; 
     age: string;
     phone: string;
     birthPlace: string;
@@ -32,9 +36,12 @@ const validationSchema = Yup.object({
     nationalId: Yup.string()
         .matches(/^\d{10}$/, "کد ملی باید ۱۰ رقم باشد")
         .required("کد ملی الزامی است"),
-    birthDate: Yup.date()
-        .typeError("تاریخ تولد معتبر نیست")
-        .required("تاریخ تولد الزامی است"),
+    birthDate: Yup.string()
+        .required("تاریخ تولد الزامی است")
+        .test("is-past-date", "تاریخ تولد باید قبل از امروز باشد", (value) => {
+            if (!value) return true; 
+            return isValidISODate(value) && value < toISODate(new Date());
+        }),
     age: Yup.number()
         .typeError("سن باید عدد باشد")
         .positive("سن معتبر نیست")
@@ -54,13 +61,15 @@ interface PersonalInfoFormProps {
 const labelClassName = "text-2xs text-neutral-900  font-semibold";
 
 export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFormProps) {
+    const yesterday = useMemo(() => getYesterday(), []);
+
     return (
         <Formik<PersonalInfoValues>
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => onSubmit?.(values)}
         >
-            {({ errors, touched, getFieldProps }) => {
+            {({ errors, touched, values, getFieldProps, setFieldValue, setFieldTouched }) => {
                 const bind = (name: keyof PersonalInfoValues) => ({
                     ...getFieldProps(name),
                     error: !!(errors[name] && touched[name]),
@@ -98,7 +107,6 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                         placeholder="مثال: علی محمدی"
                                         {...bind("fullName")}
                                     />
-                                    
                                 </div>
                                 <div className="w-[35%]">
                                     <Input
@@ -110,7 +118,6 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                         placeholder="ST-1404-0..."
                                         {...bind("membershipNumber")}
                                     />
-                                    
                                 </div>
                             </div>
 
@@ -124,17 +131,26 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                     placeholder="0012345678"
                                     {...bind("nationalId")}
                                 />
-                                
-                                <Input
+
+                                <JalaliDatePicker
                                     labelClassName={labelClassName}
                                     className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
                                     variant="default"
                                     inputSize="sm"
-                                    type="date"
                                     label="تاریخ تولد"
-                                    {...bind("birthDate")}
+                                    placeholder="۱۳۷۰/۰۱/۰۱"
+                                    name="birthDate"
+                                    value={values.birthDate}
+                                    maxDate={yesterday}
+                                    error={!!(errors.birthDate && touched.birthDate)}
+                                    errorMessage={touched.birthDate ? errors.birthDate : undefined}
+                                    onChange={(iso) => {
+                                        setFieldTouched("birthDate", true, false);
+                                        setFieldValue("birthDate", iso, true);
+                                    }}
+                                    onBlur={() => setFieldTouched("birthDate", true, false)}
                                 />
-                                
+
                                 <Input
                                     labelClassName={labelClassName}
                                     className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
@@ -145,7 +161,7 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                     placeholder="۲۴"
                                     {...bind("age")}
                                 />
-                                
+
                                 <Input
                                     labelClassName={labelClassName}
                                     className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs  "
@@ -155,7 +171,7 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                     placeholder="تهران"
                                     {...bind("birthPlace")}
                                 />
-                                
+
                                 <Input
                                     labelClassName={labelClassName}
                                     variant="default"
@@ -165,7 +181,6 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                     placeholder="09123456789"
                                     {...bind("phone")}
                                 />
-                                
                             </div>
 
                             <Input
@@ -177,7 +192,6 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                 placeholder="تهران، خیابان ولیعصر، کوچه ..."
                                 {...bind("address")}
                             />
-                            
                         </div>
                     </Form>
                 );

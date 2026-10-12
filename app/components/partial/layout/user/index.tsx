@@ -75,9 +75,9 @@ const UserLayoutContent = ({
               <Input
                 variant="default"
                 color="input"
+                className=" mt-2 w-full border-none bg-neutral-50  placeholder:text-neutral-500   placeholder:text-sm "
                 inputSize="sm"
                 placeholder="جستجو در داشبورد کارآموز…"
-                className=" mt-2 w-full border-none bg-neutral-50  placeholder:text-neutral-500   placeholder:text-sm "
                 rightIcon={
                   <Search size={18}
                     className=" mt-2 text-neutral-500"
