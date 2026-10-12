@@ -31,8 +31,7 @@ export interface SelectProps
 const sizeClasses: Record<InputSize, string> = {
     lg: "h-12 px-4 text-base",
     xl: "h-14 px-4 text-lg",
-    sm: "h-11 px-2 text-sm"
-
+    sm: ""
 };
 
 const roundedClasses = {

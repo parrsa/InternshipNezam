@@ -1,6 +1,6 @@
 "use client";
 import { Star, FileText, Download, CircleCheck, UserCheck, Building2 } from "lucide-react";
-import { cn } from "@/lib/cn";
+import { cn } from "../../../../../lib/cn";
 import { Button } from "@/app/components/ui/Button";
 import Modal from "@/app/components/ui/Modal";
 import Table from "@/app/components/ui/Table";
