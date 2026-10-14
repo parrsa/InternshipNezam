@@ -42,7 +42,7 @@ function Courses() {
     }
 
     return (
-        <div className="flex w-full flex-col items-center  gap-3 px-5 p-2">
+        <div className="flex w-full flex-col items-center  gap-3 sm:px-5 p-2">
             <div className="flex w-full items-center justify-between gap-2 self-end rounded-xl bg-[#e7eef098] p-1 md:w-1/2">
                 {TABS.map((tab) => {
                     const isActive = activeTab === tab.key;

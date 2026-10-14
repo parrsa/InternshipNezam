@@ -161,7 +161,7 @@ const OrganizationLayoutContent = ({
       className="flex w-full bg-neutral-100 mx-auto h-screen text-black overflow-hidden"
     >
       {/* سایدبار دسکتاپ - فقط در lg به بالا نمایش داده می‌شود */}
-      <div className="hidden lg:flex h-full shrink-0">
+      <div className="hidden sm:flex h-full shrink-0">
         <OrganizationSidebar />
       </div>
 

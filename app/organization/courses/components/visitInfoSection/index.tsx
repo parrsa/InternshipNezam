@@ -77,12 +77,12 @@ export function VisitInfoSection({ managers }: Props) {
 
         <div className="w-1/2"
           dir="rtl"
-        >          <label className="mb-2 block text-xs text-left font-semibold leading-5 text-[#111827]">نوع پروژه *</label>
+        >          <label className="mb-2 block text-xs  text-left font-semibold leading-5 text-[#111827]">نوع پروژه *</label>
           <Select
             options={projectTypes}
             value={values.projectType}
             placeholder="انتخاب نوع پروژه"
-            className="h-9 text-sm "
+            className="h-9 text-sm  "
 
             onChange={(value) => {
               void setFieldValue("projectType", value);
@@ -91,10 +91,10 @@ export function VisitInfoSection({ managers }: Props) {
           <ErrorMessage name="projectType" />
         </div>
 
-        <div className="w-1/2"
+        <div className="lg:w-1/2 w-full"
           dir="rtl"
         >
-          <label className="mb-2 block text-xs text-left font-semibold leading-5 text-[#111827]">مسئول پروژه *</label>
+          <label className="mb-2 block text-xs text-nowrap text-left font-semibold leading-5 text-[#111827]">مسئول پروژه *</label>
           <Select
             options={managers}
             value={values.manager}

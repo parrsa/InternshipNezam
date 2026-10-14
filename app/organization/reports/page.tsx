@@ -103,7 +103,7 @@ function Reports() {
         min-h-screen
         w-full
         bg-[#f8f8f8]
-        p-7.5
+       sm:p-7.5
       "
     >
       <div

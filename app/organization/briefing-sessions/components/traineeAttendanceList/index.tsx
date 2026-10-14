@@ -289,7 +289,7 @@ export default function TraineeAttendanceList({
       </div>
 
       <div className="mt-5 flex items-center gap-0.5">
-        <div className="flex h-11 flex-1 items-center gap-3 rounded-lg border-r-4 border-amber-400 bg-amber-50 px-4 text-xs text-amber-700">
+        <div className="flex sm:h-11 py-3 sm:py-0 flex-1 items-center gap-3 rounded-lg border-r-4 border-amber-400 bg-amber-50 px-4 text-3xs sm:text-xs text-amber-700">
           <WalletIcon className="h-4.5 w-4.5 text-amber-600" />
           <p>پس از ثبت حضور کارآموز در جلسه توجیهی، امکان پرداخت هزینه کارآموز برای کارآموز فعال می‌شود.</p>
         </div>

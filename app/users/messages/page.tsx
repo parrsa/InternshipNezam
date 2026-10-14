@@ -7,7 +7,7 @@ function MessageParent(props: Props) {
     const { } = props
 
     return (
-        <div className="w-full flex flex-col gap-4  px-5 p-2 items-center justify-center">
+        <div className="w-full flex flex-col gap-4  sm:px-5 p-2 items-center justify-center">
             <MessageInbox />
         </div>
     )

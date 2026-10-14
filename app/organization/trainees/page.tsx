@@ -167,7 +167,7 @@ function Trainees() {
     }, [trainees, query]);
 
     return (
-        <div dir="rtl" className="flex w-full flex-col gap-5 px-5 p-2">
+        <div dir="rtl" className="flex w-full flex-col gap-5 sm:px-5 p-2">
             <div className="flex items-center justify-between gap-4">
                 <Input
                     variant="default"

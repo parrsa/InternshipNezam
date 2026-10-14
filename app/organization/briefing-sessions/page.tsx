@@ -103,7 +103,7 @@ function BriefingSeason() {
     const [activeTab, setActiveTab] = useState<TabKey>("new");
 
     return (
-        <div className="w-full flex flex-col gap-3 px-5 p-2 items-center justify-center">
+        <div className="w-full flex flex-col gap-3 sm:px-5 px-0 p-2 items-center justify-center">
             <div
                 className="flex items-center justify-between gap-2 bg-[#e7eef098] p-1 rounded-xl w-full md:w-1/2 self-end"
             >

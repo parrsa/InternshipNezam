@@ -67,8 +67,8 @@ export default function MessageInbox() {
       dir="rtl"
       className=" pt-1 w-full text-[#111827]"
     >
-      <div className="mx-auto flex  items-start gap-4 w-full ">
-        <div className={`${card} w-[35%]  px-3.75 pb-3.75 pt-10`}>
+      <div className="mx-auto flex sm:flex sm:flex-row flex-col  items-center sm:items-start gap-4 w-full ">
+        <div className={`${card} sm:w-[35%]  w-full px-3.75 pb-3.75 pt-10`}>
 
           <Button
             variant="solid"
@@ -103,7 +103,7 @@ export default function MessageInbox() {
           </ul>
         </div>
 
-        <div className={`${card} flex w-[65%] flex-col`}>
+        <div className={`${card} flex w-full sm:w-[65%] flex-col`}>
           <div className="h-25 border-b border-[#dcdde2] px-7.5 pt-7">
             <h2 className="m-0 text-sm font-bold leading-6.5 text-neutral-950">{active.title}</h2>
             <div className="mt-1.5 text-xs  text-[#6b7280]">
