@@ -114,10 +114,6 @@
 //   );
 // }
 
-
-
-
-
 "use client";
 
 import { usePathname } from "next/navigation";
@@ -133,10 +129,8 @@ import { useAuthContext } from "@/core/provider/Auth";
 import "@/app/globals.css";
 import { ORGANIZATION_MENU } from "@/lib/organizationmenu";
 import OrganizationSidebar from "@/app/organization/components/organizationSidebar";
+import MobileMenuSlider from "@/app/organization/components/mobileMenuSlider";
 import { Input } from "@/app/components/ui/input";
-
-
-
 
 const OrganizationLayoutContent = ({
   children,
@@ -162,63 +156,90 @@ const OrganizationLayoutContent = ({
   );
 
   return (
-
     <div
       dir="rtl"
-      className="flex w-full bg-neutral-100 mx-auto h-screen text-black "
+      className="flex w-full bg-neutral-100 mx-auto h-screen text-black overflow-hidden"
     >
-      <OrganizationSidebar />
+      {/* سایدبار دسکتاپ - فقط در lg به بالا نمایش داده می‌شود */}
+      <div className="hidden lg:flex h-full shrink-0">
+        <OrganizationSidebar />
+      </div>
 
-      <div className="flex flex-col gap-2 relative w-full h-full min-w-0">
-        <div className="flex items-center justify-between border-b bg-white border-b-neutral-300 px-5 h-16 ">
-          <div className=" w-[30%] ">
-            <p className="font-bold text-base text-neutral-800">
-              {activeMenuItem?.label || " داشبورد سازمان"}
+      <div className="flex flex-col relative w-full h-full min-w-0">
+        {/* هدر */}
+        <div className="flex items-center justify-between border-b bg-white border-b-neutral-300 px-4 lg:px-5 h-16 shrink-0 relative">
+          
+          {/* سمت راست هدر: در دسکتاپ عنوان، در موبایل آیکون/نام */}
+          <div className="flex items-center gap-3 w-auto lg:w-[30%]">
+            {/* نمایش عنوان دسکتاپ */}
+            <div className="hidden lg:block">
+              <p className="font-bold text-base text-neutral-800">
+                {activeMenuItem?.label || " داشبورد سازمان"}
+              </p>
+              <p className="text-xs text-neutral-600">
+                {user?.fullName || " اموزان"}
+              </p>
+            </div>
+
+            {/* در موبایل: دکمه پروفایل سمت راست */}
+            <div className="lg:hidden w-10 h-10 text-sm font-bold rounded-full bg-[#0a327d1d] text-input-900 flex items-center justify-center shrink-0">
+              {(user?.fullName || "س").charAt(0)}
+            </div>
+          </div>
+
+          {/* عنوان وسط چین مخصوص موبایل */}
+          <div className="absolute left-1/2 -translate-x-1/2 lg:hidden text-center">
+            <p className="font-bold text-sm text-neutral-800 whitespace-nowrap">
+              داشبورد سازمان
             </p>
-
-            <p className="text-xs text-neutral-600">
-              {user?.fullName || " اموزان"}
+            <p className="text-2xs text-neutral-500 whitespace-nowrap">
+              نمای کلی سامانه کارآموزی
             </p>
           </div>
 
-          <div className="flex w-[70%] justify-end items-center gap-3">
-            {action && (
-              <div className="flex-1 h-full items-center z-20">
-                {action}
-              </div>
-            )}
-            <div className=" w-[35%] ">
-
+          {/* سمت چپ هدر */}
+          <div className="flex justify-end items-center gap-2 lg:gap-3 w-auto lg:w-[70%]">
+            {/* جستجو فقط در دسکتاپ */}
+            <div className="hidden lg:block w-[35%]">
               <Input
                 variant="default"
                 color="input"
                 inputSize="sm"
                 placeholder="جستجو در داشبورد سازمان"
-                className=" mt-2 w-full border-none bg-neutral-50  placeholder:text-neutral-500   placeholder:text-sm "
-                rightIcon={
-                  <Search size={18}
-                    className=" mt-2 text-neutral-500"
-                  />
-                }
+                className="mt-2 w-full border-none bg-neutral-50 placeholder:text-neutral-500 placeholder:text-sm"
+                rightIcon={<Search size={18} className="mt-2 text-neutral-500" />}
               />
             </div>
+            
+            {/* اکشن‌های هدر */}
+            {action && (
+              <div className="hidden lg:flex flex-1 h-full items-center z-20">
+                {action}
+              </div>
+            )}
+
+            {/* دکمه اعلان */}
             <button
               type="button"
-              className="relative w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center"
+              className="relative w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center shrink-0"
               aria-label="اعلان‌ها"
             >
               <Bell size={18} className="text-neutral-500" />
-
               <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500" />
             </button>
 
-            <div className="w-10 h-10 text-sm font-bold rounded-full bg-[#0a327d1d] text-input-900 flex items-center justify-center">
+            {/* دکمه پروفایل دسکتاپ */}
+            <div className="hidden lg:flex w-10 h-10 text-sm font-bold rounded-full bg-[#0a327d1d] text-input-900 items-center justify-center shrink-0">
               {(user?.fullName || "س").charAt(0)}
             </div>
           </div>
         </div>
 
-        <div className="w-full rounded-xl  overflow-auto no-scrollbar flex-1">
+        {/* نوار اسلایدری منوها - فقط در موبایل */}
+        <MobileMenuSlider />
+
+        {/* محتوای اصلی */}
+        <div className="w-full rounded-xl overflow-auto no-scrollbar flex-1 p-4 lg:p-5">
           {children}
         </div>
       </div>
@@ -240,4 +261,3 @@ export default function OrganizationLayout({
     </QueryProvider>
   );
 }
-

@@ -23,7 +23,7 @@ function AllInformation() {
             <h2 className="mb-8 text-s font-semibold text-neutral-900">اطلاعات کلی گزارش</h2>
 
             <div className="flex flex-col gap-5 md:items-center md:flex-row md:justify-between">
-                <div className=" flex items-center gap-2 justify-center w-1/2">
+                <div className=" sm:flex-row flex-col flex items-center gap-2 justify-center w-full sm:w-1/2">
                     <div className="w-full">
                         <Input
                             variant="default"
@@ -41,7 +41,7 @@ function AllInformation() {
                         />
                     </div>
 
-                    <div className="flex flex-col w-2/3 ">
+                    <div className="flex flex-col w-full sm:w-2/3">
                         <span className="text-2xs font-semibold mb-2   text-gray-900">سرپرست</span>
                         <Select
                             placeholder="انتخاب سرپرست"

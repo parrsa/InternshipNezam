@@ -62,7 +62,7 @@ function Briefing() {
                 می‌گردد.
             </div>
 
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="w-full grid  md:grid-cols-2  gap-5">
                 {sessions.map((session) => {
                     const status = statusConfig[session.status]
 
@@ -73,7 +73,7 @@ function Briefing() {
                         >
                             <div className="flex items-center justify-between gap-3">
                                 <div className="flex items-center gap-3">
-                                    <div className="flex h-11 w-11  items-center justify-center rounded-xl bg-indigo-50 text-blue-800">
+                                    <div className="flex h-11 w-11  max-sm:hidden max-md:hidden max-lg:hidden items-center justify-center rounded-xl bg-indigo-50 text-blue-800">
                                         <Presentation
                                             size={20}
                                             strokeWidth={2}
@@ -90,14 +90,14 @@ function Briefing() {
                                 </div>
 
                                 <span
-                                    className={` rounded-full border px-2 py-0.5 text-2xs font-medium ${status.className}`}
+                                    className={` rounded-full border text-nowrap px-2 py-0.5 text-2xs font-medium ${status.className}`}
                                 >
                                     {status.label}
                                 </span>
                             </div>
 
                             <div className="mt-1 flex items-center justify-between text-slate-500">
-                                <span className="text-xs">
+                                <span className="text-xs ">
                                     {session.date} — {session.time}
                                 </span>
                                 <span className="text-3xs">
