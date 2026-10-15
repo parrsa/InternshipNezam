@@ -11,12 +11,10 @@ import {
 import { HeaderResetOnRouteChange } from "@/core/provider/HeaderActionProvider/HeaderResetOnRouteChange";
 import { useAuthContext } from "@/core/provider/Auth";
 import "@/app/globals.css";
-import SuperVisor from "@/app/supervisor/components";
-import { ADMIN_MENU } from "@/lib/organizationmenu";
+
 import { Input } from "@/app/components/ui/input";
-
-
-
+import SuperVisor from "@/app/supervisor/components";
+import MobileMenuSlider from "@/app/supervisor/components/mobileMenuSlider";
 
 const AdminLayoutContent = ({
   children,
@@ -35,51 +33,44 @@ const AdminLayoutContent = ({
     return <div className="w-full">{children}</div>;
   }
 
-  const activeMenuItem = ADMIN_MENU.find((item) =>
-    item.href === "/supervisor"
-      ? pathname === "/supervisor"
-      : pathname === item.href || pathname.startsWith(`${item.href}/`)
-  );
-
   return (
     <div
       dir="rtl"
-      className="flex w-full bg-neutral-100 mx-auto h-screen text-black "
+      className="flex w-full bg-neutral-100 mx-auto h-screen text-black"
     >
-      <SuperVisor />
+      {/* سایدبار دسکتاپ — در موبایل مخفی */}
+      <div className="hidden sm:flex">
+        <SuperVisor />
+      </div>
 
       <div className="flex flex-col gap-2 relative w-full h-full min-w-0">
-        <div className="flex items-center justify-between border-b bg-white border-b-neutral-300 px-5 h-16 ">
-          <div className=" w-[30%] ">
-            <div className="flex-1 h-full items-center z-20">
-              {action}
-            </div>
+        {/* هدر */}
+        <div className="flex items-center justify-between border-b bg-white border-b-neutral-300 px-5 h-16">
+          <div className="w-[30%]">
+            <div className="flex-1 h-full items-center z-20">{action}</div>
           </div>
 
           <div className="flex w-[70%] justify-end items-center gap-3">
-
-            <div className=" w-[35%] ">
-
+            {/* جستجو — در موبایل مخفی */}
+            <div className="hidden sm:block w-[35%]">
               <Input
                 variant="default"
                 color="input"
                 inputSize="sm"
                 placeholder="جستجو در داشبورد کارآموز…"
-                className=" mt-2 w-full border-none bg-neutral-50  placeholder:text-neutral-500   placeholder:text-sm "
+                className="mt-2 w-full border-none bg-neutral-50 placeholder:text-neutral-500 placeholder:text-sm"
                 rightIcon={
-                  <Search size={18}
-                    className=" mt-2 text-neutral-500"
-                  />
+                  <Search size={18} className="mt-2 text-neutral-500" />
                 }
               />
             </div>
+
             <button
               type="button"
               className="relative w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center"
               aria-label="اعلان‌ها"
             >
               <Bell size={18} className="text-neutral-500" />
-
               <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500" />
             </button>
 
@@ -88,6 +79,9 @@ const AdminLayoutContent = ({
             </div>
           </div>
         </div>
+
+        {/* اسلایدر منوی موبایل — فقط در موبایل */}
+        <MobileMenuSlider />
 
         <div className="w-full rounded-xl mt-2 overflow-auto no-scrollbar flex-1">
           {children}
@@ -111,4 +105,3 @@ export default function OrganizationLayout({
     </QueryProvider>
   );
 }
-

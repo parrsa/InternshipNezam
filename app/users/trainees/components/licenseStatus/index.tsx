@@ -59,10 +59,10 @@ export default function LicenseStatus() {
                 </h3>
             </div>
 
-            <div className="flex w-full items-start  gap-6">
-                <div className="flex flex-col gap-1.5">
+            <div className="flex w-full max-sm:flex-col  max-lg:flex-col items-start  gap-6">
+                <div className="flex max-sm:w-full flex-col gap-1.5">
                     <span className="text-2xs  font-semibold text-gray-900">وضعیت پروانه اشتغال</span>
-                    <div className="flex w-full  items-center gap-2">
+                    <div className="flex w-full  max-sm:w-full items-center gap-2">
                         <Button
                             type="button"
                             size="sm"
@@ -97,8 +97,8 @@ export default function LicenseStatus() {
                 </div>
 
                 {hasLicense && (
-                    <div className=" flex justify-between  w-[75%]">
-                        <div className="w-1/2">
+                    <div className=" flex justify-between max-sm:w-full w-[75%]">
+                        <div className="w-1/2 ">
                             <span className="text-2xs  font-semibold text-gray-900"> پایه صلاحیت</span>
                             <Select
                                 className=" w-30 text-nowrap text-s"
@@ -126,13 +126,13 @@ export default function LicenseStatus() {
                 )}
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-3 gap-4  max-lg:grid-cols-1 max-sm:grid-cols-1">
                 {qualificationCards.map((card) => {
                     const status = statusStyles[card.status];
                     return (
                         <div
                             key={card.code}
-                            className="flex flex-col justify-between gap-3 rounded-xl border border-gray-200 p-4"
+                            className="flex flex-col  justify-between gap-3 rounded-xl border border-gray-200 p-4"
                         >
                             <div className="flex items-start justify-between gap-2">
                                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100">

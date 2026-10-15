@@ -56,7 +56,7 @@ const MESSAGES = [
 ];
 
 
-const card = 'h-[650px] rounded-xl border border-neutral-200 bg-white shadow-sm';
+const card = 'sm:h-[650px] rounded-xl border border-neutral-200 bg-white shadow-sm';
 
 export default function MessageInbox() {
   const [activeId, setActiveId] = useState(1);
@@ -121,7 +121,7 @@ export default function MessageInbox() {
               </div>
             )}
 
-            <div className="mt-6 flex items-center gap-2.5">
+            <div className="mt-6 sm:mb-0 mb-5 flex items-center gap-2.5">
 
               <Button
                 variant="solid"

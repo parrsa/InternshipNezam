@@ -63,7 +63,7 @@ export default function Certificates() {
         }
     }, [])
     return (
-        <div className="w-full grid grid-cols-2 gap-8 p-4">
+        <div className="w-full grid max-sm:grid-cols-1 max-lg:grid-cols-1 grid-cols-2 gap-8 p-4">
             {fakeData.map((item: any) => (
                 <div className="w-full h-48 flex-col gap-3 flex justify-start items-start bg-white p-4 rounded-xl border border-neutral-300">
                     <div className="w-full flex justify-between items-center">

@@ -19,9 +19,9 @@ const dashboardItems: DashboardItem[] = [
         id: 1,
         title: "کارآموزان فعال",
         number: 6,
-        des: "۲ نفر جدید این ماه",
+        des: "۲ نفر جدید  ماه",
         icon: Users,
-        badge: "text-green-900 bg-green-100 border-green-300",
+        badge: "text-green-900 sm:translate-y-0 translate-y-4 bg-green-100 border-green-300",
     },
     {
         id: 2,
@@ -65,7 +65,7 @@ export default function Supervisor() {
 
     return (
         <div dir="rtl" className="w-full px-4">
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 auto-rows-[120px] gap-5">
+            <div className="w-full grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 auto-rows-[120px] gap-5">
                 {dashboardItems.map((item) => {
                     const Icon = item.icon
                     return (
@@ -82,7 +82,7 @@ export default function Supervisor() {
                                 <p className="text-xl leading-none text-black font-bold">
                                     {item.number.toLocaleString("fa-IR")}
                                 </p>
-                                <p className={`${item.badge} w-fit text-3xs px-2 py-1 mt-1 rounded-xl border text-center`}>
+                                <p className={`${item.badge} w-fit text-3xs text-nowrap  px-2 py-1 mt-1 rounded-xl border text-center`}>
                                     {item.des}
                                 </p>
                             </div>

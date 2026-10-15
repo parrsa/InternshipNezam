@@ -34,39 +34,47 @@ export function CommitmentAgreement({
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-input-50 text-2xs font-bold text-input-700">
           {stepNumber}
         </span>
-        <h3 className="text-s font-bold text-gray-800">ظرفیت پذیرش و تعهد سرپرستی</h3>
+        <h3 className="text-s font-bold text-gray-800">
+          ظرفیت پذیرش و تعهد سرپرستی
+        </h3>
       </div>
 
       <div className="flex flex-col">
-        <div className="w-full flex justify-center items-center gap-3 mb-5">
-          <div className="w-1/3">
+        <div className="w-full flex flex-col md:flex-row justify-center items-stretch md:items-center gap-3 mb-5">
+          <div className="w-full md:w-1/3">
             <Input
               label="ظرفیت کل پذیرش"
               variant="default"
               labelClassName="mb-2 text-xs"
               inputSize="sm"
               value={totalCapacity}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTotalCapacity(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setTotalCapacity(e.target.value)
+              }
             />
           </div>
-          <div className="w-1/3">
+          <div className="w-full md:w-1/3">
             <Input
               label="ظرفیت تخصیص یافته"
               variant="default"
               labelClassName="mb-2 text-xs"
               inputSize="sm"
               value={allocatedCapacity}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAllocatedCapacity(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setAllocatedCapacity(e.target.value)
+              }
             />
           </div>
-          <div className="w-1/3">
+          <div className="w-full md:w-1/3">
             <Input
               label="حداقل ساعت ماهانه"
               variant="default"
               labelClassName="mb-2 text-xs"
               inputSize="sm"
               value={minMonthlyHours}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMinMonthlyHours(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setMinMonthlyHours(e.target.value)
+              }
             />
           </div>
         </div>
@@ -85,7 +93,7 @@ export function CommitmentAgreement({
           </p>
 
           <div className="border-t border-neutral-300 mt-4 pt-3">
-            <p className="text-[11px] leading-6 text-neutral-600">
+            <p className="text-2xs leading-6 text-neutral-600">
               <span className="font-bold text-neutral-800">بند ظرفیت: </span>
               ظرفیت پذیرش کارآموز توسط سازمان تعیین می‌شود و سرپرست متعهد
               می‌گردد از سقف تعیین‌شده فراتر نرود. در صورت تخلف، حق دوره
@@ -94,24 +102,24 @@ export function CommitmentAgreement({
           </div>
         </div>
 
-        <div className="flex mt-2 justify-start items-center gap-2 mb-5">
+        <div className="flex mt-2 justify-start items-start md:items-center gap-2 mb-5">
           <input
             type="checkbox"
-            className="w-4 h-4"
+            className="w-4 h-4 mt-0.5 md:mt-0 shrink-0"
             checked={accepted}
             onChange={(e) => setAccepted(e.target.checked)}
           />
-          <p className="text-[11.5px] font-medium text-nowrap text-neutral-950">
+          <p className="text-[11.5px] font-medium text-neutral-950">
             صورت‌مسئول تعهدنامه و بند ظرفیت را می‌پذیرم.
           </p>
         </div>
 
-        <div className="flex items-center justify-start gap-3">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-start gap-3">
           <Button
             type="submit"
             variant="solid"
             color="input"
-            className="text-sm"
+            className="text-sm w-full md:w-auto"
             size="xs"
             rounded="lg"
             disabled={!accepted}
@@ -141,7 +149,9 @@ export function CommitmentAgreement({
             type="button"
             variant="outline"
             size="sm"
-            className={cn("text-xs font-semibold border-neutral-300 bg-[#f7f9f4aa] text-neutral-900")}
+            className={cn(
+              "text-xs font-semibold border-neutral-300 bg-[#f7f9f4aa] text-neutral-900 w-full md:w-auto"
+            )}
             rounded="lg"
             onClick={onSaveDraft}
           >

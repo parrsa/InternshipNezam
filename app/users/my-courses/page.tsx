@@ -234,7 +234,7 @@ function MyCourses() {
             <div className="flex w-full gap-4 lg:flex-row lg:items-center lg:justify-between"
             >
                 <div
-                    className=" flex w-full items-center gap-2 overflow-x-auto pb-1 lg:w-auto "
+                    className=" flex w-full items-center gap-2 text-nowrap overflow-x-auto pb-1 lg:w-auto "
                 >
                     {tabs.map((tab) => {
                         const isActive = activeFilter === tab.key;

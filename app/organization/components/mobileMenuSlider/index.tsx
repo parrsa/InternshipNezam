@@ -18,7 +18,7 @@ export default function MobileMenuSlider() {
   const { sliderRef, isDragging, startDragging, onDragging, stopDragging } : any = useTouchScroll();
 
   return (
-    <div className="lg:hidden w-full bg-white border-b border-neutral-300 px-2 py-2 overflow-hidden">
+    <div className="sm:hidden w-full bg-white border-b border-neutral-300 px-2 py-2 overflow-hidden">
       <div
         ref={sliderRef}
         onMouseDown={startDragging}
