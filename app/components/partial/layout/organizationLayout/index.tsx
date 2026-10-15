@@ -172,7 +172,7 @@ const OrganizationLayoutContent = ({
           {/* سمت راست هدر: در دسکتاپ عنوان، در موبایل آیکون/نام */}
           <div className="flex items-center gap-3 w-auto lg:w-[30%]">
             {/* نمایش عنوان دسکتاپ */}
-            <div className="hidden lg:block">
+            <div className="hidden text-nowrap lg:block">
               <p className="font-bold text-base text-neutral-800">
                 {activeMenuItem?.label || " داشبورد سازمان"}
               </p>

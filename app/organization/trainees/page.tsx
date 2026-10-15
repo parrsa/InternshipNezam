@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Download } from "lucide-react";
 import { cn } from "@/lib/cn";
 import Table from "@/app/components/ui/Table";
@@ -45,9 +45,41 @@ const normalize = (value: string) =>
 const fade = (row: Trainee) =>
     cn("transition", row.status === "inactive" && "opacity-50");
 
+function useTouchScroll() {
+    const sliderRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+
+    const startDragging = (e: any) => {
+        if (!sliderRef.current) return;
+        setIsDragging(true);
+        const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
+        setStartX(pageX - sliderRef.current.offsetLeft);
+        setScrollLeft(sliderRef.current.scrollLeft);
+    };
+
+    const onDragging = (e: any) => {
+        if (!isDragging || !sliderRef.current) return;
+        const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
+        const x = pageX - sliderRef.current.offsetLeft;
+        const walk = (x - startX) * 2;
+        sliderRef.current.scrollLeft = scrollLeft - walk;
+    };
+
+    const stopDragging = () => {
+        setIsDragging(false);
+    };
+
+    return { sliderRef, startDragging, onDragging, stopDragging, isDragging };
+}
+
 function Trainees() {
     const [trainees, setTrainees] = useState<Trainee[]>(INITIAL_TRAINEES);
     const [query, setQuery] = useState("");
+
+    const { sliderRef, startDragging, onDragging, stopDragging, isDragging } =
+        useTouchScroll();
 
     const toggleStatus = useCallback((id: number) => {
         setTrainees((prev) =>
@@ -68,7 +100,7 @@ function Trainees() {
                 ...CELL_CLASSES,
                 render: (row: Trainee) => (
                     <div className={cn("flex items-center gap-3", fade(row))}>
-                        <span className="flex size-10  items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-blue-700">
+                        <span className="flex size-10 items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-blue-700">
                             {row.name.charAt(0)}
                         </span>
                         <span className="text-s font-bold text-neutral-900">{row.name}</span>
@@ -140,7 +172,7 @@ function Trainees() {
                             type="button"
                             onClick={() => toggleStatus(row.id)}
                             className={cn(
-                                "cursor-pointer rounded-lg border px-3 py-1.5 text-3xs font-bold",
+                                "cursor-pointer rounded-lg border px-3 py-1.5 text-3xs font-bold whitespace-nowrap",
                                 isInactive
                                     ? "border-emerald-200 bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
                                     : "border-red-300 bg-red-100 text-red-700 hover:bg-red-200",
@@ -172,7 +204,7 @@ function Trainees() {
                 <Input
                     variant="default"
                     color="input"
-                    className=" mt-2 w-1/3 border-none bg-neutral-50  placeholder:text-neutral-500   placeholder:text-sm "
+                    className="mt-2 w-1/3 border-none bg-neutral-50 placeholder:text-neutral-500 placeholder:text-sm"
                     inputSize="sm"
                     type="text"
                     value={query}
@@ -191,12 +223,30 @@ function Trainees() {
             </div>
 
             <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white pb-5.5 pt-6 shadow-sm">
-                <Table
-                    tableRow={rows}
-                    tableCol={columns}
-                    HeaderPY="py-[18px]"
-                    fixed
-                />
+                <div
+                    ref={sliderRef}
+                    onMouseDown={startDragging}
+                    onMouseMove={onDragging}
+                    onMouseUp={stopDragging}
+                    onMouseLeave={stopDragging}
+                    onTouchStart={startDragging}
+                    onTouchMove={onDragging}
+                    onTouchEnd={stopDragging}
+                    className={cn(
+                        "w-full overflow-x-auto select-none",
+                        isDragging ? "cursor-grabbing" : "cursor-grab lg:cursor-auto",
+                        "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+                    )}
+                >
+                    <div className="min-w-225 lg:min-w-0">
+                        <Table
+                            tableRow={rows}
+                            tableCol={columns}
+                            HeaderPY="py-[18px]"
+                            fixed
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );
