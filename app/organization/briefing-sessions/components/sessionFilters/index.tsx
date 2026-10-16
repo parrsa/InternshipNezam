@@ -29,7 +29,6 @@ function SessionFilters() {
     const [truerole, setTruerole] = useState("")
     return (
         <div
-            dir="ltr"
             className="w-full rounded-2xl border-2 shadow-xs border-neutral-200 p-5 sm:p-6  bg-white px-8 py-7 "
         >
             <div className="mb-3  mt-4  flex items-center justify-between">

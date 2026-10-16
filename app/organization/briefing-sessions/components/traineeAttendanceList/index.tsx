@@ -188,7 +188,7 @@ export default function TraineeAttendanceList({
     {
       key: "name",
       label: "نام",
-      width: "w-[26%] lg:w-[25%]",
+      width: "w-[26%] lg:w-[10%]",
       thClassName: cn(TH_BASE, "pl-[36px] sm:pl-[44px] lg:pl-[49px]"),
       className: cn(TD_BASE, "pl-2 sm:pl-2.5"),
       render: (row: Trainee) => (
@@ -220,9 +220,7 @@ export default function TraineeAttendanceList({
       className: TD_BASE,
       render: (row: Trainee) => (
         <>
-          {/* موبایل/تبلت: کوتاه */}
           <span className="lg:hidden">{row.qualification.split("،")[0]}</span>
-          {/* دسکتاپ: کامل */}
           <span className="hidden lg:inline">{row.qualification}</span>
         </>
       ),
@@ -296,7 +294,7 @@ export default function TraineeAttendanceList({
   }));
 
   return (
-    <div dir="ltr" className="mb-5">
+    <div dir="rtl" className="mb-5">
       <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white pb-6 shadow-sm">
         <div className="flex flex-col gap-2 px-4 pb-6 pt-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:pb-8 sm:pt-6 lg:px-8 lg:pb-10 lg:pt-7">
           <h2 className="text-sm font-bold text-neutral-900">لیست کارآموزان</h2>
@@ -306,7 +304,7 @@ export default function TraineeAttendanceList({
           </p>
         </div>
 
-        <div className="w-full overflow-x-auto">
+        <div  className="w-full px-3 overflow-x-auto">
           <Table
             tableRow={rows}
             tableCol={columns}

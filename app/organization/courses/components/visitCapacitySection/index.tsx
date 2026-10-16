@@ -36,7 +36,6 @@ export function VisitCapacitySection() {
 
   return (
     <div
-      dir="ltr"
     >
       <h2 className="mb-9 text-xs font-bold leading-6 text-black">
         بخش ۳ – ظرفیت و هزینه

@@ -21,8 +21,8 @@ interface Session {
 }
 
 const TABS: { key: TabKey; label: string }[] = [
-    { key: "past", label: "ثبت حضور جلسات گذشته" },
     { key: "new", label: "برنامه‌ریزی جلسه جدید" },
+    { key: "past", label: "ثبت حضور جلسات گذشته" },
 ];
 
 const STATUS_CONFIG: Record<SessionStatus, { label: string; className: string }> = {
@@ -98,7 +98,6 @@ const COLUMNS = [
 
 const TABLE_ROWS = SESSIONS.map((s) => ({ ...s, _rowClassName: "bg-white" }));
 
-/* ---------- هوک درگ/تاچ اسکرول ---------- */
 function useTouchScroll() {
     const sliderRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -125,7 +124,6 @@ function useTouchScroll() {
         const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
         const x = pageX - sliderRef.current.offsetLeft;
         const walk = (x - startX) * 2;
-        // در RTL مرورگرهای مختلف رفتار متفاوتی دارند؛ علامت را بر اساس جهت تنظیم می‌کنیم
         sliderRef.current.scrollLeft = isRTL ? scrollLeft + walk : scrollLeft - walk;
     };
 
@@ -135,7 +133,6 @@ function useTouchScroll() {
 
     return { sliderRef, startDragging, onDragging, stopDragging, isDragging };
 }
-/* --------------------------------------- */
 
 function BriefingSeason() {
     const [activeTab, setActiveTab] = useState<TabKey>("new");
@@ -145,7 +142,7 @@ function BriefingSeason() {
     return (
         <div className="w-full flex flex-col gap-3 sm:px-5 px-0 p-2 items-center justify-center">
             <div
-                className="flex items-center md:max-lg:w-full  justify-between gap-2 bg-[#e7eef098] p-1 rounded-xl w-full md:w-1/2 self-end"
+                className="flex items-center md:max-lg:w-full  justify-between gap-2 bg-[#e7eef098] p-1 rounded-xl w-full md:w-1/2 self-start"
             >
                 {TABS.map((tab) => {
                     const isActive = activeTab === tab.key;
@@ -169,7 +166,7 @@ function BriefingSeason() {
 
             {activeTab === "past" ? (
                 <div className="w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-                    <div className="px-6  pt-6 text-left">
+                    <div className="px-6  pt-6 ">
                         <h2 className="text-s font-bold text-gray-900">جلسات توجیحی برگزارشده</h2>
                         <p className="mt-3 text-2xs text-gray-600">ثبت حضور کارآموزان در جلسات گذشته.</p>
                     </div>
@@ -189,7 +186,9 @@ function BriefingSeason() {
                                 "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
                             )}
                         >
-                            <div className="min-w-225 lg:min-w-0">
+                            <div
+                            dir="ltr"
+                            className="min-w-225 lg:min-w-0">
                                 <Table
                                     tableRow={TABLE_ROWS}
                                     tableCol={COLUMNS}

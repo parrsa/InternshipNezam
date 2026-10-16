@@ -283,7 +283,7 @@ export function CourseForm() {
             validateOnChange={false}
             onSubmit={handleSubmit}
         >
-            <Form dir="ltr" noValidate className="flex  w-full min-w-0 flex-col gap-5">
+            <Form  noValidate className="flex  w-full min-w-0 flex-col gap-5">
                 <Section title="بخش ۱ — اطلاعات کلی" >
                     <div className="grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
                         <TextField
@@ -325,7 +325,7 @@ export function CourseForm() {
                                 label="پیش‌نیازها"
                                 placeholder="مثال: آشنایی با مبانی تحلیل سازه‌ای"
                             />
-                            <SelectField name="targetGroup" label="گروه هدف" options={TARGET_GROUPS} />
+                            <SelectField name="targetGroup" className=" w-1/2 max-sm:w-full" label="گروه هدف" options={TARGET_GROUPS} />
                         </div>
 
                         <TextareaField

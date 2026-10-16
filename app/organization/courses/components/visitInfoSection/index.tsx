@@ -47,7 +47,6 @@ export function VisitInfoSection({ managers }: Props) {
 
   return (
     <div
-      dir="ltr"
     >
       <h2 className="mb-12 text-s font-bold leading-6 text-black">
         بخش ۱ – اطلاعات بازدید
@@ -65,9 +64,7 @@ export function VisitInfoSection({ managers }: Props) {
             onChange={handleChange}
             onBlur={handleBlur}
             placeholder="مثال: بازدید برج پارسیان"
-            // className={INPUT}
             variant="default"
-
             className=" h-9 placeholder:text-xs"
             inputSize="lg"
           />
@@ -76,8 +73,7 @@ export function VisitInfoSection({ managers }: Props) {
 
 
         <div className="w-1/2"
-          dir="rtl"
-        >          <label className="mb-2 block text-xs  text-left font-semibold leading-5 text-[#111827]">نوع پروژه *</label>
+        >          <label className="mb-2 block text-xs  font-semibold leading-5 text-[#111827]">نوع پروژه *</label>
           <Select
             options={projectTypes}
             value={values.projectType}
@@ -92,7 +88,6 @@ export function VisitInfoSection({ managers }: Props) {
         </div>
 
         <div className="lg:w-1/2 w-full"
-          dir="rtl"
         >
           <label className="mb-2 block text-xs text-nowrap text-left font-semibold leading-5 text-[#111827]">مسئول پروژه *</label>
           <Select

@@ -262,7 +262,7 @@ export default function InternsRequest() {
 
                 </p>
             </div>
-            <div className="w-full grid grid-cols-2 grid-rows-[150px] gap-4">
+            <div className="w-full grid grid-cols-4 max-sm:grid-cols-2  max-lg:grid-cols-1 grid-rows-[150px] gap-4">
                 {infoData.map((item: any) => (
                     <div key={item.id} className="w-full  bg-white rounded-2xl shadow-sm border border-neutral-300 flex justify-center items-start p-4 gap-2 flex-col ">
                         <p className="text-neutral-500 font-medium text-xs">{item.title}</p>

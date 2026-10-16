@@ -47,7 +47,9 @@ function SessionTypeField() {
             <span id={labelId} className={cn(LABEL_CLASS, "mb-1.5")}>
                 * نوع جلسه
             </span>
-            <div role="radiogroup" aria-labelledby={labelId} className="flex items-center gap-4">
+            <div role="radiogroup" 
+            dir="ltr"
+            aria-labelledby={labelId} className="flex items-center gap-4">
                 {SESSION_TYPE_OPTIONS.map(({ value, label }) => {
                     const selected = values.sessionType === value;
                     return (
@@ -74,7 +76,7 @@ function NotificationNotice() {
     return (
         <div
             role="note"
-            className="flex items-center gap-2.5 rounded-lg border-r-4 border-[#FAB30A] bg-[#FEFAE8] px-4 py-4 text-[#93370D]"
+            className="flex items-center gap-2.5 rounded-lg border-r-4 border-[#FAB30A] bg-[#FEFAE8] px-4 py-3 text-[#93370D]"
         >
             <Bell size={20} aria-hidden="true" className="shrink-0 text-[#F79009]" />
             <p dir="rtl" className="text-xs leading-5">
@@ -188,7 +190,8 @@ function SessionFormFields({ onCancel }: { onCancel?: () => void }) {
                 rounded="lg"
                 error={Boolean(errorOf("topic"))}
                 errorMessage={errorOf("topic")}
-                className=" border-neutral-300 text-sm text-neutral-900"
+                
+                className=" border-neutral-300 text-sm  text-neutral-900"
             />
 
             <NotificationNotice />
@@ -249,11 +252,10 @@ export function SessionSchedulingForm({
 
     return (
         <div
-            dir="ltr"
             aria-labelledby={titleId}
             className={cn(
                 "w-full rounded-3xl border border-neutral-200 bg-white px-7.5 pb-7.5 pt-8",
-                "shadow-[0_1px_3px_rgba(0,0,0,0.06)]",
+                "shadow-sm",
                 className,
             )}
         >
