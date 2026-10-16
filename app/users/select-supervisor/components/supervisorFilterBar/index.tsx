@@ -35,7 +35,7 @@ export function SupervisorFilterBar({ selectedName, fieldValue, fieldOptions, on
         )}
       </div>
 
-      <div className="flex w-full md:w-[95%] sm:w-1/2 items-center gap-3">
+      <div className="flex w-full md:w-[55%] sm:w-1/2 items-center gap-3">
         <div className="flex-1">
           <Input
             variant="default"

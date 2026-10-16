@@ -46,7 +46,7 @@ function FinancialCard() {
         <>
             <div className="w-full flex flex-col gap-5  items-center justify-center" dir="rtl">
 
-                <div className="w-full grid grid-cols-1  gap-4">
+                <div className="w-full grid max-sm:grid-cols-1 max-lg:grid-cols-1 grid-cols-3  gap-4">
 
                     <div className="rounded-2xl p-6 h-41.25 flex flex-col  justify-center bg-linear-to-br from-emerald-500 to-teal-600 text-white">
                         <span className="text-2xs ">موجودی فعلی</span>

@@ -91,7 +91,7 @@ function CoursePaymentModal({
                         مبلغ قابل پرداخت
                     </span>
 
-                    <div className="text-sm font-bold bg-input-800">
+                    <div className="text-sm font-bold ">
                         {course.price}
                     </div>
 

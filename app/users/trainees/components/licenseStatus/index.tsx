@@ -126,43 +126,6 @@ export default function LicenseStatus() {
                 )}
             </div>
 
-            <div className="grid grid-cols-3 gap-4  max-lg:grid-cols-1 max-sm:grid-cols-1">
-                {qualificationCards.map((card) => {
-                    const status = statusStyles[card.status];
-                    return (
-                        <div
-                            key={card.code}
-                            className="flex flex-col  justify-between gap-3 rounded-xl border border-gray-200 p-4"
-                        >
-                            <div className="flex items-start justify-between gap-2">
-                                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100">
-                                    <Award size={18} className="text-amber-500" />
-                                </span>
-                                <div className="flex-1 text-right">
-                                    <h4 className="text-xs font-semibold text-gray-800">{card.title}</h4>
-                                </div>
-                            </div>
-                            <span className=" block text-xs text-gray-400">کد: {card.code}</span>
-
-                            <div className="flex items-center justify-between gap-2">
-                                <span className={cn("rounded-full px-3 py-1 text-xs font-medium", status.className)}>
-                                    {status.label}
-                                </span>
-
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    className={cn("text-2xs py-1  font-semibold  border-neutral-300 bg-[#f7f9f4aa]  text-neutral-900")}
-                                    rounded="lg"
-                                >
-                                    درخواست مستقل
-                                </Button>
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
         </div>
     );
 }
