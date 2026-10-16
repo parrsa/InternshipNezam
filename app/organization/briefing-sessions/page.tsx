@@ -145,7 +145,7 @@ function BriefingSeason() {
     return (
         <div className="w-full flex flex-col gap-3 sm:px-5 px-0 p-2 items-center justify-center">
             <div
-                className="flex items-center justify-between gap-2 bg-[#e7eef098] p-1 rounded-xl w-full md:w-1/2 self-end"
+                className="flex items-center md:max-lg:w-full  justify-between gap-2 bg-[#e7eef098] p-1 rounded-xl w-full md:w-1/2 self-end"
             >
                 {TABS.map((tab) => {
                     const isActive = activeTab === tab.key;
@@ -169,7 +169,7 @@ function BriefingSeason() {
 
             {activeTab === "past" ? (
                 <div className="w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-                    <div className="px-6 pt-6 text-left">
+                    <div className="px-6  pt-6 text-left">
                         <h2 className="text-s font-bold text-gray-900">جلسات توجیحی برگزارشده</h2>
                         <p className="mt-3 text-2xs text-gray-600">ثبت حضور کارآموزان در جلسات گذشته.</p>
                     </div>

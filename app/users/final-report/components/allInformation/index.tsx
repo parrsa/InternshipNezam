@@ -23,7 +23,7 @@ function AllInformation() {
             <h2 className="mb-8 text-s font-semibold text-neutral-900">اطلاعات کلی گزارش</h2>
 
             <div className="flex flex-col gap-5 md:items-center md:flex-row md:justify-between">
-                <div className=" sm:flex-row flex-col flex items-center gap-2 justify-center w-full sm:w-1/2">
+                <div className="sm:flex-row md:max-lg:flex-col flex-col flex items-center gap-2 justify-center w-full sm:w-1/2">
                     <div className="w-full">
                         <Input
                             variant="default"
@@ -41,11 +41,11 @@ function AllInformation() {
                         />
                     </div>
 
-                    <div className="flex flex-col w-full sm:w-2/3">
+                    <div className="flex flex-col w-full sm:w-2/3 md:max-lg:w-full">
                         <span className="text-2xs font-semibold mb-2   text-gray-900">سرپرست</span>
                         <Select
                             placeholder="انتخاب سرپرست"
-                            className=" w-2/3  text-nowrap rounded-xl text-xs"
+                            className=" w-2/3 md:max-lg:w-full text-nowrap rounded-xl text-xs"
                             options={supervisorOptions}
                             value={sup.value}
                             onChange={(v: string) => {

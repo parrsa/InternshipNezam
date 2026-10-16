@@ -54,7 +54,7 @@ export default function Supervisor() {
 
     useEffect(() => {
         setAction(
-            <div className="text-sm flex flex-col items-start gap-1">
+            <div className="text-sm  flex flex-col items-start gap-1">
                 <p className="text-black font-bold">داشبورد سرپرست</p>
                 <p className="text-neutral-500 text-xs font-medium">خلاصه فعالیت‌های سرپرستی</p>
             </div>

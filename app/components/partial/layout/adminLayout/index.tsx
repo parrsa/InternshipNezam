@@ -36,7 +36,7 @@ const AdminLayoutContent = ({
   return (
     <div
       dir="rtl"
-      className="flex w-full text-nowrap bg-neutral-100 mx-auto h-screen text-black"
+      className="flex w-full bg-neutral-100 mx-auto h-screen text-black"
     >
       {/* سایدبار دسکتاپ — در موبایل مخفی */}
       <div className="hidden sm:flex">
@@ -46,7 +46,7 @@ const AdminLayoutContent = ({
       <div className="flex flex-col gap-2 relative w-full h-full min-w-0">
         {/* هدر */}
         <div className="flex items-center justify-between border-b bg-white border-b-neutral-300 px-5 h-16">
-          <div className="w-[30%]">
+          <div className="w-[30%] max-sm:w-full">
             <div className="flex-1 h-full items-center z-20">{action}</div>
           </div>
 

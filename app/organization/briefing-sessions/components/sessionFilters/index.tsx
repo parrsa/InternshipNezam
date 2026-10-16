@@ -43,7 +43,7 @@ function SessionFilters() {
                 </div>
             </div>
 
-            <div className="sm:flex sm:flex-row flex  flex-col items-start sm:items-center mb-6 justify-between ">
+            <div className="sm:flex sm:flex-row md:max-lg:flex-col md:max-lg:items-stretch md:max-lg:gap-4 flex  flex-col items-start sm:items-center mb-6 justify-between ">
 
                 <div>
                     <span className="text-2xs  font-semibold text-neutral-600">رشته </span>
@@ -78,7 +78,7 @@ function SessionFilters() {
                     />
                 </div>
 
-                <div className=" w-full sm:w-[25%]">
+                <div className=" w-full sm:w-[25%] md:max-lg:w-full">
                     <span className="text-2xs  font-semibold text-neutral-600"> جستوجو  </span>
 
                     <Input

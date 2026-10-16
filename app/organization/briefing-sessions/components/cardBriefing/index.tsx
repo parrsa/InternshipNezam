@@ -51,7 +51,7 @@ function CardBriefing() {
         return (
           <div
             key={card.title}
-            className="h-27.5 rounded-xl border border-slate-300 bg-white px-5 py-3 shadow-xs"
+            className=" rounded-xl border border-slate-300 bg-white px-5 py-3 shadow-xs"
           >
             <div
               className="flex h-full items-start justify-between gap-4"
