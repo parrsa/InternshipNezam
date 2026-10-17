@@ -62,13 +62,13 @@ const engineers = [
 ];
 
 function Reports() {
-  const toPersianDigits = (value) =>
+  const toPersianDigits = (value: any) =>
     String(value).replace(
       /\d/g,
       (digit) => "۰۱۲۳۴۵۶۷۸۹"[Number(digit)]
     );
 
-  const getProgress = (completed, total) => {
+  const getProgress = (completed: any, total: any) => {
     if (!total || total <= 0) return 0;
 
     return Math.min(
@@ -77,7 +77,7 @@ function Reports() {
     );
   };
 
-  const statusConfig = {
+  const statusConfig: any = {
     active: {
       label: "فعال",
       className:
@@ -135,7 +135,7 @@ function Reports() {
             total
           );
 
-          const currentStatus = statusConfig[status];
+          const currentStatus: any = statusConfig[status];
 
           return (
             <div
