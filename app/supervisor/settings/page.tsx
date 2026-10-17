@@ -73,7 +73,7 @@ export default function Settings() {
 
     return (
         <div className="p-4">
-            <div className="w-full grid grid-cols-4 grid-rows-[150px] gap-4">
+            <div className="w-full grid grid-cols-2 sm:grid-cols-4 grid-rows-[150px] gap-4">
                 {infoData.map((item: any) => (
                     <div key={item.id} className="w-full h-full bg-white rounded-2xl shadow-lg border border-neutral-300 flex justify-center items-start p-4 gap-2 flex-col ">
                         <p className="text-neutral-500 font-medium text-xs">{item.title}</p>
@@ -97,7 +97,7 @@ export default function Settings() {
                         console.log(value)
                     }}>
                     {({ values, setFieldValue, errors }) => (
-                        <Form className="w-full grid grid-cols-2 gap-8">
+                        <Form className="w-full grid grid-cols-1 sm:grid-cols-2 gap-8">
                             <div>
                                 <Input
                                     variant="floating"
@@ -114,7 +114,7 @@ export default function Settings() {
                                     type="tel"
                                     inputMode="numeric"
                                     inputSize="sm"
-                                    className="text-right" />
+                                    className="text-right " />
                             </div>
                             <div>
                                 <Input

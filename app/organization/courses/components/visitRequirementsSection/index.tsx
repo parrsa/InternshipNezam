@@ -44,7 +44,6 @@ export function VisitRequirementsSection() {
 
   return (
     <div
-      dir="ltr"
     >
       <h2 className="mb-6 text-xs font-bold leading-6 text-black">
         بخش ۴ – الزامات و مدارک

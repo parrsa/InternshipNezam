@@ -29,7 +29,6 @@ function SessionFilters() {
     const [truerole, setTruerole] = useState("")
     return (
         <div
-            dir="ltr"
             className="w-full rounded-2xl border-2 shadow-xs border-neutral-200 p-5 sm:p-6  bg-white px-8 py-7 "
         >
             <div className="mb-3  mt-4  flex items-center justify-between">
@@ -43,7 +42,7 @@ function SessionFilters() {
                 </div>
             </div>
 
-            <div className="flex items-center mb-6 justify-between ">
+            <div className="sm:flex sm:flex-row md:max-lg:flex-col md:max-lg:items-stretch md:max-lg:gap-4 flex  flex-col items-start sm:items-center mb-6 justify-between ">
 
                 <div>
                     <span className="text-2xs  font-semibold text-neutral-600">رشته </span>
@@ -78,7 +77,7 @@ function SessionFilters() {
                     />
                 </div>
 
-                <div className="w-[25%]">
+                <div className=" w-full sm:w-[25%] md:max-lg:w-full">
                     <span className="text-2xs  font-semibold text-neutral-600"> جستوجو  </span>
 
                     <Input

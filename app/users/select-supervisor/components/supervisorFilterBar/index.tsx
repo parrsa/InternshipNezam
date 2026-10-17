@@ -25,17 +25,17 @@ export function SupervisorFilterBar({ selectedName, fieldValue, fieldOptions, on
     <div className="flex w-full flex-col gap-5">
 
       <div className="flex w-full items-center justify-between gap-4 rounded-xl border-r-4 border-orange-500 bg-[#FFFBEA] px-5 py-2">
-        <p className="text-xs text-gray-700">
+        <p className="text-xs sm:text-xs  text-gray-700">
           برای ارسال درخواست به سازمان، باید یک سرپرست انتخاب کنید. سرپرست انتخاب‌شده درخواست شما را بررسی و در صورت تأیید، به سازمان ارسال می‌کند.
         </p>
         {selectedName && (
-          <span className="rounded-full  bg-sky-100 px-1 py-0.5 border border-input-200 text-3xs text-sky-800">
+          <span className="rounded-full  bg-sky-100 px-1 sm:text-xs text-3xs py-0.5 border border-input-200  text-sky-800">
             سرپرست انتخاب‌شده: {selectedName}
           </span>
         )}
       </div>
 
-      <div className="flex w-1/2 items-center gap-3">
+      <div className="flex w-full md:w-[55%] sm:w-1/2 items-center gap-3">
         <div className="flex-1">
           <Input
             variant="default"

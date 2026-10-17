@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/cn";
 import Table from "@/app/components/ui/Table";
 import SessionFilters from "./components/sessionFilters";
@@ -21,8 +21,8 @@ interface Session {
 }
 
 const TABS: { key: TabKey; label: string }[] = [
-    { key: "past", label: "ثبت حضور جلسات گذشته" },
     { key: "new", label: "برنامه‌ریزی جلسه جدید" },
+    { key: "past", label: "ثبت حضور جلسات گذشته" },
 ];
 
 const STATUS_CONFIG: Record<SessionStatus, { label: string; className: string }> = {
@@ -74,7 +74,6 @@ const TH = "px-3 text-left text-s";
 const TD = "px-3 py-2 text-left text-xs text-neutral-900";
 
 const COLUMNS = [
-
     {
         key: "status",
         label: "وضعیت",
@@ -99,13 +98,51 @@ const COLUMNS = [
 
 const TABLE_ROWS = SESSIONS.map((s) => ({ ...s, _rowClassName: "bg-white" }));
 
+function useTouchScroll() {
+    const sliderRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const [isRTL, setIsRTL] = useState(false);
+
+    useEffect(() => {
+        if (!sliderRef.current) return;
+        const dir = getComputedStyle(sliderRef.current).direction;
+        setIsRTL(dir === "rtl");
+    }, []);
+
+    const startDragging = (e: any) => {
+        if (!sliderRef.current) return;
+        setIsDragging(true);
+        const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
+        setStartX(pageX - sliderRef.current.offsetLeft);
+        setScrollLeft(sliderRef.current.scrollLeft);
+    };
+
+    const onDragging = (e: any) => {
+        if (!isDragging || !sliderRef.current) return;
+        const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
+        const x = pageX - sliderRef.current.offsetLeft;
+        const walk = (x - startX) * 2;
+        sliderRef.current.scrollLeft = isRTL ? scrollLeft + walk : scrollLeft - walk;
+    };
+
+    const stopDragging = () => {
+        setIsDragging(false);
+    };
+
+    return { sliderRef, startDragging, onDragging, stopDragging, isDragging };
+}
+
 function BriefingSeason() {
     const [activeTab, setActiveTab] = useState<TabKey>("new");
+    const { sliderRef, startDragging, onDragging, stopDragging, isDragging } =
+        useTouchScroll();
 
     return (
-        <div className="w-full flex flex-col gap-3 px-5 p-2 items-center justify-center">
+        <div className="w-full flex flex-col gap-3 sm:px-5 px-0 p-2 items-center justify-center">
             <div
-                className="flex items-center justify-between gap-2 bg-[#e7eef098] p-1 rounded-xl w-full md:w-1/2 self-end"
+                className="flex items-center md:max-lg:w-full  justify-between gap-2 bg-[#e7eef098] p-1 rounded-xl w-full md:w-1/2 self-start"
             >
                 {TABS.map((tab) => {
                     const isActive = activeTab === tab.key;
@@ -117,7 +154,7 @@ function BriefingSeason() {
                             aria-selected={isActive}
                             onClick={() => setActiveTab(tab.key)}
                             className={cn(
-                                "flex-1 px-4 py-2  rounded-lg text-xs font-bold text-black transition-colors duration-300",
+                                "flex-1 px-4 py-2 rounded-lg text-xs font-bold text-black transition-colors duration-300",
                                 isActive && "bg-[#fffdf9] shadow-sm",
                             )}
                         >
@@ -129,18 +166,38 @@ function BriefingSeason() {
 
             {activeTab === "past" ? (
                 <div className="w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-                    <div className="px-6 pt-6 text-left">
+                    <div className="px-6  pt-6 ">
                         <h2 className="text-s font-bold text-gray-900">جلسات توجیحی برگزارشده</h2>
                         <p className="mt-3 text-2xs text-gray-600">ثبت حضور کارآموزان در جلسات گذشته.</p>
                     </div>
                     <div className="mt-8">
-                        <Table
-                            tableRow={TABLE_ROWS}
-                            tableCol={COLUMNS}
-                            fixed
-                            HeaderPY="py-4"
-                            minHeight="226px"
-                        />
+                        <div
+                            ref={sliderRef}
+                            onMouseDown={startDragging}
+                            onMouseMove={onDragging}
+                            onMouseUp={stopDragging}
+                            onMouseLeave={stopDragging}
+                            onTouchStart={startDragging}
+                            onTouchMove={onDragging}
+                            onTouchEnd={stopDragging}
+                            className={cn(
+                                "w-full overflow-x-auto select-none",
+                                isDragging ? "cursor-grabbing" : "cursor-grab lg:cursor-auto",
+                                "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+                            )}
+                        >
+                            <div
+                            dir="ltr"
+                            className="min-w-225 lg:min-w-0">
+                                <Table
+                                    tableRow={TABLE_ROWS}
+                                    tableCol={COLUMNS}
+                                    fixed
+                                    HeaderPY="py-4"
+                                    minHeight="226px"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             ) : (

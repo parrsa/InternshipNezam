@@ -167,7 +167,7 @@ export default function SuperVisor() {
 
             <div className=" p-3 border-b border-neutral-300">
                 <div className="mt-2 rounded-lg bg-[#6a93df1d] px-3 py-1.5 mb-2">
-                    <p className="text-xs font-semibold text-neutral-700 truncate">
+                    <p className="text-xs  font-semibold text-neutral-700 truncate">
                         {user?.fullName || "کارآموز"}
                     </p>
                     <p className="text-2xs text-neutral-400">
