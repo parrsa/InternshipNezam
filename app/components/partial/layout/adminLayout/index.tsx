@@ -14,7 +14,7 @@ import "@/app/globals.css";
 
 import { Input } from "@/app/components/ui/input";
 import SuperVisor from "@/app/supervisor/components";
-import MobileMenuSlider from "@/app/supervisor/components/mobileMenuSlider";
+import MobileMenuSlider from "../../../../../app/supervisor/components/mobileMenuSlider";
 
 const AdminLayoutContent = ({
   children,
