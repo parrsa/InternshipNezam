@@ -1,4 +1,3 @@
-import React from 'react'
 import MessageInbox from './components'
 
 interface Props { }

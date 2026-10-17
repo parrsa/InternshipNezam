@@ -5,9 +5,9 @@ import Table from "@/app/components/ui/Table";
 const toFa = (v: string | number) =>
     String(v).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)]);
 
-type ReportStatus = "approved" | "pending" | "rejected" | "archived";
+export type ReportStatus = "approved" | "pending" | "rejected" | "archived";
 
-interface Report {
+export interface VisitReport {
     period: string;
     periodShort: string;
     supervisor: string;
@@ -19,13 +19,15 @@ interface Report {
     _rowClassName?: string;
 }
 
-const reports: Report[] = [
+const reports: VisitReport[] = [
     { period: "برج مسکونی پارسیان", periodShort: "برج پارسیان", supervisor: "مهندس رضایی", supervisorShort: "م. رضایی", hours: 4, date: "۱۴۰۴/۰۵/۰۴", dateShort: "۰۵/۰۴", status: "approved", _rowClassName: "bg-white" },
     { period: "مجتمع تجاری کیان", periodShort: "مجتمع کیان", supervisor: "مهندس کریمی", supervisorShort: "م. کریمی", hours: 6, date: "۱۴۰۴/۰۴/۲۶", dateShort: "۰۴/۲۶", status: "approved", _rowClassName: "bg-white" },
     { period: "بیمارستان مهر", periodShort: "بیمارستان مهر", supervisor: "مهندس موسوی", supervisorShort: "م. موسوی", hours: 5, date: "۱۴۰۴/۰۴/۱۲", dateShort: "۰۴/۱۲", status: "pending", _rowClassName: "bg-white" },
     { period: "مدرسه شهید بهشتی", periodShort: "مدرسه بهشتی", supervisor: "مهندس رضایی", supervisorShort: "م. رضایی", hours: 3, date: "۱۴۰۴/۰۳/۲۰", dateShort: "۰۳/۲۰", status: "approved", _rowClassName: "bg-white" },
     { period: "ویلا مسکونی – نیاوران", periodShort: "ویلا نیاوران", supervisor: "مهندس احمدی", supervisorShort: "م. احمدی", hours: 4, date: "۱۴۰۴/۰۳/۰۸", dateShort: "۰۳/۰۸", status: "archived", _rowClassName: "bg-white" },
 ];
+
+export const initialReports = reports;
 
 const statusMap: Record<ReportStatus, { label: string; short: string; className: string }> = {
     approved: { label: "تأیید شده", short: "تأیید", className: "border-green-400 bg-green-100 text-green-900" },
@@ -44,7 +46,7 @@ const tableCol = [
         width: "w-[30%]",
         thClassName: TH,
         className: `${TD} font-semibold whitespace-nowrap`,
-        render: (row: Report) => (
+        render: (row: VisitReport) => (
             <>
                 <span className="lg:hidden">{toFa(row.periodShort)}</span>
                 <span className="hidden lg:inline">{toFa(row.period)}</span>
@@ -57,7 +59,7 @@ const tableCol = [
         width: "w-[20%]",
         thClassName: TH,
         className: `${TD} whitespace-nowrap`,
-        render: (row: Report) => (
+        render: (row: VisitReport) => (
             <>
                 <span className="lg:hidden">{row.supervisorShort}</span>
                 <span className="hidden lg:inline">{row.supervisor}</span>
@@ -70,7 +72,7 @@ const tableCol = [
         width: "w-[18%]",
         thClassName: TH,
         className: `${TD} whitespace-nowrap`,
-        render: (row: Report) => (
+        render: (row: VisitReport) => (
             <>
                 <span className="lg:hidden">{toFa(row.dateShort)}</span>
                 <span className="hidden lg:inline">{toFa(row.date)}</span>
@@ -83,7 +85,7 @@ const tableCol = [
         width: "w-[14%]",
         thClassName: TH,
         className: `${TD} whitespace-nowrap`,
-        render: (row: Report) => (
+        render: (row: VisitReport) => (
             <>
                 <span className="lg:hidden">{toFa(row.hours)}</span>
                 <span className="hidden lg:inline">{`${toFa(row.hours)} ساعت`}</span>
@@ -96,11 +98,11 @@ const tableCol = [
         width: "w-[18%]",
         thClassName: TH,
         className: "",
-        render: (row: Report) => {
+        render: (row: VisitReport) => {
             const s = statusMap[row.status];
             return (
                 <span
-                    className={`inline-flex items-center whitespace-nowrap rounded-full border px-1.5 sm:px-2 lg:px-2.5 py-0.5 text-[9px] sm:text-[10px] lg:text-2xs font-medium leading-4 ${s.className}`}
+                    className={`inline-flex items-center whitespace-nowrap rounded-full border px-1.5 sm:px-2 lg:px-2.5 py-0.5 text-[9px] sm:text-3xs lg:text-2xs font-medium leading-4 ${s.className}`}
                 >
                     <span className="lg:hidden">{s.short}</span>
                     <span className="hidden lg:inline">{s.label}</span>
@@ -110,15 +112,35 @@ const tableCol = [
     },
 ];
 
-function VisitTable() {
+interface VisitTableProps {
+    rows?: VisitReport[];
+    title?: string;
+    description?: string;
+}
+
+function VisitTable({ rows = reports, title, description }: VisitTableProps) {
     return (
         <div
-            dir="rtl"
+            dir="ltr"
             className="w-full rounded-2xl border border-neutral-200 bg-white px-3 pt-5 pb-4 shadow-sm sm:px-4 lg:px-6 lg:pt-7 lg:pb-5"
         >
+            {title && (
+                <div dir="ltr" className="mb-6 px-1 sm:px-2 lg:px-3">
+                    <h4 className="text-sm font-bold text-slate-900">
+                        {title}
+                    </h4>
+
+                    {description && (
+                        <p className="mt-1.5 text-2xs text-slate-500">
+                            {description}
+                        </p>
+                    )}
+                </div>
+            )}
+
             <div className="w-full overflow-x-auto">
                 <Table
-                    tableRow={reports}
+                    tableRow={rows}
                     tableCol={tableCol}
                     minHeight="auto"
                     HeaderPY="py-2"

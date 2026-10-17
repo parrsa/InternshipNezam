@@ -2,25 +2,37 @@
 
 import { Input } from "@/app/components/ui/input";
 import { Select } from "@/app/components/ui/input/SelectSilde";
+import { TextArea } from "@/app/components/ui/input/TextArea";
 import { useState } from "react";
 
-const degreeOptions = [
-  { label: "کارشناسی", value: "bachelor" },
-  { label: "کارشناس ارشد", value: "master" },
-  { label: "دکتری", value: "phd" },
-  { label: "کاردانی", value: "associate" },
-];
-
-const majorOptions = [
+const fieldOptions = [
   { label: "مهندسی عمران", value: "civil" },
   { label: "مهندسی معماری", value: "architecture" },
   { label: "مهندسی برق", value: "electrical" },
   { label: "مهندسی مکانیک", value: "mechanical" },
 ];
 
+const qualificationOptions = [
+  { label: "طراحی", value: "design" },
+  { label: "نظارت", value: "supervision" },
+  { label: "اجرا", value: "execution" },
+];
+
+const gradeOptions = [
+  { label: "پایه ۱", value: "1" },
+  { label: "پایه ۲", value: "2" },
+  { label: "پایه ۳", value: "3" },
+];
+
 export default function EducationInfo() {
-  const [degree, setDegree] = useState("");
-  const [major, setMajor] = useState("");
+  const [field, setField] = useState("");
+  const [qualification, setQualification] = useState("");
+  const [grade, setGrade] = useState("");
+
+  const [experienceYears, setExperienceYears] = useState("");
+  const [activeProjects, setActiveProjects] = useState("");
+  const [licenseYear, setLicenseYear] = useState("");
+  const [summary, setSummary] = useState("");
 
   return (
     <div
@@ -33,53 +45,53 @@ export default function EducationInfo() {
             ۲
           </span>
           <span className="text-s font-semibold text-neutral-900">
-            اطلاعات تحصیلی و دوره
+            رشته فعالیت، صلاحیت و سوابق
           </span>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between w-full gap-4">
-        <div className="w-full md:w-1/3">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center   w-full gap-55">
+        <div className="w-full md:w-1/7">
           <div className="w-full">
             <span className="text-2xs  font-semibold text-gray-900">
-              مقطع تحصیلی
+              رشته فعالیت
             </span>
             <Select
               className=" text-nowrap text-xs"
-              placeholder="انتخاب مقطع"
-              options={degreeOptions}
-              value={degree}
-              onChange={setDegree}
+              placeholder="انتخاب رشته"
+              options={fieldOptions}
+              value={field}
+              onChange={setField}
             />
           </div>
         </div>
 
-        <div className="flex justify-start w-full md:w-1/3">
+        <div className="flex justify-start w-full md:w-1/7">
           <div className="w-full">
             <span className="text-2xs  font-semibold text-gray-900">
-              رشته تحصیلی
+              صلاحیت
             </span>
             <Select
-              placeholder="انتخاب رشته"
+              placeholder="انتخاب صلاحیت"
               className=" text-nowrap text-xs"
-              options={majorOptions}
-              value={major}
-              onChange={setMajor}
+              options={qualificationOptions}
+              value={qualification}
+              onChange={setQualification}
             />
           </div>
         </div>
 
-        <div className="flex justify-start w-full md:w-1/3">
+        <div className="flex  w-full md:w-1/7">
           <div className="w-full">
             <span className="text-2xs  font-semibold text-gray-900">
-              رشته تحصیلی
+              پایه پروانه
             </span>
             <Select
-              placeholder="انتخاب رشته"
+              placeholder="انتخاب پایه"
               className=" text-nowrap text-xs"
-              options={majorOptions}
-              value={major}
-              onChange={setMajor}
+              options={gradeOptions}
+              value={grade}
+              onChange={setGrade}
             />
           </div>
         </div>
@@ -92,8 +104,11 @@ export default function EducationInfo() {
             label="سابقه کار (سال)"
             variant="default"
             labelClassName="mb-2 text-xs"
-            placeholder="012345678"
             inputSize="sm"
+            type="number"
+            min={0}
+            value={experienceYears}
+            onChange={(e) => setExperienceYears(e.target.value)}
           />
         </div>
         <div className="w-full md:w-1/3">
@@ -101,19 +116,44 @@ export default function EducationInfo() {
             label="تعداد پروژه فعال"
             variant="default"
             labelClassName="mb-2 text-xs"
-            placeholder="012345-6"
             inputSize="sm"
+            type="number"
+            min={0}
+            value={activeProjects}
+            onChange={(e) => setActiveProjects(e.target.value)}
           />
         </div>
         <div className="w-full md:w-1/3">
           <Input
-            label="سال اتخاذ پروانه"
+            label="سال اخذ پروانه"
             variant="default"
             labelClassName="mb-2 text-xs"
-            placeholder="تهران"
             inputSize="sm"
+            type="number"
+            value={licenseYear}
+            onChange={(e) => setLicenseYear(e.target.value)}
           />
         </div>
+      </div>
+
+      {/* ردیف سوم: خلاصه سوابق */}
+      <div className="mt-5 w-full">
+        <label
+          htmlFor="experience-summary"
+          className="mb-2 block text-xs font-semibold text-gray-900"
+        >
+          خلاصه سوابق
+        </label>
+        <TextArea
+          id="experience-summary"
+          variant="default"
+          rounded="xl"
+          rows={3}
+          value={summary}
+          onChange={(e) => setSummary(e.target.value)}
+          placeholder="خلاصه‌ای از سوابق حرفه‌ای، پروژه‌های اجرا شده و تخصص‌های اصلی..."
+          className="min-h-0 text-xs"
+        />
       </div>
     </div>
   );

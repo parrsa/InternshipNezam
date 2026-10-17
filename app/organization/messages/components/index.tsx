@@ -1,7 +1,8 @@
 "use client"
 import { Button } from '@/app/components/ui/Button';
+import { TextArea } from '@/app/components/ui/input';
 import { cn } from '@/lib/cn';
-import { CheckCircle2, Plus, Send } from 'lucide-react';
+import { Building2, Plus, Send } from 'lucide-react';
 import { useState } from 'react';
 
 
@@ -60,7 +61,19 @@ const card = 'sm:h-[650px] rounded-xl border border-neutral-200 bg-white shadow-
 
 export default function MessageInbox() {
   const [activeId, setActiveId] = useState(1);
+  const [reply, setReply] = useState('');
   const active = MESSAGES.find((m) => m.id === activeId) ?? MESSAGES[0];
+
+  const handleSelect = (id: number) => {
+    setActiveId(id);
+    setReply('');
+  };
+
+  const handleSendReply = () => {
+    const text = reply.trim();
+    if (!text) return;
+    setReply('');
+  };
 
   return (
     <div
@@ -88,7 +101,7 @@ export default function MessageInbox() {
             {MESSAGES.map((m) => (
               <li
                 key={m.id}
-                onClick={() => setActiveId(m.id)}
+                onClick={() => handleSelect(m.id)}
                 className={`relative flex  cursor-pointer flex-col gap-0.75 rounded-xl px-2.75 pt-1.75  py-2 text-right ${m.id === activeId ? 'bg-[#e7eaf6]' : ''
                   }`}
               >
@@ -114,51 +127,37 @@ export default function MessageInbox() {
           <div className="px-5 pt-10">
             <p className=" text-s leading-6  text-neutral-950">{active.body}</p>
 
-            {active.quoteLabel && (
-              <div className="mt-4 flex h-16.25 flex-col gap-1 rounded-xl border-r-4 border-[#173fab] bg-[#f7f8fa] px-3 pt-3">
-                <span className="text-xs leading-5 text-[#6b7280]">{active.quoteLabel}</span>
-                <span className="text-2xs leading-5 text-neutral-900">{active.quoteValue}</span>
+            <div className="mt-3 flex items-center gap-2 text-xs text-neutral-900">
+              <Building2 size={20} className="shrink-0 text-neutral-500" aria-hidden="true" />
+              <span>{active.sender} — سازمان نظام مهندسی</span>
+            </div>
+
+            <div className="mt-4 mb-5 sm:mb-0 flex flex-col gap-2.5 rounded-xl border-r-4 border-[#173fab] bg-[#f7f8fa] p-3.5">
+              <TextArea
+                key={active.id}
+                rows={2}
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+                placeholder="پاسخ به پیام..."
+                aria-label="پاسخ به پیام"
+                className="border-neutral-200 bg-[#f7f8fa] text-xs text-neutral-900 placeholder:text-neutral-500"
+              />
+
+              <div>
+                <Button
+                  variant="solid"
+                  color="input"
+                  size='xs'
+                  rounded="lg"
+                  type="button"
+                  leftIcon={<Send size={19} />}
+                  textSize="xs"
+                  onClick={handleSendReply}
+                  className="px-4"
+                >
+                  <p>ارسال پاسخ</p>
+                </Button>
               </div>
-            )}
-
-            <div className="mt-6 sm:mb-0 mb-5 flex items-center gap-2.5">
-
-              <Button
-                variant="solid"
-                color="input"
-                size='xs'
-                rounded="lg"
-                leftIcon={<Send size={19} />}
-                textSize="xs"
-                className={cn(
-                  " w-[10%] "
-                )}
-              >
-                <p>پاسخ</p>
-              </Button>
-
-      
-              <Button
-                size="xs"
-                rounded="lg"
-                textSize="sm"
-                variant="solid"
-                type="button"
-                className={cn("flex w-[8%] items-center justify-center  border border-gray-200 bg-amber-50/40  text-nowrap text-xs font-bold text-neutral-900 transition-colors active:text-neutral-950 active:bg-teal-50 hover:text-neutral-950 hover:bg-teal-50")}
-              >
-                ارجاع
-              </Button>
-
-              <Button
-                size="xs"
-                rounded="lg"
-                textSize="sm"
-                variant="solid"
-                type="button"
-                className={cn("flex w-[8%] items-center justify-center  bg-amber-50/40  text-nowrap text-xs font-bold text-neutral-900 transition-colors active:text-neutral-950 active:bg-teal-50 hover:text-neutral-950 hover:bg-teal-50")}
-              >
-                بایگانی
-              </Button>
             </div>
           </div>
         </div>

@@ -137,9 +137,6 @@ export function EngineerProfileModal({
       </div>
 
       <div className="mt-4 flex items-center justify-between">
-        <span className="text-2xs text-gray-500">
-          پروژه‌های فعال: <b className="text-gray-900">{fa(e.activeProjects)}</b>
-        </span>
         <span
           className={cn(
             "rounded-full border px-2 py-0.5 text-2xs",
@@ -149,6 +146,9 @@ export function EngineerProfileModal({
           )}
         >
           {isLegal ? "شخص حقوقی" : "شخص حقیقی"}
+        </span>
+        <span className="text-2xs text-gray-500">
+          پروژه‌های فعال: <b className="text-gray-900">{fa(e.activeProjects)}</b>
         </span>
       </div>
 

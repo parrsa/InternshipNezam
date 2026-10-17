@@ -215,8 +215,8 @@ export default function Profile() {
     ]
     return (
         <div className="w-full p-4">
-            <div className="sm:flex  justify-between items-center bg-white p-5 rounded-xl border border-neutral-300">
-                <div className="flex justify-center items-center gap-2">
+            <div className="sm:flex  justify-between items-center bg-white p-5 rounded-2xl border border-neutral-300">
+                <div className="flex py-5 justify-center items-center gap-2">
                     <div className=" flex justify-start items-center">
                         <div className="w-14 h-14 bg-[#DCE3F3] rounded-full flex justify-center items-center text-input-900 font-medium">
                             {Info.lastName[0]} {Info.lastName[1]}

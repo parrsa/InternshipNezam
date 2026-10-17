@@ -114,7 +114,7 @@ export default function Settings() {
                                     type="tel"
                                     inputMode="numeric"
                                     inputSize="sm"
-                                    className="text-right" />
+                                    className="text-right " />
                             </div>
                             <div>
                                 <Input

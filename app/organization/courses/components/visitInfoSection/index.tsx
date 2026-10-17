@@ -89,7 +89,7 @@ export function VisitInfoSection({ managers }: Props) {
 
         <div className="lg:w-1/2 w-full"
         >
-          <label className="mb-2 block text-xs text-nowrap text-left font-semibold leading-5 text-[#111827]">مسئول پروژه *</label>
+          <label className="mb-2 block text-xs text-nowrap font-semibold leading-5 text-[#111827]">مسئول پروژه *</label>
           <Select
             options={managers}
             value={values.manager}

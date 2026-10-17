@@ -92,14 +92,7 @@ export function CommitmentAgreement({
             معلق یا لغو نماید.
           </p>
 
-          <div className="border-t border-neutral-300 mt-4 pt-3">
-            <p className="text-2xs leading-6 text-neutral-600">
-              <span className="font-bold text-neutral-800">بند ظرفیت: </span>
-              ظرفیت پذیرش کارآموز توسط سازمان تعیین می‌شود و سرپرست متعهد
-              می‌گردد از سقف تعیین‌شده فراتر نرود. در صورت تخلف، حق دوره
-              کارآموز جدید به سازمان مسترد خواهد شد.
-            </p>
-          </div>
+
         </div>
 
         <div className="flex mt-2 justify-start items-start md:items-center gap-2 mb-5">
@@ -110,7 +103,7 @@ export function CommitmentAgreement({
             onChange={(e) => setAccepted(e.target.checked)}
           />
           <p className="text-[11.5px] font-medium text-neutral-950">
-            صورت‌مسئول تعهدنامه و بند ظرفیت را می‌پذیرم.
+            صورت‌مسئول تعهدنامه را می‌پذیرم.
           </p>
         </div>
 
