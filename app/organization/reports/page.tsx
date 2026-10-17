@@ -104,6 +104,41 @@ const engineers: Engineer[] = [
 ];
 
 function Reports() {
+  const toPersianDigits = (value: any) =>
+    String(value).replace(
+      /\d/g,
+      (digit) => "۰۱۲۳۴۵۶۷۸۹"[Number(digit)]
+    );
+
+  const getProgress = (completed: any, total: any) => {
+    if (!total || total <= 0) return 0;
+
+    return Math.min(
+      Math.max((completed / total) * 100, 0),
+      100
+    );
+  };
+
+  const statusConfig: any = {
+    active: {
+      label: "فعال",
+      className:
+        "border-emerald-300 bg-emerald-100 text-emerald-900",
+    },
+
+    inactive: {
+      label: "غیرفعال",
+      className:
+        "border-slate-300 bg-slate-100 text-slate-600",
+    },
+
+    review: {
+      label: "نیازمند بررسی",
+      className:
+        "border-amber-300 bg-orange-100 text-orange-900",
+    },
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#f8f8f8] ">
       <div
