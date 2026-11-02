@@ -1,8 +1,8 @@
-
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Download } from "lucide-react";
+import { cn } from "@/lib/cn";
 import Table from "@/app/components/ui/Table";
 
 type CourseType = "مهارتی" | "حقوقی" | "بازدید" | "نظری";
@@ -101,13 +101,7 @@ const badgeStyles: Record<string, string> = {
   "در انتظار": "border-[#F4C77F] bg-[#FFE7C1] text-[#854400]",
 };
 
-function Badge({
-  label,
-  variant,
-}: {
-  label: string;
-  variant: string;
-}) {
+function Badge({ label, variant }: { label: string; variant: string }) {
   return (
     <span
       className={[
@@ -122,16 +116,37 @@ function Badge({
   );
 }
 
+function useTouchScroll() {
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const startDragging = (e: any) => {
+    if (!sliderRef.current) return;
+    setIsDragging(true);
+    const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
+    setStartX(pageX - sliderRef.current.offsetLeft);
+    setScrollLeft(sliderRef.current.scrollLeft);
+  };
+
+  const onDragging = (e: any) => {
+    if (!isDragging || !sliderRef.current) return;
+    const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
+    const x = pageX - sliderRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    sliderRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const stopDragging = () => {
+    setIsDragging(false);
+  };
+
+  return { sliderRef, startDragging, onDragging, stopDragging, isDragging };
+}
+
 function exportCourses() {
-  const headers = [
-    "عنوان دوره",
-    "نوع",
-    "تاریخ",
-    "ظرفیت",
-    "ثبت‌نام",
-    "هزینه",
-    "وضعیت",
-  ];
+  const headers = ["عنوان دوره", "نوع", "تاریخ", "ظرفیت", "ثبت‌نام", "هزینه", "وضعیت"];
 
   const rows = courses.map((course) => [
     course.title,
@@ -144,10 +159,7 @@ function exportCourses() {
   ]);
 
   const escapeCell = (value: string) => {
-    const safeValue = /^[\s]*[=+\-@]/.test(value)
-      ? `'${value}`
-      : value;
-
+    const safeValue = /^[\s]*[=+\-@]/.test(value) ? `'${value}` : value;
     return `"${safeValue.replace(/"/g, '""')}"`;
   };
 
@@ -178,6 +190,9 @@ export default function TableCoursesPage() {
     exportCourses();
   }, []);
 
+  const { sliderRef, startDragging, onDragging, stopDragging, isDragging } =
+    useTouchScroll();
+
   const columns = [
     {
       key: "title",
@@ -190,10 +205,7 @@ export default function TableCoursesPage() {
           <span className="text-sm font-medium leading-5 text-[#111827]">
             {course.title}
           </span>
-          <span
-            dir="ltr"
-            className="text-xs leading-4.5 text-[#6B7280]"
-          >
+          <span dir="ltr" className="text-xs leading-4.5 text-[#6B7280]">
             {course.code}
           </span>
         </div>
@@ -206,10 +218,7 @@ export default function TableCoursesPage() {
       className: "text-center",
       thClassName: "text-center",
       render: (course: Course) => (
-        <Badge
-          label={course.type}
-          variant={badgeStyles[course.type]}
-        />
+        <Badge label={course.type} variant={badgeStyles[course.type]} />
       ),
     },
     {
@@ -246,9 +255,7 @@ export default function TableCoursesPage() {
             variant="border-[#8DECCF] bg-[#F0FFF9] text-[#009B76]"
           />
         ) : (
-          <span className="font-medium text-[#111827]">
-            {course.cost}
-          </span>
+          <span className="font-medium text-[#111827]">{course.cost}</span>
         ),
     },
     {
@@ -258,21 +265,15 @@ export default function TableCoursesPage() {
       className: "text-center",
       thClassName: "text-center",
       render: (course: Course) => (
-        <Badge
-          label={course.status}
-          variant={badgeStyles[course.status]}
-        />
+        <Badge label={course.status} variant={badgeStyles[course.status]} />
       ),
     },
   ];
 
   return (
-    <div
-      dir="rtl"
-      className=" bg-[#F5F6F8] "
-    >
-      <div className="mx-auto  h-127.5 w-full rounded-[18px] border border-[#D9DEE7] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.10)]">
-        <div className="flex h-25 items-start justify-between px-7.5 pt-7.5">
+    <div dir="rtl" className="bg-[#F5F6F8]">
+      <div className="mx-auto min-h-127.5 w-full rounded-[18px] border border-[#D9DEE7] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.10)]">
+        <div className="flex h-25 items-start justify-between px-4 pt-6 sm:px-6 sm:pt-7 lg:px-7.5 lg:pt-7.5">
           <h1 className="pt-2.5 text-[14px] font-bold leading-5 text-[#111827]">
             دوره‌های تعریف‌شده
           </h1>
@@ -296,14 +297,31 @@ export default function TableCoursesPage() {
         </div>
 
         <div className="w-full">
-          <Table
-            tableRow={courses}
-            tableCol={columns}
-            minHeight="390px"
-            HeaderPY="py-[15px]"
-            fixed
-           
-          />
+          <div
+            ref={sliderRef}
+            onMouseDown={startDragging}
+            onMouseMove={onDragging}
+            onMouseUp={stopDragging}
+            onMouseLeave={stopDragging}
+            onTouchStart={startDragging}
+            onTouchMove={onDragging}
+            onTouchEnd={stopDragging}
+            className={cn(
+              "w-full overflow-x-auto select-none",
+              isDragging ? "cursor-grabbing" : "cursor-grab lg:cursor-auto",
+              "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+            )}
+          >
+            <div className="min-w-[900px] lg:min-w-0">
+              <Table
+                tableRow={courses}
+                tableCol={columns}
+                minHeight="390px"
+                HeaderPY="py-[15px]"
+                fixed
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

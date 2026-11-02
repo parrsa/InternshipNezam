@@ -197,6 +197,22 @@ function MyCourses() {
     const stats = useMemo(
         () => [
             {
+                title: "ساعات آموزشی",
+                value: "۲۴",
+                badge: "تاکنون تکمیل شده",
+                badgeClass:
+                "border-amber-200 bg-amber-50 text-amber-700",
+                icon: Clock3,
+            },
+            {
+                title: "ثبت‌نام شده من",
+                value: registeredCount,
+                badge: "دوره‌های آتی",
+                badgeClass:
+                "border-emerald-200 bg-emerald-50 text-emerald-600",
+                icon: CheckCircle2,
+            },
+            {
                 title: "دوره‌های فعال",
                 value: courses.filter(
                     (course) => course.status === "active"
@@ -205,22 +221,6 @@ function MyCourses() {
                 badgeClass:
                     "border-blue-200 bg-blue-50 text-blue-600",
                 icon: BookOpen,
-            },
-            {
-                title: "ثبت‌نام شده من",
-                value: registeredCount,
-                badge: "دوره‌های آتی",
-                badgeClass:
-                    "border-emerald-200 bg-emerald-50 text-emerald-600",
-                icon: CheckCircle2,
-            },
-            {
-                title: "ساعات آموزشی",
-                value: "۲۴",
-                badge: "تاکنون تکمیل شده",
-                badgeClass:
-                    "border-amber-200 bg-amber-50 text-amber-700",
-                icon: Clock3,
             },
         ],
         [courses, registeredCount]
@@ -234,7 +234,7 @@ function MyCourses() {
             <div className="flex w-full gap-4 lg:flex-row lg:items-center lg:justify-between"
             >
                 <div
-                    className=" flex w-full items-center gap-2 overflow-x-auto pb-1 lg:w-auto "
+                    className=" flex w-full items-center gap-2 text-nowrap overflow-x-auto pb-1 lg:w-auto "
                 >
                     {tabs.map((tab) => {
                         const isActive = activeFilter === tab.key;

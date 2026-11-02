@@ -22,7 +22,7 @@ export function VisitLocationSection() {
     useFormikContext<VisitFormValues>();
 
   return (
-    <section dir="ltr">
+    <section >
       <h2 className="mb-9 text-xs font-bold leading-6 text-black">
         بخش ۲ – محل و حرکت
       </h2>

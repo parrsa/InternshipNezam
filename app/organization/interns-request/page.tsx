@@ -255,14 +255,14 @@ export default function InternsRequest() {
     ]
 
     return (
-        <div className="p-4">
+        <div className="sm:p-4">
             <div className="w-full bg-input-50 border-r-4 text-input-900 border-input-500 text-2xs rounded-lg p-3 mb-5">
                 <p>
                     این درخواست‌ها پس از تأیید سرپرست کارآموز، به همراه اطلاعات کامل کارآموز و سرپرست به سازمان ارسال شده است. با تأیید نهایی سازمان، فرایند کارآموزی آغاز می‌گردد.
 
                 </p>
             </div>
-            <div className="w-full grid grid-cols-4 grid-rows-[150px] gap-4">
+            <div className="w-full grid grid-cols-4 max-sm:grid-cols-2  max-lg:grid-cols-1 grid-rows-[150px] gap-4">
                 {infoData.map((item: any) => (
                     <div key={item.id} className="w-full  bg-white rounded-2xl shadow-sm border border-neutral-300 flex justify-center items-start p-4 gap-2 flex-col ">
                         <p className="text-neutral-500 font-medium text-xs">{item.title}</p>

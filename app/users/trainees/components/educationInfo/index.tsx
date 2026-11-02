@@ -38,9 +38,9 @@ export default function EducationInfo() {
                 </div>
             </div>
 
-            <div className="flex items-center justify-between ">
+            <div className=" flex items-center justify-between max-sm:flex max-sm:flex-col max-sm:gap-5 ">
 
-                <div >
+                <div className=" max-sm:w-full" >
                     <span className="text-2xs  font-semibold text-gray-900"> مقطع تحصیلی </span>
                     <Select
                         className=" text-nowrap text-xs"
@@ -51,7 +51,7 @@ export default function EducationInfo() {
                     />
                 </div>
 
-                <div>
+                <div className=" max-sm:w-full" >
                     <span className="text-2xs  font-semibold text-gray-900">رشته تحصیلی</span>
                     <Select
                         placeholder="انتخاب رشته"
@@ -64,7 +64,7 @@ export default function EducationInfo() {
 
 
 
-                <div className="flex flex-col gap-1 mt-1  w-[35%]">
+                <div className="flex flex-col gap-1 mt-1  max-sm:w-full  w-[35%]">
 
                     <span className="text-2xs font-semibold text-gray-900">
                         مدت دوره کارآموزی

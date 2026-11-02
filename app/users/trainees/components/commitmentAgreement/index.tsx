@@ -61,7 +61,7 @@ export function CommitmentAgreement({
 
         </div>
 
-        <div className="flex items-center justify-start gap-3">
+        <div className="flex items-center max-sm:flex-col justify-start gap-3">
           <Button
             type="button"
             variant="solid"
