@@ -14,7 +14,7 @@ function UserPanel() {
       <div className="mx-auto flex w-full pt-2 flex-col gap-5">
         <DashboardStatCards />
 
-        <div className=" w-full flex gap-3 py-4 ">
+        <div className=" w-full  max-sm:flex-col flex gap-3 py-4 ">
           <MonthlyWorkChart />
           <ActiveCourses />
         </div>

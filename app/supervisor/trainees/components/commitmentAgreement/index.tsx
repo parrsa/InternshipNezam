@@ -3,9 +3,11 @@
 import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/input";
 import { cn } from "@/lib/cn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { TOTAL_CAPACITY_BY_USER_TYPE, UserType } from "../supervisorConfig";
 
 interface CommitmentAgreementProps {
+  userType?: UserType;
   stepNumber?: string;
   supervisorName?: string;
   licenseNumber?: string;
@@ -13,17 +15,35 @@ interface CommitmentAgreementProps {
   onSaveDraft?: () => void;
 }
 
+const toEnglishDigits = (value: string) =>
+  value.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
+
 export function CommitmentAgreement({
+  userType = "User",
   stepNumber = "۵",
-  supervisorName = "{{نام سرپرست}}",
-  licenseNumber = "{{شماره پروانه}}",
+  supervisorName,
+  licenseNumber,
   onSubmit,
   onSaveDraft,
 }: CommitmentAgreementProps) {
+  const totalCapacity = TOTAL_CAPACITY_BY_USER_TYPE[userType];
+
   const [accepted, setAccepted] = useState(false);
-  const [totalCapacity, setTotalCapacity] = useState("10");
-  const [allocatedCapacity, setAllocatedCapacity] = useState("6");
+  const [allocatedCapacity, setAllocatedCapacity] = useState("0");
   const [minMonthlyHours, setMinMonthlyHours] = useState("120");
+
+  useEffect(() => {
+    setAllocatedCapacity((prev) =>
+      prev === "" ? prev : String(Math.min(Number(prev) || 0, totalCapacity))
+    );
+  }, [totalCapacity]);
+
+  const handleAllocatedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digits = toEnglishDigits(e.target.value).replace(/\D/g, "");
+    setAllocatedCapacity(
+      digits === "" ? "" : String(Math.min(Number(digits), totalCapacity))
+    );
+  };
 
   return (
     <div
@@ -47,10 +67,9 @@ export function CommitmentAgreement({
               variant="default"
               labelClassName="mb-2 text-xs"
               inputSize="sm"
-              value={totalCapacity}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setTotalCapacity(e.target.value)
-              }
+              value={String(totalCapacity)}
+              readOnly
+              disabled
             />
           </div>
           <div className="w-full md:w-1/3">
@@ -59,10 +78,9 @@ export function CommitmentAgreement({
               variant="default"
               labelClassName="mb-2 text-xs"
               inputSize="sm"
+              inputMode="numeric"
               value={allocatedCapacity}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setAllocatedCapacity(e.target.value)
-              }
+              onChange={handleAllocatedChange}
             />
           </div>
           <div className="w-full md:w-1/3">
@@ -84,12 +102,12 @@ export function CommitmentAgreement({
             متن تعهدنامه سرپرستی
           </h4>
           <p className="text-[11.5px] leading-6 text-gray-700 text-justify">
-            اینجانب {supervisorName} با شماره پروانه {licenseNumber} متعهد
-            می‌شوم که نظارت فنی و تخصصی بر کارآموزان زیر نظر خود را به‌طور
-            مستمر انجام دهم، گزارش‌های ماهانه را در مهلت ۷ روز بررسی و
-            تأیید/رد نمایم و در جلسات توجیهی سازمان حضور فعال داشته باشم. در
-            غیر این صورت، سازمان نظام مهندسی تهران می‌تواند صلاحیت سرپرستی مرا
-            معلق یا لغو نماید.
+            اینجانب {supervisorName || "..............."} با شماره پروانه{" "}
+            {licenseNumber || "..............."} متعهد می‌شوم که نظارت فنی و
+            تخصصی بر کارآموزان زیر نظر خود را به‌طور مستمر انجام دهم،
+            گزارش‌های ماهانه را در مهلت ۷ روز بررسی و تأیید/رد نمایم و در
+            جلسات توجیهی سازمان حضور فعال داشته باشم. در غیر این صورت، سازمان
+            نظام مهندسی تهران می‌تواند صلاحیت سرپرستی مرا معلق یا لغو نماید.
           </p>
 
           <div className="border-t border-neutral-300 mt-4 pt-3">
@@ -100,19 +118,22 @@ export function CommitmentAgreement({
               کارآموز جدید به سازمان مسترد خواهد شد.
             </p>
           </div>
-
         </div>
 
         <div className="flex mt-2 justify-start items-start md:items-center gap-2 mb-5">
           <input
+            id="commitment-accepted"
             type="checkbox"
             className="w-4 h-4 mt-0.5 md:mt-0 shrink-0"
             checked={accepted}
             onChange={(e) => setAccepted(e.target.checked)}
           />
-          <p className="text-[11.5px] font-medium text-neutral-950">
+          <label
+            htmlFor="commitment-accepted"
+            className="text-[11.5px] font-medium text-neutral-950 cursor-pointer"
+          >
             صورت‌مسئول تعهدنامه را می‌پذیرم.
-          </p>
+          </label>
         </div>
 
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-start gap-3">
