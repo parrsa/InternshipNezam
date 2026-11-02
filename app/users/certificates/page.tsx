@@ -57,7 +57,7 @@ function CertifiCates() {
 
     return (
         <div className='w-full flex flex-col gap-3 px-5 p-2'>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
+            <div className='grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-5'>
                 {CERTIFICATES.map((item) => {
                     const status = STATUS_MAP[item.status]
 

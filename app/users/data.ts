@@ -35,15 +35,15 @@ export const statCards: StatCard[] = [
     badge: "۱ در حال صدور",
     icon: Award,
     badgeClass:
-      "bg-blue-50 text-blue-900 border-blue-200",
+      "bg-blue-50 text-nowrap text-blue-900 border-blue-200",
   },
   {
-    title: "گزارش‌های تأیید شده",
+    title: "گزارش‌ تأیید شده",
     value: "۱۲",
     badge: "۹۶٪ نرخ تأیید",
     icon: CheckCircle2,
     badgeClass:
-      "bg-emerald-50 text-emerald-900 border-emerald-200",
+      "bg-emerald-50 text-nowrap text-emerald-900 border-emerald-200",
   },
   {
    title: "دوره‌های فعال",
@@ -51,7 +51,7 @@ export const statCards: StatCard[] = [
    badge: "۳ دوره نزد اتمام",
    icon: BookOpen,
    badgeClass:
-     "bg-amber-50 text-amber-900 border-amber-200",
+     "bg-amber-50 text-nowrap text-amber-900 border-amber-200",
  },
     {
     title: "ساعات کارآموزی",
@@ -59,7 +59,7 @@ export const statCards: StatCard[] = [
     badge: "۴۸ ساعت این ماه",
     icon: Clock3,
     badgeClass:
-      "bg-emerald-50 text-emerald-900 border-emerald-200",
+      "bg-emerald-50 text-nowrap text-emerald-900 border-emerald-200",
   },
 ];
 

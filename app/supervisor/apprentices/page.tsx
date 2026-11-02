@@ -148,7 +148,7 @@ export default function Apprentices() {
     return (
         <div className="p-4 flex justify-center items-center flex-col gap-4">
             <div className="w-full flex justify-between items-center">
-                <div className="w-3/12">
+                <div className=" max-sm:w-[65%] max-lg:w-[70%] w-3/12">
                     <Input
                         variant="rounded"
                         className=""

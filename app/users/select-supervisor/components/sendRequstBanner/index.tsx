@@ -34,7 +34,7 @@ export function SendRequestBanner() {
                 type="button"
                 variant="solid"
                 color="input"
-                className="text-sm"
+                className="text-sm text-nowrap"
                 size="xs"
                 rounded="lg"
                 leftIcon={

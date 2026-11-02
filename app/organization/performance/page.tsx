@@ -16,7 +16,7 @@ function Performance() {
     return (
         <div
             dir="rtl"
-            className="w-full flex flex-col gap-5 px-5 p-2 items-center justify-center"
+            className="w-full flex flex-col gap-5 sm:px-5 p-2 items-center justify-center"
         >
             <div className="grid w-full grid-cols-1 gap-5 lg:grid-cols-2">
                 <SupervisorScoreChart scores={SUPERVISOR_SCORES} />

@@ -98,14 +98,14 @@ export function SupervisorCard({
 
       <hr className="my-4 border-gray-200" />
 
-      <div className="flex items-center gap-3">
+      <div className=" lg:flex-row lg:items-center  gap-3   flex flex-col ">
         <Button
           variant="outline"
           color="input"
           leftIcon={<Eye size={18} />}
           onClick={() => { setProfileOpen(true); onViewProfile?.(s.id); }}
 
-          className="h-9 flex-1 border-gray-200 bg-[#FDFCF8] py-0 font-semibold text-gray-900 hover:border-gray-300 hover:bg-gray-50"
+          className="h-9 flex-1 border-gray-200 bg-[#FDFCF8]  font-semibold text-gray-900 hover:border-gray-300 hover:bg-gray-50"
           textSize="xs"
         >
           مشاهده پروفایل
@@ -118,7 +118,7 @@ export function SupervisorCard({
           onClick={() => onSelect(s.id)}
           textSize="xs"
           className={cn(
-            "h-9 flex-1 py-0",
+            "h-9 flex-1 ",
             active
               ? "bg-blue-800  text-white font-semibold hover:bg-blue-700"
               : "border-gray-200 bg-[#FDFCF8] text-neutral-900 font-semibold hover:border-gray-300 hover:bg-gray-50"
