@@ -92,6 +92,14 @@ export function CommitmentAgreement({
             معلق یا لغو نماید.
           </p>
 
+          <div className="border-t border-neutral-300 mt-4 pt-3">
+            <p className="text-2xs leading-6 text-neutral-600">
+              <span className="font-bold text-neutral-800">بند ظرفیت: </span>
+              ظرفیت پذیرش کارآموز توسط سازمان تعیین می‌شود و سرپرست متعهد
+              می‌گردد از سقف تعیین‌شده فراتر نرود. در صورت تخلف، حق دوره
+              کارآموز جدید به سازمان مسترد خواهد شد.
+            </p>
+          </div>
 
         </div>
 
