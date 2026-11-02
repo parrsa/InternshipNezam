@@ -17,7 +17,7 @@ const faNumber = (n: number) => n.toLocaleString("fa-IR");
 
 export default function TopSupervisors() {
   return (
-    <div className=" h-81 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <div className=" sm:h-81  rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
       <div className="flex items-center p-2 justify-between">
         <h2 className="text-s font-bold text-gray-900">سرپرستان برتر</h2>
         <Star className="h-4 w-4 text-amber-500" aria-hidden="true" />

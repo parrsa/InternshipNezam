@@ -17,8 +17,8 @@ import { Send } from "lucide-react";
 type TabKey = "new" | "past";
 
 const TABS: { key: TabKey; label: string }[] = [
-    { key: "past", label: "بازدید پروژه" },
     { key: "new", label: "تعریف دوره" },
+    { key: "past", label: "بازدید پروژه" },
 ];
 
 const MANAGERS: VisitOption[] = [
@@ -42,8 +42,8 @@ function Courses() {
     }
 
     return (
-        <div className="flex w-full flex-col items-center  gap-3 px-5 p-2">
-            <div className="flex w-full items-center justify-between gap-2 self-end rounded-xl bg-[#e7eef098] p-1 md:w-1/2">
+        <div className="flex w-full flex-col items-center  gap-3 sm:px-5 p-2">
+            <div className="flex w-full items-center justify-between gap-2 self-start rounded-xl bg-[#e7eef098] p-1 md:w-1/2">
                 {TABS.map((tab) => {
                     const isActive = activeTab === tab.key;
 
@@ -68,7 +68,7 @@ function Courses() {
             {activeTab === "past" ? (
                 <>
                     <div className="mt-2 w-full">
-                        <div className="flex min-h-11 items-center justify-end gap-3 rounded-lg border-r-4 border-input-400 bg-input-50 px-4 py-2 text-xs text-input-950">
+                        <div className="flex min-h-11 items-center  gap-3 rounded-lg border-r-4 border-input-400 bg-input-50 px-4 py-2 text-xs text-input-950">
                             <p>
                                 بازدید پروژه شامل: نام پروژه، زمان بازدید، محل حرکت،
                                 هزینه و الزامات. این بازدید در پنل کارآموز نمایش داده
@@ -86,7 +86,6 @@ function Courses() {
                     >
                         {({ isSubmitting }) => (
                             <Form
-                                dir="ltr"
                                 noValidate
                                 className="w-full flex flex-col gap-4 "
                             >

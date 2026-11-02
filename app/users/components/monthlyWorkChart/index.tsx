@@ -153,7 +153,7 @@ function MonthlyWorkChart() {
   return (
     <div
       dir="rtl"
-      className="rounded-xl border border-slate-200 bg-white px-7.75 w-[65%] py-5 shadow-sm"
+      className="rounded-xl border border-slate-200 bg-white px-7.75 w-full lg:w-[65%] py-5 shadow-sm"
     >
       <div
         className="flex items-center justify-between gap-4"

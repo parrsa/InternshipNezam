@@ -298,5 +298,66 @@ export default function EducationInfo({ userType }: { userType: "User" | "legal"
                 />
             </div>
         </div>
-    );
+      </div>
+
+      {/* ردیف دوم: سه Input */}
+      <div className="w-full flex flex-col md:flex-row justify-center items-center gap-3 mt-5">
+        <div className="w-full md:w-1/3">
+          <Input
+            label="سابقه کار (سال)"
+            variant="default"
+            labelClassName="mb-2 text-xs"
+            inputSize="sm"
+            type="number"
+            min={0}
+            value={experienceYears}
+            onChange={(e) => setExperienceYears(e.target.value)}
+          />
+        </div>
+        <div className="w-full md:w-1/3">
+          <Input
+            label="تعداد پروژه فعال"
+            variant="default"
+            labelClassName="mb-2 text-xs"
+            inputSize="sm"
+            type="number"
+            min={0}
+            value={activeProjects}
+            onChange={(e) => setActiveProjects(e.target.value)}
+          />
+        </div>
+        <div className="w-full md:w-1/3">
+          <Input
+            label="سال اخذ پروانه"
+            variant="default"
+            labelClassName="mb-2 text-xs"
+            inputSize="sm"
+            type="number"
+            value={licenseYear}
+            onChange={(e) => setLicenseYear(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* ردیف سوم: خلاصه سوابق */}
+      <div className="mt-5 w-full">
+        <label
+          htmlFor="experience-summary"
+          className="mb-2 block text-xs font-semibold text-gray-900"
+        >
+          خلاصه سوابق
+        </label>
+        <TextArea
+          id="experience-summary"
+          variant="default"
+          rounded="xl"
+          rows={3}
+          value={summary}
+          onChange={(e) => setSummary(e.target.value)}
+          placeholder="خلاصه‌ای از سوابق حرفه‌ای، پروژه‌های اجرا شده و تخصص‌های اصلی..."
+          className="min-h-0 text-xs"
+        />
+      </div>
+    </div>
+  );
 }

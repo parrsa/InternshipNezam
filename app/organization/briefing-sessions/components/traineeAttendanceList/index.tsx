@@ -40,8 +40,10 @@ const DEFAULT_TRAINEES: Trainee[] = [
 
 const DEFAULT_SELECTED_IDS = ["2", "4", "5", "6", "7", "8"];
 
-const TH_BASE = "px-0 text-left text-sm text-neutral-900";
-const TD_BASE = "px-0 py-2 text-left text-xs text-neutral-900";
+const TH_BASE =
+  "px-0 text-left text-[10px] sm:text-[11px] lg:text-sm text-neutral-900 whitespace-nowrap";
+const TD_BASE =
+  "px-0 py-2 text-left text-[10px] sm:text-[11px] lg:text-xs text-neutral-900 whitespace-nowrap";
 
 interface AttendanceCheckboxProps {
   checked: boolean;
@@ -59,7 +61,7 @@ function AttendanceCheckbox({
   return (
     <label
       className={cn(
-        "relative inline-flex h-5 w-5 ",
+        "relative inline-flex h-4 w-4 sm:h-5 sm:w-5 shrink-0",
         disabled ? "cursor-not-allowed" : "cursor-pointer",
       )}
     >
@@ -73,12 +75,12 @@ function AttendanceCheckbox({
       />
       <span
         className={cn(
-          "h-5 w-5 rounded-md border border-neutral-200 bg-white transition-colors duration-200",
+          "h-4 w-4 sm:h-5 sm:w-5 rounded-md border border-neutral-200 bg-white transition-colors duration-200",
           "peer-checked:border-input-800 peer-checked:bg-input-800",
           "peer-focus-visible:ring-2 peer-focus-visible:ring-input-300 peer-focus-visible:ring-offset-1",
         )}
       />
-      <CheckIcon className="pointer-events-none absolute inset-0 m-auto h-3.5 w-3.5 text-white opacity-0 transition-opacity duration-200 peer-checked:opacity-100" />
+      <CheckIcon className="pointer-events-none absolute inset-0 m-auto h-3 w-3 sm:h-3.5 sm:w-3.5 text-white opacity-0 transition-opacity duration-200 peer-checked:opacity-100" />
     </label>
   );
 }
@@ -87,20 +89,23 @@ type BadgeVariant = AttendanceStatus | "inactive";
 
 const BADGE_STYLES: Record<
   BadgeVariant,
-  { label: string; icon?: string; className: string }
+  { label: string; short: string; icon?: string; className: string }
 > = {
   present: {
     label: "حاضر",
+    short: "حاضر",
     icon: "✓",
     className: "border-green-300 bg-green-100 text-neutral-900",
   },
   absent: {
     label: "غایب",
+    short: "غایب",
     icon: "✗",
     className: "border-red-300 bg-red-100 text-red-900",
   },
   inactive: {
     label: "غیرفعال",
+    short: "غیرفعال",
     className: "border-red-300 bg-red-100 text-red-700",
   },
 };
@@ -111,7 +116,7 @@ function StatusBadge({ variant }: { variant: BadgeVariant }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-lg border text-xs px-2.5 py-1 text-2xs font-medium leading-4",
+        "inline-flex items-center gap-1 whitespace-nowrap rounded-lg border px-1.5 sm:px-2 lg:px-2.5 py-1 text-[9px] sm:text-3xs lg:text-2xs font-medium leading-4",
         className,
       )}
     >
@@ -183,18 +188,20 @@ export default function TraineeAttendanceList({
     {
       key: "name",
       label: "نام",
-      width: "w-[25%]",
-      thClassName: cn(TH_BASE, "pl-[49px]"),
-      className: cn(TD_BASE, "pl-2.5"),
+      width: "w-[26%] lg:w-[10%]",
+      thClassName: cn(TH_BASE, "pl-[36px] sm:pl-[44px] lg:pl-[49px]"),
+      className: cn(TD_BASE, "pl-2 sm:pl-2.5"),
       render: (row: Trainee) => (
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-2 sm:gap-3.5 lg:gap-5">
           <AttendanceCheckbox
             checked={selectedIds.has(row.id)}
             disabled={!row.isActive}
             label={`ثبت حضور ${row.name}`}
             onChange={() => toggleSelected(row.id)}
           />
-          <span className="text-xs font-bold">{row.name}</span>
+          <span className="text-3xs sm:text-2xs lg:text-xs font-bold whitespace-nowrap">
+            {row.name}
+          </span>
         </div>
       ),
     },
@@ -211,6 +218,12 @@ export default function TraineeAttendanceList({
       width: "w-[18%]",
       thClassName: cn(TH_BASE, "font-bold"),
       className: TD_BASE,
+      render: (row: Trainee) => (
+        <>
+          <span className="lg:hidden">{row.qualification.split("،")[0]}</span>
+          <span className="hidden lg:inline">{row.qualification}</span>
+        </>
+      ),
     },
     {
       key: "level",
@@ -218,6 +231,18 @@ export default function TraineeAttendanceList({
       width: "w-[14%]",
       thClassName: cn(TH_BASE, "font-bold"),
       className: TD_BASE,
+      render: (row: Trainee) => (
+        <>
+          <span className="lg:hidden">
+            {row.level === "کارشناسی"
+              ? "کارشن."
+              : row.level === "کارشناسی ارشد"
+                ? "ارشد"
+                : row.level}
+          </span>
+          <span className="hidden lg:inline">{row.level}</span>
+        </>
+      ),
     },
     {
       key: "status",
@@ -242,7 +267,7 @@ export default function TraineeAttendanceList({
             color="danger"
             size="xs"
             rounded="xl"
-            className="border border-red-200 px-3 text-3xs font-bold text-red-800"
+            className="border border-red-200 px-2 sm:px-2.5 lg:px-3 text-[9px] sm:text-3xs lg:text-3xs font-bold text-red-800 whitespace-nowrap"
             onClick={() => toggleActive(row.id)}
           >
             غیرفعال
@@ -254,7 +279,7 @@ export default function TraineeAttendanceList({
             size="sm"
             textSize="xs"
             rounded="md"
-            className="border border-green-200 px-3.5 font-bold"
+            className="border border-green-200 px-2 sm:px-2.5 lg:px-3.5 text-[9px] sm:text-3xs lg:text-xs font-bold whitespace-nowrap"
             onClick={() => toggleActive(row.id)}
           >
             فعال‌سازی
@@ -269,29 +294,34 @@ export default function TraineeAttendanceList({
   }));
 
   return (
-    <div dir="ltr" className=" mb-5">
+    <div dir="rtl" className="mb-5">
       <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white pb-6 shadow-sm">
-        <div className="flex items-center justify-between px-8 pb-10 pt-7">
+        <div className="flex flex-col gap-2 px-4 pb-6 pt-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:pb-8 sm:pt-6 lg:px-8 lg:pb-10 lg:pt-7">
           <h2 className="text-sm font-bold text-neutral-900">لیست کارآموزان</h2>
-          <p dir="rtl" className="text-xs text-neutral-500">
+          <p dir="rtl" className="text-3xs sm:text-2xs lg:text-xs text-neutral-500">
             {faNumber.format(selectedIds.size)} کارآموز حاضر از{" "}
             {faNumber.format(trainees.length)} کارآموز
           </p>
         </div>
 
-        <Table
-          tableRow={rows}
-          tableCol={columns}
-          minHeight="0px"
-          HeaderPY="py-[17px]"
-          fixed
-        />
+        <div  className="w-full px-3 overflow-x-auto">
+          <Table
+            tableRow={rows}
+            tableCol={columns}
+            minHeight="0px"
+            HeaderPY="py-2.5 lg:py-[17px]"
+            fixed
+          />
+        </div>
       </div>
 
-      <div className="mt-5 flex items-center gap-0.5">
-        <div className="flex h-11 flex-1 items-center gap-3 rounded-lg border-r-4 border-amber-400 bg-amber-50 px-4 text-xs text-amber-700">
-          <WalletIcon className="h-4.5 w-4.5 text-amber-600" />
-          <p>پس از ثبت حضور کارآموز در جلسه توجیهی، امکان پرداخت هزینه کارآموز برای کارآموز فعال می‌شود.</p>
+      <div className="mt-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-0.5">
+        <div className="flex flex-1 items-center gap-2 sm:gap-3 rounded-lg border-r-4 border-amber-400 bg-amber-50 px-3 sm:px-4 py-3 lg:py-0 lg:h-11 text-3xs sm:text-2xs  lg:text-xs text-amber-700">
+          <WalletIcon className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-amber-600 shrink-0" />
+          <p>
+            پس از ثبت حضور کارآموز در جلسه توجیهی، امکان پرداخت هزینه کارآموز برای
+            کارآموز فعال می‌شود.
+          </p>
         </div>
 
         <Button
@@ -302,7 +332,7 @@ export default function TraineeAttendanceList({
           rounded="lg"
           loading={isSubmitting}
           leftIcon={<CircleCheckIcon className="h-4.5 w-4.5" />}
-          className="h-9 gap-2.5 px-6 py-0 font-bold"
+          className="h-9 w-full lg:w-auto gap-2.5 px-6 py-0 font-bold"
           onClick={handleSubmit}
         >
           ثبت نهایی حضور

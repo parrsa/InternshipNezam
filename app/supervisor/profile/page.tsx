@@ -215,8 +215,8 @@ export default function Profile() {
     ]
     return (
         <div className="w-full p-4">
-            <div className="flex justify-between items-center bg-white p-5 rounded-xl border border-neutral-300">
-                <div className="flex justify-center items-center gap-2">
+            <div className="sm:flex  justify-between items-center bg-white p-5 rounded-2xl border border-neutral-300">
+                <div className="flex py-5 justify-center items-center gap-2">
                     <div className=" flex justify-start items-center">
                         <div className="w-14 h-14 bg-[#DCE3F3] rounded-full flex justify-center items-center text-input-900 font-medium">
                             {Info.lastName[0]} {Info.lastName[1]}
@@ -229,7 +229,7 @@ export default function Profile() {
                         <p className="text-neutral-500 text-2xs">این پروفایل توسط کارآموزان هنگام انتخاب سرپرست مشاهده می‌شود.</p>
                     </div>
                 </div>
-                <div className="flex justify-center items-center gap-2">
+                <div className="flex justify-center sm:mt-0 mt-4 items-center gap-2">
                     <div className="flex justify-center items-center gap-1 text-3xs">
                         <span>نمایش پروفایل به کارآموزان</span>
                         <SwitchButton id="profile-visibility" checked={checked} onChange={setChecked} />
@@ -288,7 +288,7 @@ export default function Profile() {
                                 type="button"
                                 onClick={handlePreview}
                                 disabled={!resume.url}
-                                className="flex justify-center items-center gap-1 px-3 py-2 text-xs font-bold border border-neutral-300 rounded-lg bg-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="sm:flex hidden justify-center items-center gap-1 px-3 py-2 text-xs font-bold border border-neutral-300 rounded-lg bg-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <Eye size={14} />
                                 <span>پیش‌نمایش</span>

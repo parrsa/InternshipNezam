@@ -42,7 +42,7 @@ export const statCards: StatCard[] = [
 function CardBriefing() {
   return (
     <div
-      dir="rtl"
+      dir="ltr"
       className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3"
     >
       {statCards.map((card) => {
@@ -51,7 +51,7 @@ function CardBriefing() {
         return (
           <div
             key={card.title}
-            className="h-27.5 rounded-xl border border-slate-300 bg-white px-5 py-3 shadow-xs"
+            className=" rounded-xl border border-slate-300 bg-white px-5 py-3 shadow-xs"
           >
             <div
               className="flex h-full items-start justify-between gap-4"

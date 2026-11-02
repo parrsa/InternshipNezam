@@ -247,7 +247,7 @@ export default function InternsRequest() {
             <div className="w-full bg-input-50 border-r-4 text-input-900 border-input-600 text-xs rounded-xl p-4 mb-5">
                 <p>این درخواست‌ها از سمت کارآموزانی ارسال شده که در مرحله «انتخاب سرپرست»، شما را انتخاب کرده‌اند. در صورت تأیید، درخواست نهایی به همراه اطلاعات کارآموز و شما به سازمان ارسال می‌شود.</p>
             </div>
-            <div className="w-full grid grid-cols-4 grid-rows-[150px] gap-4">
+            <div className="w-full grid  grid-cols-2 sm:grid-cols-4 grid-rows-[150px] gap-4">
                 {infoData.map((item: any) => (
                     <div key={item.id} className="w-full h-full bg-white rounded-2xl shadow-lg border border-neutral-300 flex justify-center items-start p-4 gap-2 flex-col ">
                         <p className="text-neutral-500 font-medium text-xs">{item.title}</p>
