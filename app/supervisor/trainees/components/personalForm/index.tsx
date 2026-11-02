@@ -11,6 +11,7 @@ import EducationInfo from "../educationInfo";
 import LicenseStatus from "../licenseStatus";
 import CommitmentAgreement from "../commitmentAgreement";
 import RegistrationCOnditions from "../RegistrationConditions";
+import ResumeUploader from "../resumeUploader";
 
 type UserType = "User" | "legal";
 
@@ -18,7 +19,7 @@ const user = {
     FullName: "",
     LicenseNumber: "",
     NationalCode: "",
-    Birthday: "", 
+    Birthday: "",
     Birthplace: "",
     PhoneNumber: ""
 }
@@ -27,7 +28,7 @@ const legal = {
     CompanyName: "",
     LicenseNumber: "",
     NationalCode: "",
-    Birthday: "", 
+    Birthday: "",
     Birthplace: "",
     PhoneNumber: ""
 }
@@ -285,6 +286,13 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
                                     </div>}
                             </div>
                         </div>
+                        <ResumeUploader
+                            initialResume={{
+                                name: "resume_razai_1404.pdf",
+                                size: 1.2 * 1024 * 1024,
+                                uploadedAt: "۱۴۰۴/۰۴/۲۸",
+                            }}
+                        />
                         <EducationInfo />
                         <LicenseStatus />
                         <RegistrationCOnditions />

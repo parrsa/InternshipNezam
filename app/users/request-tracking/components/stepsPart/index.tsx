@@ -1,7 +1,6 @@
 import React from 'react'
 import {
     UserPlus,
-    Presentation,
     CircleCheck,
     Wallet,
     UserRoundCheck,
@@ -30,55 +29,41 @@ const steps: Step[] = [
     },
     {
         id: 2,
-        title: 'تعیین جلسه توجیحی',
-        description: 'کارشناس سازمان جلسه توجیحی نیمسال پاییز ۱۴۰۴ را برای شما تعیین کرد.',
-        status: 'done',
-        icon: Presentation,
-    },
-    {
-        id: 3,
-        title: 'حضور در جلسه توجیحی',
-        description: 'حضور شما در جلسه توجیحی ۱۴۰۴/۰۴/۱۸ توسط کارشناس سازمان ثبت شد.',
-        status: 'done',
-        icon: CircleCheck,
-    },
-    {
-        id: 4,
         title: 'فعال‌سازی پرداخت',
-        description: 'پس از حضور در جلسه، امکان پرداخت حق دوره برای شما فعال شد.',
+        description: 'امکان پرداخت حق دوره برای شما فعال شد.',
         status: 'done',
         icon: Wallet,
     },
     {
-        id: 5,
+        id: 3,
         title: 'پرداخت حق دوره',
         description: 'حق دوره با موفقیت پرداخت شد — ۱,۵۰۰,۰۰۰ تومان.',
         status: 'done',
         icon: CircleCheck,
     },
     {
-        id: 6,
+        id: 4,
         title: 'انتخاب سرپرست کارآموزی',
         description: 'پروفایل سرپرستان را مشاهده و سرپرست موردنظر را انتخاب کنید.',
         status: 'current',
         icon: UserRoundCheck,
     },
     {
-        id: 7,
+        id: 5,
         title: 'ارسال درخواست به سرپرست',
         description: 'درخواست شما به سرپرست انتخاب‌شده ارسال خواهد شد. منتظر تأیید سرپرست.',
         status: 'pending',
         icon: Send,
     },
     {
-        id: 8,
+        id: 6,
         title: 'تأیید سرپرست و ارسال به سازمان',
         description: 'پس از تأیید سرپرست، درخواست نهایی به همراه اطلاعات شما و سرپرست به سازمان ارسال می‌شود.',
         status: 'pending',
         icon: CircleCheck,
     },
     {
-        id: 9,
+        id: 7,
         title: 'تأیید سازمان و آغاز کارآموزی',
         description: 'سازمان درخواست را نهایی تأیید می‌کند و فرایند کارآموزی آغاز می‌شود.',
         status: 'pending',
@@ -104,7 +89,7 @@ const toPersianDigit = (n: number) =>
 function StepCircle({ status, id }: { status: StepStatus; id: number }) {
     if (status === 'done') {
         return (
-            <div className="size-7 rounded-full bg-emerald-500 flex items-center justify-center relative z-10">
+            <div className="size-7 rounded-full bg-emerald-500 flex items-center justify-center relative z-10 shrink-0">
                 <span className="size-3 rounded-full border-[1.5px] border-white flex items-center justify-center">
                     <Check className="size-3 text-white" strokeWidth={3} />
                 </span>
@@ -114,14 +99,14 @@ function StepCircle({ status, id }: { status: StepStatus; id: number }) {
 
     if (status === 'current') {
         return (
-            <div className="size-7  rounded-full bg-input-800 ring-4 ring-indigo-100 flex items-center justify-center relative z-10">
+            <div className="size-7 rounded-full bg-input-800 ring-4 ring-indigo-100 flex items-center justify-center relative z-10 shrink-0">
                 <span className="text-2xs font-bold text-white">{toPersianDigit(id)}</span>
             </div>
         )
     }
 
     return (
-        <div className="size-7 rounded-full bg-neutral-300 flex items-center justify-center relative z-10">
+        <div className="size-7 rounded-full bg-neutral-300 flex items-center justify-center relative z-10 shrink-0">
             <span className="text-3xs font-bold text-white">{toPersianDigit(id)}</span>
         </div>
     )
@@ -129,33 +114,64 @@ function StepCircle({ status, id }: { status: StepStatus; id: number }) {
 
 function StepsPart() {
     return (
-        <div className="w-full relative flex flex-col gap-5.5 mt-5 mb-5">
+        <div className="w-full" dir="rtl">
+            <h1 className="text-s font-bold text-neutral-900 mb-4">
+                فرایند تأیید درخواست کارآموزی
+            </h1>
 
-            <div className="absolute right-1.25 top-0 bottom-0 w-0.5 bg-indigo-200" />
+            <div className="w-full overflow-x-auto pb-3">
+                <div className="flex flex-row w-max min-w-full">
+                    {steps.map((step, index) => {
+                        const Icon = step.icon
+                        const isFirst = index === 0
+                        const isLast = index === steps.length - 1
+                        const prevDone = !isFirst && steps[index - 1].status === 'done'
+                        const thisDone = step.status === 'done'
 
-            {steps.map((step) => {
-                const Icon = step.icon
-                return (
-                    <div key={step.id} className="w-full flex items-start gap-1">
-                        <StepCircle status={step.status} id={step.id} />
+                        return (
+                            <div
+                                key={step.id}
+                                className="w-48 shrink-0 flex flex-col items-center text-center"
+                            >
+                                <div className="w-full flex items-center">
+                                    <div
+                                        className={`h-0.5 flex-1 ${
+                                            isFirst
+                                                ? 'bg-transparent'
+                                                : prevDone
+                                                  ? 'bg-emerald-500'
+                                                  : 'bg-indigo-200'
+                                        }`}
+                                    />
+                                    <StepCircle status={step.status} id={step.id} />
+                                    <div
+                                        className={`h-0.5 flex-1 ${
+                                            isLast
+                                                ? 'bg-transparent'
+                                                : thisDone
+                                                  ? 'bg-emerald-500'
+                                                  : 'bg-indigo-200'
+                                        }`}
+                                    />
+                                </div>
 
-                        <div className="flex flex-col gap-1 pt-0.5">
-                            <div className="flex items-center gap-2">
-                                <Icon className="size-4 text-neutral-800" strokeWidth={1.75} />
-                                <h2 className="text-s font-semibold text-neutral-900">
-                                    {step.title}
-                                </h2>
-                                <span
-                                    className={`text-3xs h-6 px-2 rounded-full border flex items-center justify-center ${badgeStyle[step.status]}`}
-                                >
-                                    {badgeText[step.status]}
-                                </span>
+                                <div className="flex flex-col items-center gap-2 mt-3 px-2">
+                                    <Icon className="size-4 text-neutral-800" strokeWidth={1.75} />
+                                    <h2 className="text-s font-semibold text-neutral-900">
+                                        {step.title}
+                                    </h2>
+                                    <span
+                                        className={`text-3xs h-6 px-2 rounded-full border flex items-center justify-center ${badgeStyle[step.status]}`}
+                                    >
+                                        {badgeText[step.status]}
+                                    </span>
+                                    <p className="text-neutral-600 text-2xs">{step.description}</p>
+                                </div>
                             </div>
-                            <p className="text-neutral-600 text-2xs">{step.description}</p>
-                        </div>
-                    </div>
-                )
-            })}
+                        )
+                    })}
+                </div>
+            </div>
         </div>
     )
 }
