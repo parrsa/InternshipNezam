@@ -12,11 +12,13 @@ interface PersonalInfoValues {
     fullName: string;
     membershipNumber: string;
     nationalId: string;
-    birthDate: string; 
+    birthDate: string;
     age: string;
     phone: string;
     birthPlace: string;
     address: string;
+    university: string;
+    competence: string
 }
 
 const initialValues: PersonalInfoValues = {
@@ -28,6 +30,8 @@ const initialValues: PersonalInfoValues = {
     phone: "",
     birthPlace: "",
     address: "",
+    university: "",
+    competence: "",
 };
 
 const validationSchema = Yup.object({
@@ -39,7 +43,7 @@ const validationSchema = Yup.object({
     birthDate: Yup.string()
         .required("تاریخ تولد الزامی است")
         .test("is-past-date", "تاریخ تولد باید قبل از امروز باشد", (value) => {
-            if (!value) return true; 
+            if (!value) return true;
             return isValidISODate(value) && value < toISODate(new Date());
         }),
     age: Yup.number()
@@ -51,6 +55,8 @@ const validationSchema = Yup.object({
         .required("شماره تماس الزامی است"),
     birthPlace: Yup.string().required("محل تولد الزامی است"),
     address: Yup.string().required("نشانی الزامی است"),
+    university: Yup.string().required("نام دانشگاه الزامی است"),
+    competence:Yup.string().required("صلاحیت خود را وارد کنید ")
 });
 
 interface PersonalInfoFormProps {
@@ -170,6 +176,27 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                     label="محل تولد"
                                     placeholder="تهران"
                                     {...bind("birthPlace")}
+                                />
+
+                                <Input
+                                    labelClassName={labelClassName}
+                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
+                                    variant="default"
+                                    inputSize="sm"
+                                    type="text"
+                                    label="صلاحیت"
+                                    placeholder="صلاحیت"
+                                    {...bind("competence")}
+                                />
+
+                                <Input
+                                    labelClassName={labelClassName}
+                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs  "
+                                    variant="default"
+                                    inputSize="sm"
+                                    label="نام دانشگاه"
+                                    placeholder="تهران"
+                                    {...bind("university")}
                                 />
 
                                 <Input
