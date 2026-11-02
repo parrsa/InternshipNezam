@@ -4,7 +4,7 @@ function DashboardStatCards() {
   return (
     <div
       dir="ltr"
-      className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+      className="grid w-full grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4"
     >
       {statCards.map((card) => {
         const Icon = card.icon;
@@ -15,13 +15,13 @@ function DashboardStatCards() {
             className="h-27.5 rounded-xl border border-slate-300 bg-white px-5 py-3 shadow-xs"
           >
             <div
-              className="flex h-full items-start justify-between gap-4"
+              className="flex h-full items-start justify-between gap-2"
             >
               <div
                 className="flex min-w-0 flex-1 flex-col items-end text-right"
               >
                 <h3
-                  className="text-2xs font-medium leading-6 text-slate-600"
+                  className="text-2xs text-nowrap font-medium leading-6 text-slate-600"
                 >
                   {card.title}
                 </h3>

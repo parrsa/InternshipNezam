@@ -12,11 +12,13 @@ interface PersonalInfoValues {
     fullName: string;
     membershipNumber: string;
     nationalId: string;
-    birthDate: string; 
+    birthDate: string;
     age: string;
     phone: string;
     birthPlace: string;
     address: string;
+    university: string;
+    competence: string
 }
 
 const initialValues: PersonalInfoValues = {
@@ -28,6 +30,8 @@ const initialValues: PersonalInfoValues = {
     phone: "",
     birthPlace: "",
     address: "",
+    university: "",
+    competence: "",
 };
 
 const validationSchema = Yup.object({
@@ -39,7 +43,7 @@ const validationSchema = Yup.object({
     birthDate: Yup.string()
         .required("تاریخ تولد الزامی است")
         .test("is-past-date", "تاریخ تولد باید قبل از امروز باشد", (value) => {
-            if (!value) return true; 
+            if (!value) return true;
             return isValidISODate(value) && value < toISODate(new Date());
         }),
     age: Yup.number()
@@ -51,6 +55,8 @@ const validationSchema = Yup.object({
         .required("شماره تماس الزامی است"),
     birthPlace: Yup.string().required("محل تولد الزامی است"),
     address: Yup.string().required("نشانی الزامی است"),
+    university: Yup.string().required("نام دانشگاه الزامی است"),
+    competence:Yup.string().required("صلاحیت خود را وارد کنید ")
 });
 
 interface PersonalInfoFormProps {
@@ -61,7 +67,7 @@ interface PersonalInfoFormProps {
 const labelClassName = "text-2xs text-neutral-900  font-semibold";
 
 export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFormProps) {
-    const yesterday = useMemo(() => getYesterday(), []);
+    const yesterday = getYesterday();
 
     return (
         <Formik<PersonalInfoValues>
@@ -96,8 +102,8 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                         </div>
 
                         <div className="flex  flex-col gap-5">
-                            <div className=" flex gap-5">
-                                <div className="w-[70%]">
+                            <div className=" flex flex-col  gap-5 sm:flex-row sm:flex">
+                                <div className="sm:w-[70%] w-full">
                                     <Input
                                         labelClassName={labelClassName}
                                         className=" mt-2 placeholder:text-neutral-600   placeholder:text-xs "
@@ -108,7 +114,7 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                         {...bind("fullName")}
                                     />
                                 </div>
-                                <div className="w-[35%]">
+                                <div className="sm:w-[35%]  w-full">
                                     <Input
                                         labelClassName={labelClassName}
                                         className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
@@ -174,6 +180,27 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
 
                                 <Input
                                     labelClassName={labelClassName}
+                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
+                                    variant="default"
+                                    inputSize="sm"
+                                    type="text"
+                                    label="صلاحیت"
+                                    placeholder="صلاحیت"
+                                    {...bind("competence")}
+                                />
+
+                                <Input
+                                    labelClassName={labelClassName}
+                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs  "
+                                    variant="default"
+                                    inputSize="sm"
+                                    label="نام دانشگاه"
+                                    placeholder="تهران"
+                                    {...bind("university")}
+                                />
+
+                                <Input
+                                    labelClassName={labelClassName}
                                     variant="default"
                                     inputSize="sm"
                                     label="شماره تماس"
@@ -183,15 +210,15 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                                 />
                             </div>
 
-                            <Input
-                                labelClassName={labelClassName}
-                                variant="default"
-                                inputSize="sm"
-                                className=" mt-2  w-[66%]  placeholder:text-neutral-600  placeholder:text-xs "
-                                label="نشانی"
-                                placeholder="تهران، خیابان ولیعصر، کوچه ..."
-                                {...bind("address")}
-                            />
+                                <Input
+                                    labelClassName={labelClassName}
+                                    variant="default"
+                                    inputSize="sm"
+                                    className=" mt-2  sm:w-[66%]  w-full placeholder:text-neutral-600  placeholder:text-xs "
+                                    label="نشانی"
+                                    placeholder="تهران، خیابان ولیعصر، کوچه ..."
+                                    {...bind("address")}
+                                />
                         </div>
                     </Form>
                 );

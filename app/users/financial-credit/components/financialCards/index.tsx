@@ -46,7 +46,7 @@ function FinancialCard() {
         <>
             <div className="w-full flex flex-col gap-5  items-center justify-center" dir="rtl">
 
-                <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="w-full grid max-sm:grid-cols-1 max-lg:grid-cols-1 grid-cols-3  gap-4">
 
                     <div className="rounded-2xl p-6 h-41.25 flex flex-col  justify-center bg-linear-to-br from-emerald-500 to-teal-600 text-white">
                         <span className="text-2xs ">موجودی فعلی</span>
@@ -60,8 +60,8 @@ function FinancialCard() {
                         </div>
                         <div className="flex flex-col items-start">
                             <span className="text-2xs text-gray-500">کل واریزی</span>
-                            <span className="mt-1 text-[24px] font-semibold text-gray-900 leading-tight">{fmt(totalDeposits)}</span>
-                            <span className="mt-2 rounded-full border border-green-300 bg-green-100 px-2 py-0.5 text-3xs text-green-800">
+                            <span className="mt-1 text-[24px]   font-semibold text-gray-900 leading-tight">{fmt(totalDeposits)}</span>
+                            <span className="mt-2 rounded-full text-nowrap border border-green-300 bg-green-100 px-2 py-0.5 text-3xs text-green-800">
                                 ۶ ماه اخیر
                             </span>
                         </div>
@@ -73,8 +73,8 @@ function FinancialCard() {
                         </div>
                         <div className="flex flex-col items-start">
                             <span className=" text-2xs text-gray-500">کل کسورات</span>
-                            <span className="mt-1 text-[24px]  font-extrabold text-gray-900 leading-tight">{fmt(totalDeductions)}</span>
-                            <span className="mt-2 rounded-full border border-red-300 bg-red-100 px-2 py-0.5 text-3xs text-red-700">
+                            <span className="mt-1 text-[24px] font-extrabold text-gray-900 leading-tight">{fmt(totalDeductions)}</span>
+                            <span className="mt-2 rounded-full  border border-red-300 bg-red-100 px-2 py-0.5 text-3xs text-red-700">
                                 حق دوره و گواهی
                             </span>
                         </div>
