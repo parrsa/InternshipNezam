@@ -235,13 +235,6 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
               </div>
             </div>
 
-            <ResumeUploader
-              initialResume={{
-                name: "resume_razai_1404.pdf",
-                size: 1.2 * 1024 * 1024,
-                uploadedAt: "۱۴۰۴/۰۴/۲۸",
-              }}
-            />
             <EducationInfo userType={userType} />
             <LicenseStatus />
             <RegistrationCOnditions />
@@ -249,6 +242,13 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
               userType={userType}
               supervisorName={(values as any).FullName || (values as any).CompanyName}
               licenseNumber={(values as any).LicenseNumber}
+            />
+            <ResumeUploader
+              initialResume={{
+                name: "resume_razai_1404.pdf",
+                size: 1.2 * 1024 * 1024,
+                uploadedAt: "۱۴۰۴/۰۴/۲۸",
+              }}
             />
           </Form>
         );

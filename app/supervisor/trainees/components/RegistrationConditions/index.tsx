@@ -10,7 +10,7 @@ const insuranceOptions = [
   { value: "none", label: "بدون بیمه" },
 ];
 
-const CERTIFICATE_LABEL = "صادر می‌شود";
+const CERTIFICATE_LABEL = "صادر می‌شود ";
 
 export default function RegistrationCOnditions() {
   const [salary, setSalary] = useState("3000000");
@@ -65,7 +65,7 @@ export default function RegistrationCOnditions() {
         </div>
 
         <div className="w-full flex flex-col md:flex-row justify-start items-stretch md:items-end gap-4">
-          <div className="w-full md:w-96">
+          <div className="w-full md:w-1/2">
             <Input
               label="ساعات حضور هفتگی"
               variant="default"
@@ -77,8 +77,9 @@ export default function RegistrationCOnditions() {
               }
             />
           </div>
-          <div className="w-full md:w-48">
+          <div className="w-full md:w-1/2">
             <Input
+              className=" bg-neutral-100"
               label="گواهی پایان دوره"
               variant="default"
               labelClassName="mb-2 text-xs"

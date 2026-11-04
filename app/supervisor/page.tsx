@@ -60,7 +60,6 @@ export default function Supervisor() {
             </div>
         )
         return () => setAction(null)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

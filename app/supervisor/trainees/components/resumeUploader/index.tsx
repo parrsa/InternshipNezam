@@ -18,10 +18,7 @@ interface ResumeUploaderProps {
     onChange?: (resume: ResumeFile | null, file?: File) => void
 }
 
-const formatSize = (bytes: number) => {
-    const mb = Number((bytes / (1024 * 1024)).toFixed(1))
-    return `${mb.toLocaleString("fa-IR")} مگابایت`
-}
+
 
 export default function ResumeUploader({ initialResume = null, onChange }: ResumeUploaderProps) {
     const [resume, setResume] = useState<ResumeFile | null>(initialResume)
@@ -29,7 +26,6 @@ export default function ResumeUploader({ initialResume = null, onChange }: Resum
     const [error, setError] = useState("")
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    // آزادسازی URL موقت هنگام unmount شدن کامپوننت
     const urlRef = useRef<string | undefined>(undefined)
     useEffect(() => {
         urlRef.current = resume?.url
@@ -98,41 +94,7 @@ export default function ResumeUploader({ initialResume = null, onChange }: Resum
                 <ArrowUpToLine size={18} />
                 <span>فایل رزومه</span>
             </div>
-
-            {resume && (
-                <div className="w-full flex justify-between items-center gap-3 p-4 rounded-xl border border-neutral-300 bg-neutral-50">
-                    <div className="flex justify-start items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg bg-red-100 text-red-600 text-2xs font-bold flex justify-center items-center">
-                            PDF
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <p className="text-sm font-bold text-black" dir="ltr">{resume.name}</p>
-                            <p className="text-2xs text-neutral-500">
-                                {formatSize(resume.size)} — آپلود شده در {resume.uploadedAt}
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex justify-center items-center gap-2">
-                        <button
-                            type="button"
-                            onClick={handlePreview}
-                            disabled={!resume.url}
-                            className="flex justify-center items-center gap-1 px-3 py-2 text-xs font-bold border border-neutral-300 rounded-lg bg-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <Eye size={14} />
-                            <span>پیش‌نمایش</span>
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleDelete}
-                            className="flex justify-center items-center gap-1 px-3 py-2 text-xs font-bold border border-red-300 rounded-lg bg-white text-red-600 cursor-pointer"
-                        >
-                            <Trash2 size={14} />
-                            <span>حذف</span>
-                        </button>
-                    </div>
-                </div>
-            )}
+ 
 
             <div
                 onDragOver={(e) => {
