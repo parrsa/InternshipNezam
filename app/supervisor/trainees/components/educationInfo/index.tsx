@@ -78,7 +78,6 @@ function ChipGroup({
     );
 }
 
-/** One row of the activation panel. */
 function ActivationRow({
     title,
     active,
