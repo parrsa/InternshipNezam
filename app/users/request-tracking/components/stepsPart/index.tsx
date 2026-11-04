@@ -7,6 +7,7 @@ import {
     Send,
     Newspaper,
     Check,
+    ArrowLeft,
 } from 'lucide-react'
 
 type StepStatus = 'done' | 'current' | 'pending'
@@ -14,165 +15,143 @@ type StepStatus = 'done' | 'current' | 'pending'
 interface Step {
     id: number
     title: string
-    description: string
     status: StepStatus
     icon: React.ElementType
 }
 
+interface StepsPartProps {
+    requestCode?: string
+    registeredAt?: string
+}
+
 const steps: Step[] = [
-    {
-        id: 1,
-        title: 'ثبت‌نام در سامانه',
-        description: 'اطلاعات هویتی و تحصیلی شما در سامانه ثبت شد.',
-        status: 'done',
-        icon: UserPlus,
-    },
-    {
-        id: 2,
-        title: 'فعال‌سازی پرداخت',
-        description: 'امکان پرداخت حق دوره برای شما فعال شد.',
-        status: 'done',
-        icon: Wallet,
-    },
-    {
-        id: 3,
-        title: 'پرداخت حق دوره',
-        description: 'حق دوره با موفقیت پرداخت شد — ۱,۵۰۰,۰۰۰ تومان.',
-        status: 'done',
-        icon: CircleCheck,
-    },
-    {
-        id: 4,
-        title: 'انتخاب سرپرست کارآموزی',
-        description: 'پروفایل سرپرستان را مشاهده و سرپرست موردنظر را انتخاب کنید.',
-        status: 'current',
-        icon: UserRoundCheck,
-    },
-    {
-        id: 5,
-        title: 'ارسال درخواست به سرپرست',
-        description: 'درخواست شما به سرپرست انتخاب‌شده ارسال خواهد شد. منتظر تأیید سرپرست.',
-        status: 'pending',
-        icon: Send,
-    },
-    {
-        id: 6,
-        title: 'تأیید سرپرست و ارسال به سازمان',
-        description: 'پس از تأیید سرپرست، درخواست نهایی به همراه اطلاعات شما و سرپرست به سازمان ارسال می‌شود.',
-        status: 'pending',
-        icon: CircleCheck,
-    },
-    {
-        id: 7,
-        title: 'تأیید سازمان و آغاز کارآموزی',
-        description: 'سازمان درخواست را نهایی تأیید می‌کند و فرایند کارآموزی آغاز می‌شود.',
-        status: 'pending',
-        icon: Newspaper,
-    },
+    { id: 1, title: 'ثبت‌نام در سامانه', status: 'done', icon: UserPlus },
+    { id: 2, title: 'پرداخت حق دوره', status: 'done', icon: Wallet },
+    { id: 3, title: 'انتخاب سرپرست کارآموزی', status: 'current', icon: UserRoundCheck },
+    { id: 4, title: 'ارسال درخواست به سرپرست', status: 'pending', icon: Send },
+    { id: 5, title: 'تأیید سرپرست و ارسال به سازمان', status: 'pending', icon: CircleCheck },
+    { id: 6, title: 'تأیید سازمان و آغاز کارآموزی', status: 'pending', icon: Newspaper },
 ]
 
-const badgeText: Record<StepStatus, string> = {
-    done: 'انجام شد',
-    current: 'مرحله فعلی',
-    pending: 'در انتظار',
-}
-
-const badgeStyle: Record<StepStatus, string> = {
-    done: 'bg-emerald-100 border-emerald-600 text-emerald-900',
-    current: 'bg-amber-100 border-amber-600 text-amber-900',
-    pending: 'bg-neutral-100 border-neutral-400 text-neutral-800',
-}
-
-const toPersianDigit = (n: number) =>
+const toPersianDigit = (n: number | string) =>
     n.toString().replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[Number(d)])
+
+const cardStyle: Record<StepStatus, string> = {
+    done: 'bg-emerald-50 border-emerald-200',
+    current: 'bg-indigo-50 border-2 border-input-800 shadow-sm',
+    pending: 'bg-neutral-50 border-neutral-200',
+}
+
+const statusText: Record<StepStatus, { label: string; className: string }> = {
+    done: { label: 'انجام شد ✓', className: 'text-emerald-700' },
+    current: { label: 'مرحله فعلی', className: 'text-input-800' },
+    pending: { label: 'در انتظار', className: 'text-neutral-500' },
+}
 
 function StepCircle({ status, id }: { status: StepStatus; id: number }) {
     if (status === 'done') {
         return (
-            <div className="size-7 rounded-full bg-emerald-500 flex items-center justify-center relative z-10 shrink-0">
-                <span className="size-3 rounded-full border-[1.5px] border-white flex items-center justify-center">
-                    <Check className="size-3 text-white" strokeWidth={3} />
-                </span>
+            <div className="size-7 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
+                <Check className="size-4 text-white" strokeWidth={3} />
             </div>
         )
     }
 
     if (status === 'current') {
         return (
-            <div className="size-7 rounded-full bg-input-800 ring-4 ring-indigo-100 flex items-center justify-center relative z-10 shrink-0">
+            <div className="size-7 rounded-full bg-input-800 flex items-center justify-center shrink-0">
                 <span className="text-2xs font-bold text-white">{toPersianDigit(id)}</span>
             </div>
         )
     }
 
     return (
-        <div className="size-7 rounded-full bg-neutral-300 flex items-center justify-center relative z-10 shrink-0">
-            <span className="text-3xs font-bold text-white">{toPersianDigit(id)}</span>
+        <div className="size-7 rounded-full bg-neutral-300 flex items-center justify-center shrink-0">
+            <span className="text-2xs font-bold text-white">{toPersianDigit(id)}</span>
         </div>
     )
 }
 
-function StepsPart() {
-    return (
-        <div className="w-full" dir="rtl">
-            <h1 className="text-s font-bold text-neutral-900 mb-4">
-                فرایند تأیید درخواست کارآموزی
-            </h1>
+function StepsPart({
+    requestCode = 'REQ-1404-9452',
+    registeredAt = '1404/04/01',
+}: StepsPartProps) {
+    const doneCount = steps.filter((s) => s.status === 'done').length
+    const percent = (doneCount / steps.length) * 100
 
-            <div className="w-full overflow-x-auto pb-3">
-                <div className="flex flex-row w-max min-w-full">
+    return (
+        <section
+            dir="rtl"
+            className="w-full bg-white rounded-3xl border border-neutral-200 shadow-sm p-6 sm:p-7"
+        >
+            <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-s font-bold text-neutral-900">
+                        فرایند تأیید درخواست کارآموزی
+                    </h1>
+                    <p className="text-2xs text-neutral-600">
+                        کد درخواست: <span dir="ltr">{requestCode}</span> — تاریخ ثبت:{' '}
+                        <span dir="ltr">{toPersianDigit(registeredAt)}</span>
+                    </p>
+                </div>
+
+                <span className="shrink-0 h-7 px-3 rounded-full border border-sky-300 bg-sky-100 text-sky-900 text-2xs flex items-center">
+                    {toPersianDigit(doneCount)} از {toPersianDigit(steps.length)} مرحله
+                </span>
+            </div>
+
+            <div
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={steps.length}
+                aria-valuenow={doneCount}
+                className="mt-6 h-2 w-full rounded-full bg-indigo-100 overflow-hidden"
+            >
+                <div
+                    className="h-full rounded-full bg-input-800 transition-all duration-500"
+                    style={{ width: `${percent}%` }}
+                />
+            </div>
+
+            <div className="mt-8 w-full overflow-x-auto pb-2">
+                <div className="flex flex-row items-center w-max min-w-full justify-between">
                     {steps.map((step, index) => {
                         const Icon = step.icon
-                        const isFirst = index === 0
                         const isLast = index === steps.length - 1
-                        const prevDone = !isFirst && steps[index - 1].status === 'done'
-                        const thisDone = step.status === 'done'
+                        const status = statusText[step.status]
 
                         return (
-                            <div
-                                key={step.id}
-                                className="w-48 shrink-0 flex flex-col items-center text-center"
-                            >
-                                <div className="w-full flex items-center">
-                                    <div
-                                        className={`h-0.5 flex-1 ${
-                                            isFirst
-                                                ? 'bg-transparent'
-                                                : prevDone
-                                                  ? 'bg-emerald-500'
-                                                  : 'bg-indigo-200'
-                                        }`}
-                                    />
+                            <React.Fragment key={step.id}>
+                                <div
+                                    aria-current={step.status === 'current' ? 'step' : undefined}
+                                    className={`w-38 text-nowrap  rounded-xl border px-3 py-3 flex flex-col items-center text-center gap-2 ${cardStyle[step.status]}`}
+                                >
                                     <StepCircle status={step.status} id={step.id} />
-                                    <div
-                                        className={`h-0.5 flex-1 ${
-                                            isLast
-                                                ? 'bg-transparent'
-                                                : thisDone
-                                                  ? 'bg-emerald-500'
-                                                  : 'bg-indigo-200'
-                                        }`}
+                                    <Icon
+                                        className="size-4 text-neutral-600"
+                                        strokeWidth={1.75}
                                     />
-                                </div>
-
-                                <div className="flex flex-col items-center gap-2 mt-3 px-2">
-                                    <Icon className="size-4 text-neutral-800" strokeWidth={1.75} />
-                                    <h2 className="text-s font-semibold text-neutral-900">
+                                    <h2 className="text-3xs font-bold text-neutral-900 leading-5">
                                         {step.title}
                                     </h2>
-                                    <span
-                                        className={`text-3xs h-6 px-2 rounded-full border flex items-center justify-center ${badgeStyle[step.status]}`}
-                                    >
-                                        {badgeText[step.status]}
+                                    <span className={`text-3xs ${status.className}`}>
+                                        {status.label}
                                     </span>
-                                    <p className="text-neutral-600 text-2xs">{step.description}</p>
                                 </div>
-                            </div>
+
+                                {!isLast && (
+                                    <ArrowLeft
+                                        className="size-5 text-neutral-300 shrink-0 mx-2"
+                                        strokeWidth={1.5}
+                                        aria-hidden
+                                    />
+                                )}
+                            </React.Fragment>
                         )
                     })}
                 </div>
             </div>
-        </div>
+        </section>
     )
 }
 

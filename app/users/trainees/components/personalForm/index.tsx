@@ -1,12 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Input } from "@/app/components/ui/input";
 import { getYesterday, isValidISODate, toISODate } from "@/lib/date-utils";
 import JalaliDatePicker from "@/lib/jalaliDatePicker";
-
 
 interface PersonalInfoValues {
     fullName: string;
@@ -17,8 +15,6 @@ interface PersonalInfoValues {
     phone: string;
     birthPlace: string;
     address: string;
-    university: string;
-    competence: string
 }
 
 const initialValues: PersonalInfoValues = {
@@ -30,8 +26,6 @@ const initialValues: PersonalInfoValues = {
     phone: "",
     birthPlace: "",
     address: "",
-    university: "",
-    competence: "",
 };
 
 const validationSchema = Yup.object({
@@ -55,8 +49,6 @@ const validationSchema = Yup.object({
         .required("شماره تماس الزامی است"),
     birthPlace: Yup.string().required("محل تولد الزامی است"),
     address: Yup.string().required("نشانی الزامی است"),
-    university: Yup.string().required("نام دانشگاه الزامی است"),
-    competence:Yup.string().required("صلاحیت خود را وارد کنید ")
 });
 
 interface PersonalInfoFormProps {
@@ -64,7 +56,8 @@ interface PersonalInfoFormProps {
     onSubmit?: (values: PersonalInfoValues) => void;
 }
 
-const labelClassName = "text-2xs text-neutral-900  font-semibold";
+const labelClassName = "text-2xs font-semibold text-neutral-900";
+const inputClassName = "mt-2 placeholder:text-neutral-600 placeholder:text-xs";
 
 export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFormProps) {
     const yesterday = getYesterday();
@@ -82,143 +75,106 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: PersonalInfoFo
                     errorMessage: touched[name] ? errors[name] : undefined,
                 });
 
+                const common = {
+                    labelClassName,
+                    className: inputClassName,
+                    variant: "default" as const,
+                    inputSize: "sm" as const,
+                };
+
                 return (
                     <Form
                         dir="rtl"
                         noValidate
-                        className=" w-full rounded-2xl border-2 shadow-xs border-neutral-200 bg-white p-5 sm:p-6"
+                        className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-5 shadow-xs sm:p-7"
                     >
-                        <div className="flex items-center justify-between mb-6">
+                        <div className="mb-8 flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-input-50 text-2xs font-bold text-input-700">
+                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#eef0f8] text-xs text-blue-800">
                                     {stepNumber}
                                 </span>
-                                <h3 className="text-s font-bold text-gray-800">اطلاعات شخصی</h3>
+                                <h3 className="text-s font-semibold text-neutral-900">
+                                    اطلاعات شخصی
+                                </h3>
                             </div>
 
-                            <span className="rounded-full bg-gray-100 px-2 py-1 text-2xs border border-neutral-400 font-medium text-gray-600">
+                            <span className="rounded-full border border-neutral-300 bg-neutral-100 px-2.5 py-0.5 text-2xs font-medium text-neutral-600">
                                 الزامی
                             </span>
                         </div>
 
-                        <div className="flex  flex-col gap-5">
-                            <div className=" flex flex-col  gap-5 sm:flex-row sm:flex">
-                                <div className="sm:w-[70%] w-full">
-                                    <Input
-                                        labelClassName={labelClassName}
-                                        className=" mt-2 placeholder:text-neutral-600   placeholder:text-xs "
-                                        variant="default"
-                                        inputSize="sm"
-                                        label="نام و نام خانوادگی"
-                                        placeholder="مثال: علی محمدی"
-                                        {...bind("fullName")}
-                                    />
-                                </div>
-                                <div className="sm:w-[35%]  w-full">
-                                    <Input
-                                        labelClassName={labelClassName}
-                                        className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
-                                        variant="default"
-                                        inputSize="sm"
-                                        label="شماره عضویت"
-                                        placeholder="ST-1404-0..."
-                                        {...bind("membershipNumber")}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-3">
+                            <div className="sm:col-span-2">
                                 <Input
-                                    labelClassName={labelClassName}
-                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
-                                    variant="default"
-                                    inputSize="sm"
-                                    label="کد ملی"
-                                    placeholder="0012345678"
-                                    {...bind("nationalId")}
-                                />
-
-                                <JalaliDatePicker
-                                    labelClassName={labelClassName}
-                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
-                                    variant="default"
-                                    inputSize="sm"
-                                    label="تاریخ تولد"
-                                    placeholder="۱۳۷۰/۰۱/۰۱"
-                                    name="birthDate"
-                                    value={values.birthDate}
-                                    maxDate={yesterday}
-                                    error={!!(errors.birthDate && touched.birthDate)}
-                                    errorMessage={touched.birthDate ? errors.birthDate : undefined}
-                                    onChange={(iso) => {
-                                        setFieldTouched("birthDate", true, false);
-                                        setFieldValue("birthDate", iso, true);
-                                    }}
-                                    onBlur={() => setFieldTouched("birthDate", true, false)}
-                                />
-
-                                <Input
-                                    labelClassName={labelClassName}
-                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
-                                    variant="default"
-                                    inputSize="sm"
-                                    type="number"
-                                    label="سن (سال)"
-                                    placeholder="۲۴"
-                                    {...bind("age")}
-                                />
-
-                                <Input
-                                    labelClassName={labelClassName}
-                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs  "
-                                    variant="default"
-                                    inputSize="sm"
-                                    label="محل تولد"
-                                    placeholder="تهران"
-                                    {...bind("birthPlace")}
-                                />
-
-                                <Input
-                                    labelClassName={labelClassName}
-                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
-                                    variant="default"
-                                    inputSize="sm"
-                                    type="text"
-                                    label="صلاحیت"
-                                    placeholder="صلاحیت"
-                                    {...bind("competence")}
-                                />
-
-                                <Input
-                                    labelClassName={labelClassName}
-                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs  "
-                                    variant="default"
-                                    inputSize="sm"
-                                    label="نام دانشگاه"
-                                    placeholder="تهران"
-                                    {...bind("university")}
-                                />
-
-                                <Input
-                                    labelClassName={labelClassName}
-                                    variant="default"
-                                    inputSize="sm"
-                                    label="شماره تماس"
-                                    className=" mt-2   placeholder:text-neutral-600  placeholder:text-xs "
-                                    placeholder="09123456789"
-                                    {...bind("phone")}
+                                    {...common}
+                                    label="نام و نام خانوادگی"
+                                    placeholder="مثال: علی محمدی"
+                                    {...bind("fullName")}
                                 />
                             </div>
 
+                            <Input
+                                {...common}
+                                label="شماره عضویت"
+                                placeholder="ST-1404-0..."
+                                {...bind("membershipNumber")}
+                            />
+
+                            <Input
+                                {...common}
+                                label="کد ملی"
+                                placeholder="0012345678"
+                                {...bind("nationalId")}
+                            />
+
+                            <JalaliDatePicker
+                                {...common}
+                                label="تاریخ تولد"
+                                placeholder="۱۳۷۰/۰۱/۰۱"
+                                name="birthDate"
+                                value={values.birthDate}
+                                maxDate={yesterday}
+                                error={!!(errors.birthDate && touched.birthDate)}
+                                errorMessage={touched.birthDate ? errors.birthDate : undefined}
+                                onChange={(iso) => {
+                                    setFieldTouched("birthDate", true, false);
+                                    setFieldValue("birthDate", iso, true);
+                                }}
+                                onBlur={() => setFieldTouched("birthDate", true, false)}
+                            />
+
+                            <Input
+                                {...common}
+                                type="number"
+                                label="سن (سال)"
+                                placeholder="۲۴"
+                                {...bind("age")}
+                            />
+
+                            <Input
+                                {...common}
+                                label="محل تولد"
+                                placeholder="تهران"
+                                {...bind("birthPlace")}
+                            />
+
+                            <Input
+                                {...common}
+                                label="شماره تماس"
+                                placeholder="09123456789"
+                                {...bind("phone")}
+                            />
+
+                            <div className="hidden sm:block" aria-hidden />
+
+                            <div className="sm:col-span-2">
                                 <Input
-                                    labelClassName={labelClassName}
-                                    variant="default"
-                                    inputSize="sm"
-                                    className=" mt-2  sm:w-[66%]  w-full placeholder:text-neutral-600  placeholder:text-xs "
+                                    {...common}
                                     label="نشانی"
                                     placeholder="تهران، خیابان ولیعصر، کوچه ..."
                                     {...bind("address")}
                                 />
+                            </div>
                         </div>
                     </Form>
                 );
