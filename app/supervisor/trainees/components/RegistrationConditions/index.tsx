@@ -17,6 +17,7 @@ export default function RegistrationCOnditions() {
   const [insurance, setInsurance] = useState("social");
   const [weeklyHours, setWeeklyHours] = useState("30");
 
+
   return (
     <div
       dir="rtl"
