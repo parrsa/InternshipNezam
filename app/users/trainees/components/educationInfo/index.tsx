@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, type ReactNode } from "react";
 import { Select } from "@/app/components/ui/input/SelectSilde";
-import { useState } from "react";
+import { Input } from "@/app/components/ui/input";
 
 const degreeOptions = [
     { label: "کارشناسی", value: "bachelor" },
@@ -17,72 +18,95 @@ const majorOptions = [
     { label: "مهندسی مکانیک", value: "mechanical" },
 ];
 
-export default function EducationInfo() {
+const competenceOptions = [
+    { label: "طراحی", value: "design" },
+    { label: "نظارت", value: "supervision" },
+    { label: "اجرا", value: "execution" },
+];
+
+function Field({ label, children }: { label: string; children: ReactNode }) {
+    return (
+        <div className="flex w-full flex-col gap-2">
+            <span className="text-2xs font-semibold text-neutral-900">{label}</span>
+            {children}
+        </div>
+    );
+}
+
+interface EducationInfoProps {
+    stepNumber?: string;
+}
+
+export default function EducationInfo({ stepNumber = "۲" }: EducationInfoProps) {
     const [degree, setDegree] = useState("");
     const [major, setMajor] = useState("");
+    const [university, setUniversity] = useState("");
+    const [competence, setCompetence] = useState("");
 
     return (
         <div
             dir="rtl"
-            className="w-full rounded-2xl border-2 shadow-xs border-neutral-200 p-5 sm:p-6  bg-white px-8 py-7 "
+            className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-5 shadow-xs sm:p-7"
         >
-            <div className="mb-8  flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#eef0f8] text-xs text-blue-800">
-                        ۲
-                    </span>
-
-                    <span className="text-s font-semibold text-neutral-900">
-                        اطلاعات تحصیلی و دوره
-                    </span>
-                </div>
+            <div className="mb-8 flex items-center gap-2">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#eef0f8] text-xs text-blue-800">
+                    {stepNumber}
+                </span>
+                <h3 className="text-s font-semibold text-neutral-900">
+                    اطلاعات تحصیلی و دوره
+                </h3>
             </div>
 
-            <div className=" flex items-center justify-between max-sm:flex max-sm:flex-col max-sm:gap-5 ">
-
-                <div className=" max-sm:w-full" >
-                    <span className="text-2xs  font-semibold text-gray-900"> مقطع تحصیلی </span>
+             <div className="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-3">
+                <Field label="مقطع تحصیلی">
                     <Select
-                        className=" text-nowrap text-xs"
+                        className="w-1/2 text-nowrap text-xs"
                         placeholder="انتخاب مقطع"
                         options={degreeOptions}
                         value={degree}
                         onChange={setDegree}
                     />
-                </div>
+                </Field>
 
-                <div className=" max-sm:w-full" >
-                    <span className="text-2xs  font-semibold text-gray-900">رشته تحصیلی</span>
+                <Field label="رشته تحصیلی">
                     <Select
+                        className="w-1/2 text-nowrap text-xs"
                         placeholder="انتخاب رشته"
-                        className=" text-nowrap text-xs"
                         options={majorOptions}
                         value={major}
                         onChange={setMajor}
                     />
-                </div>
+                </Field>
 
+                <Field label="نام دانشگاه">
+                    <Input
+                        variant="default"
+                        inputSize="sm"
+                        className="placeholder:text-neutral-600 placeholder:text-xs"
+                        placeholder="مثال: دانشگاه صنعتی شریف"
+                        value={university}
+                        onChange={(e) => setUniversity(e.target.value)}
+                    />
+                </Field>
 
+                <Field label="صلاحیت مدنظر برای کارآموزی">
+                    <Select
+                        className="w-1/2 text-nowrap text-xs"
+                        placeholder="انتخاب صلاحیت موردنظر"
+                        options={competenceOptions}
+                        value={competence}
+                        onChange={setCompetence}
+                    />
+                </Field>
 
-                <div className="flex flex-col gap-1 mt-1  max-sm:w-full  w-[35%]">
+                <div className="hidden sm:block" aria-hidden />
 
-                    <span className="text-2xs font-semibold text-gray-900">
-                        مدت دوره کارآموزی
-                    </span>
-
-                    <div className="flex h-9 w-full items-center  gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-4">
-                        <span className="text-xs font-semibold text-neutral-900">
-                            ۱ سال
-                        </span>
-
-                        <span className="text-2xs text-neutral-500">
-                            (دوره استاندارد)
-                        </span>
+                <Field label="مدت دوره کارآموزی">
+                    <div className="flex h-9 w-full items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-4">
+                        <span className="text-xs font-semibold text-neutral-900">۱ سال</span>
+                        <span className="text-2xs text-neutral-500">(دوره استاندارد)</span>
                     </div>
-                </div>
-
-
-
+                </Field>
             </div>
         </div>
     );

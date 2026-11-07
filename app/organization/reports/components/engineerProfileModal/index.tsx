@@ -1,11 +1,13 @@
 "use client";
 
-import { Star, FileText, Download, Building2 } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Star, FileText, Download, Building2, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { Button } from "@/app/components/ui/Button";
 import Modal from "@/app/components/ui/Modal";
 import Table from "@/app/components/ui/Table";
 import { Engineer, EngineerProject, EngineerResume } from "../../types";
+import SwitchButton from "@/app/components/ui/Button/switchButton";
 
 const fa = (n: number) => new Intl.NumberFormat("fa-IR").format(n);
 
@@ -13,6 +15,11 @@ interface EngineerProfileModalProps {
   engineer: Engineer;
   isOpen: boolean;
   onClose: () => void;
+  onToggleActive?: (
+    engineerId: number,
+    item: { kind: "field" | "qualification"; label: string },
+    active: boolean
+  ) => void;
 }
 
 function StatusBadge({ status }: { status: EngineerProject["status"] }) {
@@ -47,6 +54,42 @@ function StatCard({
     </div>
   );
 }
+
+function ActivationRow({
+  title,
+  active,
+  onToggle,
+}: {
+  title: string;
+  active: boolean;
+  onToggle: (next: boolean) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between py-3">
+      <div className="flex items-center gap-3">
+        <span className="text-2xs font-semibold text-gray-900">{title}</span>
+        <span
+          className={cn(
+            "flex h-5 items-center rounded-full border px-2 text-3xs",
+            active
+              ? "border-emerald-300 bg-emerald-100 text-emerald-900"
+              : "border-slate-300 bg-slate-100 text-slate-600"
+          )}
+        >
+          {active ? "فعال" : "غیرفعال"}
+        </span>
+      </div>
+
+      <SwitchButton checked={active} onChange={onToggle} size="lg" />
+    </div>
+  );
+}
+
+const splitSpecialties = (value: string) =>
+  value
+    .split("/")
+    .map((s) => s.trim())
+    .filter(Boolean);
 
 const tableCol = [
   {
@@ -92,12 +135,42 @@ export function EngineerProfileModal({
   engineer: e,
   isOpen,
   onClose,
+  onToggleActive,
 }: EngineerProfileModalProps) {
   const isLegal = e.type === "legal";
   const projects = e.projects ?? defaultProjects;
   const resume = e.resume ?? defaultResume;
 
   const tableRow = projects.map((p) => ({ ...p, _rowClassName: "odd:bg-white " }));
+
+  const activationItems = useMemo(
+    () => [
+      {
+        key: `field:${e.field}`,
+        kind: "field" as const,
+        name: e.field,
+        title: `رشته: ${e.field}`,
+      },
+      ...splitSpecialties(e.specialties).map((s) => ({
+        key: `qualification:${s}`,
+        kind: "qualification" as const,
+        name: s,
+        title: `صلاحیت: ${s}`,
+      })),
+    ],
+    [e.field, e.specialties]
+  );
+
+  // Everything is active by default; only overrides are stored
+  const [activeMap, setActiveMap] = useState<Record<string, boolean>>({});
+
+  const handleToggle = (
+    item: (typeof activationItems)[number],
+    next: boolean
+  ) => {
+    setActiveMap((prev) => ({ ...prev, [item.key]: next }));
+    onToggleActive?.(e.id, { kind: item.kind, label: item.name }, next);
+  };
 
   const header = (
     <div className="flex items-center gap-4 py-1">
@@ -194,7 +267,29 @@ export function EngineerProfileModal({
         </Button>
       </div>
 
-      <div className="mt-3 flex items-center justify-center border-t border-neutral-200 pt-4">
+      {/* Organization-managed activation */}
+      <div className="mt-5 flex items-center gap-1.5 text-xs font-semibold text-gray-900">
+        <ShieldCheck size={16} />
+        <span>مدیریت صلاحیت و رشته توسط سازمان</span>
+      </div>
+      <p className="mt-2 text-3xs leading-5 text-gray-500">
+        سازمان می‌تواند سرپرست را در صلاحیت یا رشته خاص فعال یا غیرفعال کند. در
+        صورت غیرفعال‌سازی، کارآموزان نمی‌توانند برای آن صلاحیت/رشته از این سرپرست
+        انتخاب کنند.
+      </p>
+
+      <div className="mt-3 divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-neutral-50 px-4">
+        {activationItems.map((item) => (
+          <ActivationRow
+            key={item.key}
+            title={item.title}
+            active={activeMap[item.key] ?? true}
+            onToggle={(next) => handleToggle(item, next)}
+          />
+        ))}
+      </div>
+
+      <div className="mt-4 flex items-center justify-center border-t border-neutral-200 pt-4">
         <Button
           size="xs"
           type="button"

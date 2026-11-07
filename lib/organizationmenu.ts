@@ -132,12 +132,12 @@ export const USER_MENU: UserMenuItem[] = [
     href: "/users/trainees",
     icon: UserPlus,
   },
-  {
-    label: "پیگیری درخواست کارآموزی ",
-    href: "/users/request-tracking",
-    icon: FileText,
-    tag: "فعال",
-  },
+  // {
+  //   label: "پیگیری درخواست کارآموزی ",
+  //   href: "/users/request-tracking",
+  //   icon: FileText,
+  //   tag: "فعال",
+  // },
   {
     label: "انتخاب سرپرست",
     href: "/users/select-supervisor",
