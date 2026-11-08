@@ -85,7 +85,8 @@ import { AuthProvider } from "@/core/provider/Auth";
 import { ToastContainer } from "react-toastify";
 import ClientLayoutSelector from "./components/partial/layout/ClientLayoutSelector";
 import './globals.css'
-import { Pelak  } from "@/lib/font";
+import { Pelak } from "@/lib/font";
+import SessionHandler from "./components/As";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -115,13 +116,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         style={{ backgroundColor: "var(--main-bg-color)" }}
       >
         <ToastContainer />
-        <QueryProvider> 
-          <AuthProvider>
-            <ClientLayoutSelector >
-              {children}
-            </ClientLayoutSelector>
-          </AuthProvider>
-        </QueryProvider>
+        <SessionHandler>
+          <QueryProvider>
+            <AuthProvider>
+              <ClientLayoutSelector >
+                {children}
+              </ClientLayoutSelector>
+            </AuthProvider>
+          </QueryProvider>
+        </SessionHandler>
       </body>
     </html>
   );
