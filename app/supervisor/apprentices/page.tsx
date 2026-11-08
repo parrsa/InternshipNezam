@@ -7,12 +7,16 @@ import { useEffect } from "react"
 
 const HandelStatus = (status: any) => {
     switch (status) {
-        case "active":
-            return <div className="bg-green-100 w-fit text-green-800 px-2 py-1 text-2xs border border-green-300 rounded-full">فعال</div>;
-        case "inProgress":
-            return <div className="bg-amber-100 w-fit text-amber-800 px-2 py-1 text-2xs border border-amber-300 rounded-full">در حال انجام</div>;
-        case "completed":
-            return <div className="bg-neutral-100 w-fit text-neutral-600 px-2 py-1 text-2xs border border-neutral-300 rounded-full">تکمیل شده</div>;
+        case "awaitingPayment":
+            return <div className="bg-red-100 w-fit text-red-800 px-2 py-1 text-2xs border border-red-300 rounded-full">در انتظار پرداخت</div>;
+        case "awaitingSupervisorSelection":
+            return <div className="bg-amber-100 w-fit text-amber-800 px-2 py-1 text-2xs border border-amber-300 rounded-full">در انتظار انتخاب سرپرست</div>;
+        case "awaitingSupervisorApproval":
+            return <div className="bg-blue-100 w-fit text-blue-800 px-2 py-1 text-2xs border border-blue-300 rounded-full">در انتظار تایید سرپرست</div>;
+        case "awaitingOrganizationApproval":
+            return <div className="bg-purple-100 w-fit text-purple-800 px-2 py-1 text-2xs border border-purple-300 rounded-full">در انتظار تایید سازمان</div>;
+        case "started":
+            return <div className="bg-green-100 w-fit text-green-800 px-2 py-1 text-2xs border border-green-300 rounded-full">شروع کارآموزی</div>;
     }
 }
 
@@ -23,7 +27,7 @@ const tabelRow = [
         Time: 168,
         Start: "۱۴۰۴/۰۴/۰۱",
         progress: 75,
-        Status: "active",
+        Status: "started",
     },
     {
         name: "زهرا حسینی",
@@ -31,7 +35,7 @@ const tabelRow = [
         Time: 152,
         Start: "۱۴۰۴/۰۳/۱۵",
         progress: 60,
-        Status: "active",
+        Status: "started",
     },
     {
         name: "محمد رضایی",
@@ -39,7 +43,7 @@ const tabelRow = [
         Time: 96,
         Start: "۱۴۰۴/۰۴/۱۵",
         progress: 45,
-        Status: "inProgress",
+        Status: "awaitingOrganizationApproval",
     },
     {
         name: "فاطمه کریمی",
@@ -47,7 +51,7 @@ const tabelRow = [
         Time: 48,
         Start: "۱۴۰۴/۰۵/۰۱",
         progress: 20,
-        Status: "inProgress",
+        Status: "awaitingSupervisorApproval",
     },
     {
         name: "حسین موسوی",
@@ -55,7 +59,7 @@ const tabelRow = [
         Time: 180,
         Start: "۱۴۰۴/۰۱/۰۱",
         progress: 100,
-        Status: "active",
+        Status: "awaitingSupervisorSelection",
     },
     {
         name: "سحر احمدی",
@@ -63,7 +67,7 @@ const tabelRow = [
         Time: 120,
         Start: "۱۴۰۴/۰۲/۰۱",
         progress: 90,
-        Status: "completed",
+        Status: "awaitingPayment",
     },
 ]
 

@@ -1,8 +1,5 @@
-"use client";
-import { Award, Edit, Pen, Pencil, Plus, Trash2, Truck } from "lucide-react";
-import { cn } from "@/lib/cn";
-import { Select } from "@/app/components/ui/input/SelectSilde";
-import { Input } from "@/app/components/ui/input";
+"use client";;
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/app/components/ui/Button";
 import { useState } from "react";
 import Table from "@/app/components/ui/Table";

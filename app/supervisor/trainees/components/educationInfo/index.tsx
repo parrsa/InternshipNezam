@@ -23,6 +23,28 @@ const qualificationOptions: Option[] = [
     { label: "اجرا", value: "execution" },
 ];
 
+// سرپرست حقوقی
+const legalCategoryOptions: Option[] = [
+    { label: "طراحی و نظارت", value: "design_supervision" },
+    { label: "آزمایشگاه", value: "lab" },
+    { label: "مجری", value: "executor" },
+];
+
+const labOptions: Option[] = [
+    { label: "آزمایشگاه بتن", value: "concrete" },
+    { label: "آزمایشگاه جوش", value: "welding" },
+    { label: "آزمایشگاه ژئو", value: "geo" },
+];
+
+// TODO: برای سرپرست حقیقی باید از API عضویت خوانده شود
+const membershipData: { fields: Item[]; qualifications: Item[] } = {
+    fields: [{ value: "civil", active: true }],
+    qualifications: [
+        { value: "design", active: true },
+        { value: "supervision", active: true },
+    ],
+};
+
 const labelClassName = "text-2xs font-semibold text-neutral-900";
 
 function ChipGroup({
@@ -78,6 +100,29 @@ function ChipGroup({
     );
 }
 
+// نمایش فقط‌خواندنی برای سرپرست حقیقی (اطلاعات از عضویت خوانده می‌شود)
+function ReadOnlyChips({ label, labels }: { label: string; labels: string[] }) {
+    return (
+        <div className="w-full">
+            <span className={cn(labelClassName, "mb-3 block")}>{label}</span>
+            <div className="flex flex-wrap gap-2">
+                {labels.length === 0 ? (
+                    <span className="text-2xs text-neutral-500">موردی ثبت نشده است</span>
+                ) : (
+                    labels.map((l) => (
+                        <span
+                            key={l}
+                            className="flex h-9 items-center rounded-lg border border-neutral-200 bg-neutral-100 px-4 text-2xs font-semibold text-neutral-800"
+                        >
+                            {l}
+                        </span>
+                    ))
+                )}
+            </div>
+        </div>
+    );
+}
+
 function ActivationRow({
     title,
     active,
@@ -113,9 +158,23 @@ interface LicenseStatusProps {
     stepNumber?: string;
 }
 
-export default function LicenseStatus({ stepNumber = "۲" }: LicenseStatusProps) {
-    const [fields, setFields] = useState<Item[]>([]);
-    const [qualifications, setQualifications] = useState<Item[]>([]);
+export default function EducationInfo({
+    userType = "User",
+    stepNumber = "۲",
+}: LicenseStatusProps) {
+    const isLegal = userType === "legal";
+
+    // سرپرست حقیقی: از عضویت خوانده می‌شود
+    const [fields, setFields] = useState<Item[]>(membershipData.fields);
+    const [qualifications, setQualifications] = useState<Item[]>(
+        membershipData.qualifications,
+    );
+
+    // سرپرست حقوقی
+    const [categories, setCategories] = useState<Item[]>([]);
+    const [designFields, setDesignFields] = useState<Item[]>([]);
+    const [labs, setLabs] = useState<Item[]>([]);
+
     const [experienceYears, setExperienceYears] = useState("");
     const [activeProjects, setActiveProjects] = useState("");
     const [summary, setSummary] = useState("");
@@ -130,7 +189,17 @@ export default function LicenseStatus({ stepNumber = "۲" }: LicenseStatusProps)
         active: boolean,
     ) => setItems(items.map((i) => (i.value === value ? { ...i, active } : i)));
 
-    const hasSelection = fields.length > 0 || qualifications.length > 0;
+    const hasCategory = (value: string) => categories.some((c) => c.value === value);
+
+    const handleCategoriesChange = (next: Item[]) => {
+        setCategories(next);
+        if (!next.some((c) => c.value === "design_supervision")) setDesignFields([]);
+        if (!next.some((c) => c.value === "lab")) setLabs([]);
+    };
+
+    const hasSelection = isLegal
+        ? categories.length > 0
+        : fields.length > 0 || qualifications.length > 0;
 
     return (
         <div
@@ -147,21 +216,50 @@ export default function LicenseStatus({ stepNumber = "۲" }: LicenseStatusProps)
             </div>
 
             <div className="flex flex-col gap-5">
-                <ChipGroup
-                    label="رشته‌های فعالیت (چند انتخابی)"
-                    options={fieldOptions}
-                    items={fields}
-                    onChange={setFields}
-                    multiple
-                />
+                {isLegal ? (
+                    <>
+                        <ChipGroup
+                            label="حوزه فعالیت (چند انتخابی)"
+                            options={legalCategoryOptions}
+                            items={categories}
+                            onChange={handleCategoriesChange}
+                            multiple
+                        />
 
-                <ChipGroup
-                    label="صلاحیت‌ها (چند انتخابی)"
-                    options={qualificationOptions}
-                    items={qualifications}
-                    onChange={setQualifications}
-                    multiple
-                />
+                        {hasCategory("design_supervision") && (
+                            <ChipGroup
+                                label="رشته‌های طراحی و نظارت (چند انتخابی)"
+                                options={fieldOptions}
+                                items={designFields}
+                                onChange={setDesignFields}
+                                multiple
+                            />
+                        )}
+
+                        {hasCategory("lab") && (
+                            <ChipGroup
+                                label="آزمایشگاه‌ها (چند انتخابی)"
+                                options={labOptions}
+                                items={labs}
+                                onChange={setLabs}
+                                multiple
+                            />
+                        )}
+                    </>
+                ) : (
+                    <>
+                        <ReadOnlyChips
+                            label="رشته‌های فعالیت"
+                            labels={fields.map((i) => labelOf(fieldOptions, i.value))}
+                        />
+                        <ReadOnlyChips
+                            label="صلاحیت‌ها"
+                            labels={qualifications.map((i) =>
+                                labelOf(qualificationOptions, i.value),
+                            )}
+                        />
+                    </>
+                )}
 
                 {hasSelection && (
                     <div className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-4">
@@ -177,31 +275,70 @@ export default function LicenseStatus({ stepNumber = "۲" }: LicenseStatusProps)
                         </p>
 
                         <div className="mt-2 divide-y divide-neutral-200">
-                            {fields.map((item) => (
-                                <ActivationRow
-                                    key={`field-${item.value}`}
-                                    title={labelOf(fieldOptions, item.value)}
-                                    active={item.active}
-                                    onToggle={(next) =>
-                                        setActive(fields, setFields, item.value, next)
-                                    }
-                                />
-                            ))}
-                            {qualifications.map((item) => (
-                                <ActivationRow
-                                    key={`qualification-${item.value}`}
-                                    title={`صلاحیت ${labelOf(qualificationOptions, item.value)}`}
-                                    active={item.active}
-                                    onToggle={(next) =>
-                                        setActive(
-                                            qualifications,
-                                            setQualifications,
-                                            item.value,
-                                            next,
-                                        )
-                                    }
-                                />
-                            ))}
+                            {isLegal ? (
+                                <>
+                                    {designFields.map((item) => (
+                                        <ActivationRow
+                                            key={`design-${item.value}`}
+                                            title={`طراحی و نظارت - ${labelOf(fieldOptions, item.value)}`}
+                                            active={item.active}
+                                            onToggle={(next) =>
+                                                setActive(designFields, setDesignFields, item.value, next)
+                                            }
+                                        />
+                                    ))}
+                                    {labs.map((item) => (
+                                        <ActivationRow
+                                            key={`lab-${item.value}`}
+                                            title={labelOf(labOptions, item.value)}
+                                            active={item.active}
+                                            onToggle={(next) =>
+                                                setActive(labs, setLabs, item.value, next)
+                                            }
+                                        />
+                                    ))}
+                                    {categories
+                                        .filter((c) => c.value === "executor")
+                                        .map((item) => (
+                                            <ActivationRow
+                                                key="executor"
+                                                title="مجری"
+                                                active={item.active}
+                                                onToggle={(next) =>
+                                                    setActive(categories, setCategories, item.value, next)
+                                                }
+                                            />
+                                        ))}
+                                </>
+                            ) : (
+                                <>
+                                    {fields.map((item) => (
+                                        <ActivationRow
+                                            key={`field-${item.value}`}
+                                            title={labelOf(fieldOptions, item.value)}
+                                            active={item.active}
+                                            onToggle={(next) =>
+                                                setActive(fields, setFields, item.value, next)
+                                            }
+                                        />
+                                    ))}
+                                    {qualifications.map((item) => (
+                                        <ActivationRow
+                                            key={`qualification-${item.value}`}
+                                            title={`صلاحیت ${labelOf(qualificationOptions, item.value)}`}
+                                            active={item.active}
+                                            onToggle={(next) =>
+                                                setActive(
+                                                    qualifications,
+                                                    setQualifications,
+                                                    item.value,
+                                                    next,
+                                                )
+                                            }
+                                        />
+                                    ))}
+                                </>
+                            )}
                         </div>
                     </div>
                 )}
