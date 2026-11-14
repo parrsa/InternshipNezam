@@ -116,15 +116,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         style={{ backgroundColor: "var(--main-bg-color)" }}
       >
         <ToastContainer />
-        {/* <SessionHandler> */}
+        <SessionHandler>
           <QueryProvider>
-            {/* <AuthProvider> */}
+            <AuthProvider>
               <ClientLayoutSelector >
                 {children}
               </ClientLayoutSelector>
-            {/* </AuthProvider> */}
+            </AuthProvider>
           </QueryProvider>
-        {/* </SessionHandler> */}
+        </SessionHandler>
       </body>
     </html>
   );

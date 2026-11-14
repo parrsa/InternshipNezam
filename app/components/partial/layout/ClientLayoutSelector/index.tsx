@@ -38,9 +38,9 @@ export default function ClientLayoutSelector({
    * Loading
    * --------------------------------------------
    */
-  // if (loading || isLoggingOut) return <Loading />;
+  if (loading || isLoggingOut) return <Loading />;
 
-  // if (!user) return null;
+  if (!user) return null;
 
   /*
    * --------------------------------------------
