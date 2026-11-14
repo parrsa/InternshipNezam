@@ -33,6 +33,8 @@ export interface AdminMenuItem {
   href: string;
   icon: LucideIcon;
   badge?: number;
+  disabled?: boolean; // جدید
+
 }
 
 export interface UserMenuItem {
@@ -259,9 +261,11 @@ export const ADMIN_MENU: OrgMenuItem[] = [
     href: "/supervisor/messages",
     icon: Mail,
     badge: 5,
+    disabled: true,
+
   },
   {
-    label: "تنظیمات ظرفیت",
+    label: "تنظیمات ظرفیت امسال",
     href: "/supervisor/settings",
     icon: Building2,
   },
