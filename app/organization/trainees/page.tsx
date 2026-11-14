@@ -1,35 +1,312 @@
+// "use client";
+
+// import { useCallback, useMemo, useRef, useState } from "react";
+// import { Download } from "lucide-react";
+// import { cn } from "@/lib/cn";
+// import Table from "@/app/components/ui/Table";
+// import { Input } from "@/app/components/ui/input";
+
+// type TraineeStatus = "active" | "review" | "inactive";
+
+// interface Trainee {
+//     id: number;
+//     name: string;
+//     supervisor: string;
+//     course: string;
+//     hours: number;
+//     status: TraineeStatus;
+// }
+
+// const INITIAL_TRAINEES: Trainee[] = [
+//     { id: 1, name: "علی محمدی", supervisor: "مهندس رضایی", course: "مقررات ملی", hours: 168, status: "active" },
+//     { id: 2, name: "زهرا حسینی", supervisor: "مهندس احمدی", course: "مدیریت پیمان", hours: 152, status: "active" },
+//     { id: 3, name: "محمد رضایی", supervisor: "مهندس کریمی", course: "فولاد ساختمانی", hours: 96, status: "review" },
+//     { id: 4, name: "فاطمه کریمی", supervisor: "مهندس موسوی", course: "بتن مسلح", hours: 48, status: "review" },
+//     { id: 5, name: "حسین موسوی", supervisor: "مهندس رضایی", course: "مقررات ملی", hours: 180, status: "active" },
+//     { id: 6, name: "سحر احمدی", supervisor: "مهندس احمدی", course: "مدیریت پیمان", hours: 120, status: "inactive" },
+// ];
+
+// const STATUS_BADGE: Record<TraineeStatus, { label: string; className: string }> = {
+//     active: { label: "فعال", className: "border-green-500 bg-primary-100 text-green-950" },
+//     review: { label: "نیازمند بررسی", className: "border-orange-300 bg-orange-100 text-orange-900" },
+//     inactive: { label: "غیرفعال", className: "border-red-500 bg-red-100 text-red-950" },
+// };
+
+// const CELL_CLASSES = {
+//     className: "px-2.5 py-2",
+//     thClassName: "px-2.5 text-s",
+// };
+
+// const hoursFormatter = new Intl.NumberFormat("fa-IR", { useGrouping: false });
+
+// const normalize = (value: string) =>
+//     value.replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
+
+// const fade = (row: Trainee) =>
+//     cn("transition", row.status === "inactive" && "opacity-50");
+
+// function useTouchScroll() {
+//     const sliderRef = useRef<HTMLDivElement>(null);
+//     const [isDragging, setIsDragging] = useState(false);
+//     const [startX, setStartX] = useState(0);
+//     const [scrollLeft, setScrollLeft] = useState(0);
+
+//     const startDragging = (e: any) => {
+//         if (!sliderRef.current) return;
+//         setIsDragging(true);
+//         const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
+//         setStartX(pageX - sliderRef.current.offsetLeft);
+//         setScrollLeft(sliderRef.current.scrollLeft);
+//     };
+
+//     const onDragging = (e: any) => {
+//         if (!isDragging || !sliderRef.current) return;
+//         const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
+//         const x = pageX - sliderRef.current.offsetLeft;
+//         const walk = (x - startX) * 2;
+//         sliderRef.current.scrollLeft = scrollLeft - walk;
+//     };
+
+//     const stopDragging = () => {
+//         setIsDragging(false);
+//     };
+
+//     return { sliderRef, startDragging, onDragging, stopDragging, isDragging };
+// }
+
+// function Trainees() {
+//     const [trainees, setTrainees] = useState<Trainee[]>(INITIAL_TRAINEES);
+//     const [query, setQuery] = useState("");
+
+//     const { sliderRef, startDragging, onDragging, stopDragging, isDragging } =
+//         useTouchScroll();
+
+//     const toggleStatus = useCallback((id: number) => {
+//         setTrainees((prev) =>
+//             prev.map((t) =>
+//                 t.id === id
+//                     ? { ...t, status: t.status === "inactive" ? "active" : "inactive" }
+//                     : t,
+//             ),
+//         );
+//     }, []);
+
+//     const columns = useMemo(
+//         () => [
+//             {
+//                 key: "name",
+//                 label: "نام",
+//                 width: "w-[24%]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => (
+//                     <div className={cn("flex items-center gap-3", fade(row))}>
+//                         <span className="flex size-10 items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-blue-700">
+//                             {row.name.charAt(0)}
+//                         </span>
+//                         <span className="text-s font-bold text-neutral-900">{row.name}</span>
+//                     </div>
+//                 ),
+//             },
+//             {
+//                 key: "supervisor",
+//                 label: "سرپرست",
+//                 width: "w-[18%]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => (
+//                     <span className={cn("text-sm text-neutral-800", fade(row))}>
+//                         {row.supervisor}
+//                     </span>
+//                 ),
+//             },
+//             {
+//                 key: "course",
+//                 label: "دوره",
+//                 width: "w-[18%]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => (
+//                     <span className={cn("text-sm text-neutral-800", fade(row))}>
+//                         {row.course}
+//                     </span>
+//                 ),
+//             },
+//             {
+//                 key: "hours",
+//                 label: "ساعت",
+//                 width: "w-[9%]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => (
+//                     <span className={cn("text-sm text-neutral-800", fade(row))}>
+//                         {hoursFormatter.format(row.hours)}
+//                     </span>
+//                 ),
+//             },
+//             {
+//                 key: "status",
+//                 label: "وضعیت",
+//                 width: "w-[24%]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => {
+//                     const badge = STATUS_BADGE[row.status];
+//                     return (
+//                         <span
+//                             className={cn(
+//                                 "inline-flex items-center rounded-full border px-2 py-0.5 text-2xs font-medium",
+//                                 badge.className,
+//                                 fade(row),
+//                             )}
+//                         >
+//                             {badge.label}
+//                         </span>
+//                     );
+//                 },
+//             },
+//             {
+//                 key: "actions",
+//                 label: "عملیات",
+//                 width: "w-[92px]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => {
+//                     const isInactive = row.status === "inactive";
+//                     return (
+//                         <button
+//                             type="button"
+//                             onClick={() => toggleStatus(row.id)}
+//                             className={cn(
+//                                 "cursor-pointer rounded-lg border px-3 py-1.5 text-3xs font-bold whitespace-nowrap",
+//                                 isInactive
+//                                     ? "border-emerald-200 bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+//                                     : "border-red-300 bg-red-100 text-red-700 hover:bg-red-200",
+//                                 fade(row),
+//                             )}
+//                         >
+//                             {isInactive ? "فعال‌سازی" : "غیرفعال"}
+//                         </button>
+//                     );
+//                 },
+//             },
+//         ],
+//         [toggleStatus],
+//     );
+
+//     const rows = useMemo(() => {
+//         const q = normalize(query);
+//         return trainees
+//             .filter((t) => !q || normalize(t.name).includes(q))
+//             .map((t) => ({
+//                 ...t,
+//                 _rowClassName: "transition-colors hover:bg-neutral-50",
+//             }));
+//     }, [trainees, query]);
+
+//     return (
+//         <div dir="rtl" className="flex w-full flex-col gap-5 sm:px-5 p-2">
+//             <div className="flex items-center justify-between gap-4">
+//                 <Input
+//                     variant="default"
+//                     color="input"
+//                     className="mt-2 w-1/3 border-none bg-neutral-50 placeholder:text-neutral-500 placeholder:text-sm"
+//                     inputSize="sm"
+//                     type="text"
+//                     value={query}
+//                     onChange={(e) => setQuery(e.target.value)}
+//                     placeholder="جستجوی کارآموز..."
+//                     aria-label="جستجوی کارآموز"
+//                 />
+
+//                 <button
+//                     type="button"
+//                     className="flex h-8 font-semibold justify-center cursor-pointer items-center text-nowrap gap-2 rounded-lg border border-neutral-200 bg-white px-3 text-s text-neutral-900 shadow-sm transition-colors hover:bg-neutral-50"
+//                 >
+//                     <Download className="size-4.5" aria-hidden />
+//                     <span>خروجی Exc1el</span>
+//                 </button>
+//             </div>
+
+//             <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white pb-5.5 pt-6 shadow-sm">
+//                 <div
+//                     ref={sliderRef}
+//                     onMouseDown={startDragging}
+//                     onMouseMove={onDragging}
+//                     onMouseUp={stopDragging}
+//                     onMouseLeave={stopDragging}
+//                     onTouchStart={startDragging}
+//                     onTouchMove={onDragging}
+//                     onTouchEnd={stopDragging}
+//                     className={cn(
+//                         "w-full overflow-x-auto select-none",
+//                         isDragging ? "cursor-grabbing" : "cursor-grab lg:cursor-auto",
+//                         "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+//                     )}
+//                 >
+//                     <div className="min-w-225 lg:min-w-0">
+//                         <Table
+//                             tableRow={rows}
+//                             tableCol={columns}
+//                             HeaderPY="py-[18px]"
+//                             fixed
+//                         />
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// }
+
+// export default Trainees;
+
+
+
+
+
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Download } from "lucide-react";
 import { cn } from "@/lib/cn";
 import Table from "@/app/components/ui/Table";
 import { Input } from "@/app/components/ui/input";
 
-type TraineeStatus = "active" | "review" | "inactive";
+type TraineeStatus =
+    | "awaiting_payment"
+    | "awaiting_supervisor_selection"
+    | "awaiting_supervisor_approval"
+    | "awaiting_org_approval";
 
 interface Trainee {
     id: number;
     name: string;
-    supervisor: string;
+    supervisor: string | null;
     course: string;
     hours: number;
     status: TraineeStatus;
 }
 
 const INITIAL_TRAINEES: Trainee[] = [
-    { id: 1, name: "علی محمدی", supervisor: "مهندس رضایی", course: "مقررات ملی", hours: 168, status: "active" },
-    { id: 2, name: "زهرا حسینی", supervisor: "مهندس احمدی", course: "مدیریت پیمان", hours: 152, status: "active" },
-    { id: 3, name: "محمد رضایی", supervisor: "مهندس کریمی", course: "فولاد ساختمانی", hours: 96, status: "review" },
-    { id: 4, name: "فاطمه کریمی", supervisor: "مهندس موسوی", course: "بتن مسلح", hours: 48, status: "review" },
-    { id: 5, name: "حسین موسوی", supervisor: "مهندس رضایی", course: "مقررات ملی", hours: 180, status: "active" },
-    { id: 6, name: "سحر احمدی", supervisor: "مهندس احمدی", course: "مدیریت پیمان", hours: 120, status: "inactive" },
+    { id: 1, name: "علی محمدی", supervisor: "مهندس رضایی", course: "مقررات ملی", hours: 168, status: "awaiting_org_approval" },
+    { id: 2, name: "زهرا حسینی", supervisor: "مهندس احمدی", course: "مدیریت پیمان", hours: 152, status: "awaiting_supervisor_approval" },
+    { id: 3, name: "محمد رضایی", supervisor: null, course: "فولاد ساختمانی", hours: 96, status: "awaiting_supervisor_selection" },
+    { id: 4, name: "فاطمه کریمی", supervisor: null, course: "بتن مسلح", hours: 48, status: "awaiting_payment" },
+    { id: 5, name: "حسین موسوی", supervisor: "مهندس رضایی", course: "مقررات ملی", hours: 180, status: "awaiting_org_approval" },
+    { id: 6, name: "سحر احمدی", supervisor: null, course: "مدیریت پیمان", hours: 120, status: "awaiting_payment" },
 ];
 
 const STATUS_BADGE: Record<TraineeStatus, { label: string; className: string }> = {
-    active: { label: "فعال", className: "border-green-500 bg-primary-100 text-green-950" },
-    review: { label: "نیازمند بررسی", className: "border-orange-300 bg-orange-100 text-orange-900" },
-    inactive: { label: "غیرفعال", className: "border-red-500 bg-red-100 text-red-950" },
+    awaiting_payment: {
+        label: "در انتظار پرداخت",
+        className: "border-red-300 bg-red-100 text-red-950",
+    },
+    awaiting_supervisor_selection: {
+        label: "در انتظار انتخاب سرپرست",
+        className: "border-orange-300 bg-orange-100 text-orange-900",
+    },
+    awaiting_supervisor_approval: {
+        label: "در انتظار تایید سرپرست",
+        className: "border-blue-300 bg-blue-100 text-blue-900",
+    },
+    awaiting_org_approval: {
+        label: "در انتظار تایید سازمان",
+        className: "border-green-500 bg-primary-100 text-green-950",
+    },
 };
 
 const CELL_CLASSES = {
@@ -41,9 +318,6 @@ const hoursFormatter = new Intl.NumberFormat("fa-IR", { useGrouping: false });
 
 const normalize = (value: string) =>
     value.replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
-
-const fade = (row: Trainee) =>
-    cn("transition", row.status === "inactive" && "opacity-50");
 
 function useTouchScroll() {
     const sliderRef = useRef<HTMLDivElement>(null);
@@ -75,31 +349,21 @@ function useTouchScroll() {
 }
 
 function Trainees() {
-    const [trainees, setTrainees] = useState<Trainee[]>(INITIAL_TRAINEES);
+    const [trainees] = useState<Trainee[]>(INITIAL_TRAINEES);
     const [query, setQuery] = useState("");
 
     const { sliderRef, startDragging, onDragging, stopDragging, isDragging } =
         useTouchScroll();
-
-    const toggleStatus = useCallback((id: number) => {
-        setTrainees((prev) =>
-            prev.map((t) =>
-                t.id === id
-                    ? { ...t, status: t.status === "inactive" ? "active" : "inactive" }
-                    : t,
-            ),
-        );
-    }, []);
 
     const columns = useMemo(
         () => [
             {
                 key: "name",
                 label: "نام",
-                width: "w-[24%]",
+                width: "w-[22%]",
                 ...CELL_CLASSES,
                 render: (row: Trainee) => (
-                    <div className={cn("flex items-center gap-3", fade(row))}>
+                    <div className="flex items-center gap-3">
                         <span className="flex size-10 items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-blue-700">
                             {row.name.charAt(0)}
                         </span>
@@ -110,32 +374,30 @@ function Trainees() {
             {
                 key: "supervisor",
                 label: "سرپرست",
-                width: "w-[18%]",
+                width: "w-[20%]",
                 ...CELL_CLASSES,
                 render: (row: Trainee) => (
-                    <span className={cn("text-sm text-neutral-800", fade(row))}>
-                        {row.supervisor}
+                    <span className="text-sm text-neutral-800">
+                        {row.supervisor ?? "—"}
                     </span>
                 ),
             },
             {
                 key: "course",
                 label: "دوره",
-                width: "w-[18%]",
+                width: "w-[20%]",
                 ...CELL_CLASSES,
                 render: (row: Trainee) => (
-                    <span className={cn("text-sm text-neutral-800", fade(row))}>
-                        {row.course}
-                    </span>
+                    <span className="text-sm text-neutral-800">{row.course}</span>
                 ),
             },
             {
                 key: "hours",
                 label: "ساعت",
-                width: "w-[9%]",
+                width: "w-[10%]",
                 ...CELL_CLASSES,
                 render: (row: Trainee) => (
-                    <span className={cn("text-sm text-neutral-800", fade(row))}>
+                    <span className="text-sm text-neutral-800">
                         {hoursFormatter.format(row.hours)}
                     </span>
                 ),
@@ -143,16 +405,15 @@ function Trainees() {
             {
                 key: "status",
                 label: "وضعیت",
-                width: "w-[24%]",
+                width: "w-[28%]",
                 ...CELL_CLASSES,
                 render: (row: Trainee) => {
                     const badge = STATUS_BADGE[row.status];
                     return (
                         <span
                             className={cn(
-                                "inline-flex items-center rounded-full border px-2 py-0.5 text-2xs font-medium",
+                                "inline-flex items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-2xs font-medium",
                                 badge.className,
-                                fade(row),
                             )}
                         >
                             {badge.label}
@@ -160,32 +421,8 @@ function Trainees() {
                     );
                 },
             },
-            {
-                key: "actions",
-                label: "عملیات",
-                width: "w-[92px]",
-                ...CELL_CLASSES,
-                render: (row: Trainee) => {
-                    const isInactive = row.status === "inactive";
-                    return (
-                        <button
-                            type="button"
-                            onClick={() => toggleStatus(row.id)}
-                            className={cn(
-                                "cursor-pointer rounded-lg border px-3 py-1.5 text-3xs font-bold whitespace-nowrap",
-                                isInactive
-                                    ? "border-emerald-200 bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                                    : "border-red-300 bg-red-100 text-red-700 hover:bg-red-200",
-                                fade(row),
-                            )}
-                        >
-                            {isInactive ? "فعال‌سازی" : "غیرفعال"}
-                        </button>
-                    );
-                },
-            },
         ],
-        [toggleStatus],
+        [],
     );
 
     const rows = useMemo(() => {
@@ -218,7 +455,7 @@ function Trainees() {
                     className="flex h-8 font-semibold justify-center cursor-pointer items-center text-nowrap gap-2 rounded-lg border border-neutral-200 bg-white px-3 text-s text-neutral-900 shadow-sm transition-colors hover:bg-neutral-50"
                 >
                     <Download className="size-4.5" aria-hidden />
-                    <span>خروجی Exc1el</span>
+                    <span>خروجی Excel</span>
                 </button>
             </div>
 

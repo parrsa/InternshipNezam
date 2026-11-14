@@ -25,6 +25,7 @@ export interface OrgMenuItem {
   href: string;
   icon: LucideIcon;
   badge?: number;
+  disabled?: boolean; // جدید
 }
 
 export interface AdminMenuItem {
@@ -32,14 +33,17 @@ export interface AdminMenuItem {
   href: string;
   icon: LucideIcon;
   badge?: number;
+  disabled?: boolean; // جدید
+
 }
 
 export interface UserMenuItem {
   label: string;
   href: string;
-  icon: LucideIcon; // یا LucideIcon
+  icon: LucideIcon;
   badge?: number;
-  tag?: string; // فیلد جدید برای نمایش متن‌هایی مثل "فعال"
+  tag?: string;
+  disabled?: boolean; // جدید
 }
 
 
@@ -66,11 +70,11 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
     icon: Users,
     badge: 4,
   },
-  {
-    label: "جلسات توجیهی",
-    href: "/organization/briefing-sessions",
-    icon: UserCog,
-  },
+  // {
+  //   label: "جلسات توجیهی",
+  //   href: "/organization/briefing-sessions",
+  //   icon: UserCog,
+  // },
   {
     label: "کار اموزان",
     href: "/organization/trainees",
@@ -86,16 +90,22 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
     label: "دوره ها",
     href: "/organization/courses",
     icon: Building2,
+    disabled: true,
+
   },
   {
     label: "عملکرد سرپرستان",
     href: "/organization/performance",
     icon: TrendingUp,
+    disabled: true,
+
   },
   {
     label: "صندوق پیام",
     href: "/organization/messages",
     icon: Mail,
+    disabled: true,
+
     badge: 5,
   },
   {
@@ -103,6 +113,8 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
     href: "/organization/certificates",
     icon: Award,
     badge: 3,
+    disabled: true,
+
   },
 ];
 
@@ -143,14 +155,14 @@ export const USER_MENU: UserMenuItem[] = [
     href: "/users/select-supervisor",
     icon: UserCheck,
   },
+  // {
+  //   label: "جلسات توجیهی",
+  //   href: "/users/briefing-sessions",
+  //   icon: MonitorPlay,
+  //   badge: 1,
+  // },
   {
-    label: "جلسات توجیهی",
-    href: "/users/briefing-sessions",
-    icon: MonitorPlay,
-    badge: 1,
-  },
-  {
-    label: "اعتبار مالی",
+    label: " سوابق پرداخت",
     href: "/users/financial-credit",
     icon: Wallet,
   },
@@ -159,6 +171,8 @@ export const USER_MENU: UserMenuItem[] = [
     href: "/users/my-courses",
     icon: BookOpen,
     badge: 4,
+    disabled: true,
+
   },
   {
     label: "گزارش ماهانه",
@@ -176,11 +190,15 @@ export const USER_MENU: UserMenuItem[] = [
     href: "/users/messages",
     icon: Mail,
     badge: 5,
+    disabled: true,
+
   },
   {
     label: "بازدیدها",
     href: "/users/visits",
     icon: Eye,
+    disabled: true,
+
   },
   {
     label: "گواهی‌ها",
@@ -243,9 +261,11 @@ export const ADMIN_MENU: OrgMenuItem[] = [
     href: "/supervisor/messages",
     icon: Mail,
     badge: 5,
+    disabled: true,
+
   },
   {
-    label: "تنظیمات ظرفیت",
+    label: "تنظیمات ظرفیت امسال",
     href: "/supervisor/settings",
     icon: Building2,
   },
