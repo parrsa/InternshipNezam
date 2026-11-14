@@ -25,6 +25,7 @@ export interface OrgMenuItem {
   href: string;
   icon: LucideIcon;
   badge?: number;
+  disabled?: boolean; // جدید
 }
 
 export interface AdminMenuItem {
@@ -67,11 +68,11 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
     icon: Users,
     badge: 4,
   },
-  {
-    label: "جلسات توجیهی",
-    href: "/organization/briefing-sessions",
-    icon: UserCog,
-  },
+  // {
+  //   label: "جلسات توجیهی",
+  //   href: "/organization/briefing-sessions",
+  //   icon: UserCog,
+  // },
   {
     label: "کار اموزان",
     href: "/organization/trainees",
@@ -87,16 +88,22 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
     label: "دوره ها",
     href: "/organization/courses",
     icon: Building2,
+    disabled: true,
+
   },
   {
     label: "عملکرد سرپرستان",
     href: "/organization/performance",
     icon: TrendingUp,
+    disabled: true,
+
   },
   {
     label: "صندوق پیام",
     href: "/organization/messages",
     icon: Mail,
+    disabled: true,
+
     badge: 5,
   },
   {
@@ -104,6 +111,8 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
     href: "/organization/certificates",
     icon: Award,
     badge: 3,
+    disabled: true,
+
   },
 ];
 
