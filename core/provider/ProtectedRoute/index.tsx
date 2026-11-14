@@ -990,7 +990,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     setAuthorized(true);
   }, [loading, user, pathname, isPublicRoute, router]);
 
-  if (!authorized) return <Loading />;
+  // if (!authorized) return <Loading />;
 
   return <>{children}</>;
 }
