@@ -13,7 +13,7 @@ export const toastify = (type: Type, message: string) => {
     rtl: true,
     autoClose: 1000,
     hideProgressBar: true,
-    // className: `${YekanBakh.className} customToast`,
+    className: ` customToast`,
   });
 };
 

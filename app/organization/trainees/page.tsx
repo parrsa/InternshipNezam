@@ -218,7 +218,7 @@ function Trainees() {
                     className="flex h-8 font-semibold justify-center cursor-pointer items-center text-nowrap gap-2 rounded-lg border border-neutral-200 bg-white px-3 text-s text-neutral-900 shadow-sm transition-colors hover:bg-neutral-50"
                 >
                     <Download className="size-4.5" aria-hidden />
-                    <span>خروجی Excel</span>
+                    <span>خروجی Exc1el</span>
                 </button>
             </div>
 

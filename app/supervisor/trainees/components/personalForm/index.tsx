@@ -1,19 +1,82 @@
-
 "use client";
 
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Input } from "@/app/components/ui/input";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getYesterday, isValidISODate, toISODate } from "@/lib/date-utils";
 import JalaliDatePicker from "@/lib/jalaliDatePicker";
 
-import LicenseStatus from "../licenseStatus";
+import LicenseStatus, { type Item, type ProjectRow } from "../licenseStatus";
 import CommitmentAgreement from "../commitmentAgreement";
 import RegistrationCOnditions from "../RegistrationConditions";
-import ResumeUploader from "../resumeUploader";
+import ResumeUploader, { type ResumeFile } from "../resumeUploader";
 import EducationInfo from "../educationInfo";
-import type { UserType } from "../supervisorConfig";
+import {
+  TOTAL_CAPACITY_BY_USER_TYPE,
+  type UserType,
+} from "../supervisorConfig";
+
+import {
+  realInfoToFormValues,
+  realInfoToLicenseStatus,
+  realInfoToRegistrationConditions,
+  realInfoToCommitment,
+} from "../../hook/index";
+
+/* ============ Types ============ */
+
+export interface PersonalInfoFormSubmitState {
+  formValues: {
+    FullName?: string;
+    CompanyName?: string;
+    LicenseNumber?: string;
+    NationalCode?: string;
+    Birthday?: string; // ISO
+    Birthplace?: string;
+    PhoneNumber?: string;
+  };
+  userType: UserType;
+  fields: Item[];
+  qualifications: Item[];
+  experienceYears: string;
+  activeProjects: string;
+  summary: string;
+  salary: string;
+  insurance: "social" | "none";
+  weeklyHours: string;
+  traineeCertificate: boolean;
+  allocatedCapacity: string;
+  minMonthlyHours: string;
+  payloadTotalCapacity: number;
+  resume: ResumeFile | null;
+  resumeFile: File | null;
+  projects: ProjectRow[];
+}
+
+/** شکل داده‌ای که mapper کاربر جاری برمی‌گرداند (برای fallback) */
+export interface PersonalInfoInitialData {
+  FullName?: string;
+  CompanyName?: string;
+  LicenseNumber?: string;
+  NationalCode?: string;
+  Birthday?: string;
+  Birthplace?: string;
+  PhoneNumber?: string;
+}
+
+interface PersonalInfoFormProps {
+  stepNumber?: string;
+  /** داده اولیه هویتی (مثلاً از GetCurrentUser) - فقط fallback */
+  initialData?: PersonalInfoInitialData | null;
+  /** داده کامل سرپرست از بک‌اند (GetInfoTrainee) - اولویت اول */
+  backendData?: any | null;
+  isSubmitting?: boolean;
+  onSubmit?: (state: PersonalInfoFormSubmitState) => void;
+  onSaveDraft?: () => void;
+}
+
+/* ============ Initial values ============ */
 
 const user = {
   FullName: "",
@@ -37,6 +100,8 @@ const usersType: { id: number; title: string; type: UserType }[] = [
   { id: 1, title: "شخص حقیقی", type: "User" },
   { id: 2, title: "شخص حقوقی", type: "legal" },
 ];
+
+/* ============ Validation ============ */
 
 const pastDate = (label: string) =>
   Yup.string()
@@ -77,21 +142,129 @@ const legalSchema = Yup.object({
   Birthplace: Yup.string().trim().required("محل شرکت الزامی است"),
 });
 
-export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
+/* ============ Component ============ */
+
+export function PersonalInfoForm({
+  stepNumber = "۱",
+  initialData,
+  backendData,
+  isSubmitting = false,
+  onSubmit,
+  onSaveDraft,
+}: PersonalInfoFormProps) {
   const [userType, setUserType] = useState<UserType>("User");
   const yesterday = useMemo(() => getYesterday(), []);
   const isUser = userType === "User";
+  
+
+  const [fields, setFields] = useState<Item[]>([]);
+  const [qualifications, setQualifications] = useState<Item[]>([]);
+  const [experienceYears, setExperienceYears] = useState("");
+  const [activeProjects, setActiveProjects] = useState("");
+  const [summary, setSummary] = useState("");
+  const [salary, setSalary] = useState("");
+  const [insurance, setInsurance] = useState<"social" | "none">("none");
+  const [weeklyHours, setWeeklyHours] = useState("");
+  const [traineeCertificate, setTraineeCertificate] = useState(false);
+  const [allocatedCapacity, setAllocatedCapacity] = useState("");
+  const [minMonthlyHours, setMinMonthlyHours] = useState("");
+  const [resume, setResume] = useState<ResumeFile | null>(null);
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [projects, setProjects] = useState<ProjectRow[]>([]);
+
+  /* ---------- Pre-fill از GetInfoTrainee (backendData) ---------- */
+  useEffect(() => {
+    if (!backendData) return;
+
+    const license = realInfoToLicenseStatus(backendData);
+    setFields(license.fields);
+    setQualifications(license.qualifications);
+    setExperienceYears(license.experienceYears);
+    setActiveProjects(license.activeProjects);
+    setSummary(license.summary);
+
+    const reg = realInfoToRegistrationConditions(backendData);
+    setSalary(reg.salary);
+    setInsurance(reg.insurance);
+    setWeeklyHours(reg.weeklyHours);
+    setTraineeCertificate(reg.traineeCertificate);
+
+    const commit = realInfoToCommitment(backendData);
+    setAllocatedCapacity(commit.allocatedCapacity);
+    setMinMonthlyHours(commit.minMonthlyHours);
+  }, [backendData]);
+
+  /* ---------- initialValues داینامیک (merge: backend > currentUser) ---------- */
+  const dynamicInitial = useMemo(() => {
+    // اگر backendData موجود است، از آن استفاده کن
+    const fromBackend = backendData
+      ? realInfoToFormValues(backendData)
+      : null;
+
+    // داده کاربر جاری (fallback)
+    const fromUser = initialData ?? null;
+
+    // ادغام: اولویت با backend، سپس currentUser
+    const mapped = {
+      FullName: fromBackend?.FullName || fromUser?.FullName || "",
+      CompanyName: fromBackend?.CompanyName || fromUser?.CompanyName || "",
+      LicenseNumber:
+        fromBackend?.LicenseNumber || fromUser?.LicenseNumber || "",
+      NationalCode:
+        fromBackend?.NationalCode || fromUser?.NationalCode || "",
+      Birthday: fromBackend?.Birthday || fromUser?.Birthday || "",
+      Birthplace: fromBackend?.Birthplace || fromUser?.Birthplace || "",
+      PhoneNumber: fromBackend?.PhoneNumber || fromUser?.PhoneNumber || "",
+    };
+
+    return isUser
+      ? { ...user, ...mapped }
+      : { ...legal, ...mapped };
+  }, [backendData, initialData, isUser]);
+
+  /* ---------- ظرفیت ---------- */
+  const commitment = useMemo(
+    () =>
+      realInfoToCommitment(backendData, TOTAL_CAPACITY_BY_USER_TYPE[userType]),
+    [backendData, userType]
+  );
 
   return (
     <Formik
       enableReinitialize
-      initialValues={isUser ? user : legal}
+      initialValues={dynamicInitial}
       validationSchema={isUser ? userSchema : legalSchema}
-      onSubmit={(value) => {
-        console.log(value);
+      onSubmit={(values) => {
+        onSubmit?.({
+          formValues: values,
+          userType,
+          fields,
+          qualifications,
+          experienceYears,
+          activeProjects,
+          summary,
+          salary,
+          insurance,
+          weeklyHours,
+          traineeCertificate,
+          allocatedCapacity,
+          minMonthlyHours,
+          payloadTotalCapacity: commitment.payloadTotalCapacity,
+          resume,
+          resumeFile,
+          projects,
+        });
       }}
     >
-      {({ getFieldProps, errors, touched, values, setFieldValue, setFieldTouched }) => {
+      {({
+        getFieldProps,
+        errors,
+        touched,
+        values,
+        setFieldValue,
+        setFieldTouched,
+        handleSubmit,
+      }) => {
         const f = (name: string) => ({
           name,
           field: getFieldProps(name),
@@ -100,12 +273,16 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
         });
 
         return (
-          <Form className="w-full flex flex-col justify-center items-center gap-4">
+          <Form
+            onSubmit={handleSubmit}
+            className="w-full flex flex-col justify-center items-center gap-4"
+          >
+            {/* Card 1: اطلاعات هویتی */}
             <div className="w-full rounded-2xl border-2 shadow-xs border-neutral-200 sm:p-6 bg-white px-8 py-7">
               <div className="w-full flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#eef0f8] text-xs text-blue-800">
-                    1
+                    {stepNumber}
                   </span>
                   <span className="text-s font-semibold text-neutral-900">
                     نوع شخص و اطلاعات هویتی
@@ -125,9 +302,8 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
                         key={item.id}
                         type="button"
                         onClick={() => setUserType(item.type)}
-                        className={`w-1/2 h-11 flex justify-center items-center text-center border border-neutral-300 rounded-lg text-xs cursor-pointer p-2 hover:bg-blue-300 transition-all duration-500 hover:text-white ${
-                          userType === item.type ? "bg-blue-700 text-white" : ""
-                        }`}
+                        className={`w-1/2 h-11 flex justify-center items-center text-center border border-neutral-300 rounded-lg text-xs cursor-pointer p-2 hover:bg-blue-300 transition-all duration-500 hover:text-white ${userType === item.type ? "bg-blue-700 text-white" : ""
+                          }`}
                       >
                         <p>{item.title}</p>
                       </button>
@@ -193,7 +369,12 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
                         name="Birthday"
                         value={(values as any).Birthday ?? ""}
                         maxDate={yesterday}
-                        error={!!((touched as any).Birthday && (errors as any).Birthday)}
+                        error={
+                          !!(
+                            (touched as any).Birthday &&
+                            (errors as any).Birthday
+                          )
+                        }
                         errorMessage={
                           (touched as any).Birthday
                             ? ((errors as any).Birthday as string | undefined)
@@ -236,18 +417,55 @@ export function PersonalInfoForm({ stepNumber = "۱", onSubmit }: any) {
             </div>
 
             <EducationInfo userType={userType} />
-            <LicenseStatus />
-            <RegistrationCOnditions />
+
+            <LicenseStatus
+              userType={userType}
+              fields={fields}
+              setFields={setFields}
+              qualifications={qualifications}
+              setQualifications={setQualifications}
+              experienceYears={experienceYears}
+              setExperienceYears={setExperienceYears}
+              activeProjects={activeProjects}
+              setActiveProjects={setActiveProjects}
+              summary={summary}
+              setSummary={setSummary}
+              projects={projects}
+              setProjects={setProjects}
+            />
+
+            <RegistrationCOnditions
+              salary={salary}
+              setSalary={setSalary}
+              insurance={insurance}
+              setInsurance={setInsurance}
+              weeklyHours={weeklyHours}
+              setWeeklyHours={setWeeklyHours}
+              traineeCertificate={traineeCertificate}
+              setTraineeCertificate={setTraineeCertificate}
+            />
+
             <CommitmentAgreement
               userType={userType}
-              supervisorName={(values as any).FullName || (values as any).CompanyName}
+              supervisorName={
+                (values as any).FullName || (values as any).CompanyName
+              }
               licenseNumber={(values as any).LicenseNumber}
+              displayTotalCapacity={commitment.displayTotalCapacity}
+              allocatedCapacity={allocatedCapacity}
+              setAllocatedCapacity={setAllocatedCapacity}
+              minMonthlyHours={minMonthlyHours}
+              setMinMonthlyHours={setMinMonthlyHours}
+              isSubmitting={isSubmitting}
+              onSubmit={handleSubmit}
+              onSaveDraft={onSaveDraft}
             />
+
             <ResumeUploader
-              initialResume={{
-                name: "resume_razai_1404.pdf",
-                size: 1.2 * 1024 * 1024,
-                uploadedAt: "۱۴۰۴/۰۴/۲۸",
+              initialResume={resume}
+              onChange={(r, file) => {
+                setResume(r);
+                setResumeFile(file ?? null);
               }}
             />
           </Form>

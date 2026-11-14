@@ -1,23 +1,41 @@
-
 "use client";
 
 import { Input } from "@/app/components/ui/input";
 import { Select } from "@/app/components/ui/input/SelectSilde";
-import { useState } from "react";
 
 const insuranceOptions = [
   { value: "social", label: "بیمه تأمین اجتماعی" },
   { value: "none", label: "بدون بیمه" },
 ];
 
-const CERTIFICATE_LABEL = "صادر می‌شود ";
+const toEnglishDigits = (value: string) =>
+  value.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
 
-export default function RegistrationCOnditions() {
-  const [salary, setSalary] = useState("3000000");
-  const [insurance, setInsurance] = useState("social");
-  const [weeklyHours, setWeeklyHours] = useState("30");
+const onlyDigits = (value: string) => toEnglishDigits(value).replace(/\D/g, "");
 
+interface RegistrationCOnditionsProps {
+  salary: string;
+  setSalary: (v: string) => void;
+  insurance: "social" | "none";
+  setInsurance: (v: "social" | "none") => void;
+  weeklyHours: string;
+  setWeeklyHours: (v: string) => void;
+  traineeCertificate: boolean;
+  setTraineeCertificate: (v: boolean) => void;
+  stepNumber?: string;
+}
 
+export default function RegistrationCOnditions({
+  salary,
+  setSalary,
+  insurance,
+  setInsurance,
+  weeklyHours,
+  setWeeklyHours,
+  traineeCertificate,
+  setTraineeCertificate,
+  stepNumber = "۴",
+}: RegistrationCOnditionsProps) {
   return (
     <div
       dir="rtl"
@@ -26,11 +44,9 @@ export default function RegistrationCOnditions() {
       <div className="flex items-center mb-7 gap-2 justify-between w-full">
         <div className="flex justify-center items-center gap-2">
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-input-50 text-2xs font-bold text-input-700">
-            4
+            {stepNumber}
           </span>
-          <h3 className="text-s font-bold text-gray-800">
-            شرایط پذیرش کارآموز
-          </h3>
+          <h3 className="text-s font-bold text-gray-800">شرایط پذیرش کارآموز</h3>
         </div>
         <div>
           <span className="px-2 bg-blue-100 text-2xs py-1 rounded-full text-input-900">
@@ -47,9 +63,10 @@ export default function RegistrationCOnditions() {
               variant="default"
               labelClassName="mb-2 text-xs"
               inputSize="sm"
+              inputMode="numeric"
               value={salary}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSalary(e.target.value)
+                setSalary(onlyDigits(e.target.value))
               }
             />
           </div>
@@ -60,7 +77,7 @@ export default function RegistrationCOnditions() {
               placeholder="انتخاب بیمه"
               options={insuranceOptions}
               value={insurance}
-              onChange={setInsurance}
+              onChange={(v) => setInsurance(v as "social" | "none")}
             />
           </div>
         </div>
@@ -72,23 +89,25 @@ export default function RegistrationCOnditions() {
               variant="default"
               labelClassName="mb-2 text-xs"
               inputSize="sm"
+              inputMode="numeric"
               value={weeklyHours}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setWeeklyHours(e.target.value)
+                setWeeklyHours(onlyDigits(e.target.value))
               }
             />
           </div>
           <div className="w-full md:w-1/2">
-            <Input
-              className=" bg-neutral-100"
-              label="گواهی پایان دوره"
-              variant="default"
-              labelClassName="mb-2 text-xs"
-              inputSize="sm"
-              value={CERTIFICATE_LABEL}
-              readOnly
-              disabled
-            />
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={traineeCertificate}
+                onChange={(e) => setTraineeCertificate(e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="text-2xs font-semibold text-gray-900">
+                گواهی پایان دوره صادر می‌شود
+              </span>
+            </label>
           </div>
         </div>
       </div>

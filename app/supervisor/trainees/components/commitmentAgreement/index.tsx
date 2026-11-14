@@ -4,13 +4,19 @@ import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/input";
 import { cn } from "@/lib/cn";
 import { useEffect, useState } from "react";
-import { TOTAL_CAPACITY_BY_USER_TYPE, UserType } from "../supervisorConfig";
+import type { UserType } from "../supervisorConfig";
 
 interface CommitmentAgreementProps {
   userType?: UserType;
   stepNumber?: string;
   supervisorName?: string;
   licenseNumber?: string;
+  displayTotalCapacity: number;
+  allocatedCapacity: string;
+  setAllocatedCapacity: (v: string) => void;
+  minMonthlyHours: string;
+  setMinMonthlyHours: (v: string) => void;
+  isSubmitting?: boolean;
   onSubmit?: () => void;
   onSaveDraft?: () => void;
 }
@@ -18,30 +24,36 @@ interface CommitmentAgreementProps {
 const toEnglishDigits = (value: string) =>
   value.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
 
+const onlyDigits = (value: string) => toEnglishDigits(value).replace(/\D/g, "");
+
 export function CommitmentAgreement({
-  userType = "User",
   stepNumber = "۵",
   supervisorName,
   licenseNumber,
+  displayTotalCapacity,
+  allocatedCapacity,
+  setAllocatedCapacity,
+  minMonthlyHours,
+  setMinMonthlyHours,
+  isSubmitting = false,
   onSubmit,
   onSaveDraft,
 }: CommitmentAgreementProps) {
-  const totalCapacity = TOTAL_CAPACITY_BY_USER_TYPE[userType];
-
   const [accepted, setAccepted] = useState(false);
-  const [allocatedCapacity, setAllocatedCapacity] = useState("0");
-  const [minMonthlyHours, setMinMonthlyHours] = useState("120");
 
+  /* مقدار تخصیص‌یافته (حتی بعد از لود بک‌اند) به سقف ظرفیت محدود می‌شود */
   useEffect(() => {
-    setAllocatedCapacity((prev) =>
-      prev === "" ? prev : String(Math.min(Number(prev) || 0, totalCapacity))
-    );
-  }, [totalCapacity]);
+    if (allocatedCapacity === "") return;
+    const clamped = Math.min(Number(allocatedCapacity) || 0, displayTotalCapacity);
+    if (String(clamped) !== allocatedCapacity) {
+      setAllocatedCapacity(String(clamped));
+    }
+  }, [displayTotalCapacity, allocatedCapacity, setAllocatedCapacity]);
 
   const handleAllocatedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const digits = toEnglishDigits(e.target.value).replace(/\D/g, "");
+    const digits = onlyDigits(e.target.value);
     setAllocatedCapacity(
-      digits === "" ? "" : String(Math.min(Number(digits), totalCapacity))
+      digits === "" ? "" : String(Math.min(Number(digits), displayTotalCapacity))
     );
   };
 
@@ -67,7 +79,7 @@ export function CommitmentAgreement({
               variant="default"
               labelClassName="mb-2 text-xs"
               inputSize="sm"
-              value={String(totalCapacity)}
+              value={String(displayTotalCapacity)}
               readOnly
               disabled
             />
@@ -89,9 +101,10 @@ export function CommitmentAgreement({
               variant="default"
               labelClassName="mb-2 text-xs"
               inputSize="sm"
+              inputMode="numeric"
               value={minMonthlyHours}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setMinMonthlyHours(e.target.value)
+                setMinMonthlyHours(onlyDigits(e.target.value))
               }
             />
           </div>
@@ -105,17 +118,17 @@ export function CommitmentAgreement({
             اینجانب {supervisorName || "..............."} با شماره پروانه{" "}
             {licenseNumber || "..............."} متعهد می‌شوم که نظارت فنی و
             تخصصی بر کارآموزان زیر نظر خود را به‌طور مستمر انجام دهم،
-            گزارش‌های ماهانه را در مهلت ۷ روز بررسی و تأیید/رد نمایم و در
-            جلسات توجیهی سازمان حضور فعال داشته باشم. در غیر این صورت، سازمان
-            نظام مهندسی تهران می‌تواند صلاحیت سرپرستی مرا معلق یا لغو نماید.
+            گزارش‌های ماهانه را در مهلت ۷ روز بررسی و تأیید/رد نمایم و در جلسات
+            توجیهی سازمان حضور فعال داشته باشم. در غیر این صورت، سازمان نظام
+            مهندسی تهران می‌تواند صلاحیت سرپرستی مرا معلق یا لغو نماید.
           </p>
 
           <div className="border-t border-neutral-300 mt-4 pt-3">
             <p className="text-2xs leading-6 text-neutral-600">
               <span className="font-bold text-neutral-800">بند ظرفیت: </span>
               ظرفیت پذیرش کارآموز توسط سازمان تعیین می‌شود و سرپرست متعهد
-              می‌گردد از سقف تعیین‌شده فراتر نرود. در صورت تخلف، حق دوره
-              کارآموز جدید به سازمان مسترد خواهد شد.
+              می‌گردد از سقف تعیین‌شده فراتر نرود. در صورت تخلف، حق دوره کارآموز
+              جدید به سازمان مسترد خواهد شد.
             </p>
           </div>
         </div>
@@ -132,19 +145,19 @@ export function CommitmentAgreement({
             htmlFor="commitment-accepted"
             className="text-[11.5px] font-medium text-neutral-950 cursor-pointer"
           >
-            صورت‌مسئول تعهدنامه را می‌پذیرم.
+            مسئولیت تعهدنامه را می‌پذیرم.
           </label>
         </div>
 
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-start gap-3">
           <Button
-            type="submit"
+            type="button"
             variant="solid"
             color="input"
             className="text-sm w-full md:w-auto"
             size="xs"
             rounded="lg"
-            disabled={!accepted}
+            disabled={!accepted || isSubmitting}
             onClick={onSubmit}
             leftIcon={
               <svg
@@ -164,7 +177,7 @@ export function CommitmentAgreement({
               </svg>
             }
           >
-            ارسال درخواست ثبت‌نام سرپرستی
+            {isSubmitting ? "در حال ارسال..." : "ارسال درخواست ثبت‌نام سرپرستی"}
           </Button>
 
           <Button

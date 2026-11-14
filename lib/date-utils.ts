@@ -37,3 +37,31 @@ export function getYesterday(): Date {
     date.setDate(date.getDate() - 1);
     return date;
 }
+
+import { toGregorian } from "jalaali-js";
+
+export function jalaliToISO(jalali?: string | null): string {
+    if (!jalali) return "";
+    const [jy, jm, jd] = jalali.split("/").map(Number);
+    if (!jy || !jm || !jd) return "";
+    const { gy, gm, gd } = toGregorian(jy, jm, jd);
+    return `${gy}-${String(gm).padStart(2, "0")}-${String(gd).padStart(2, "0")}`;
+}
+
+export function ageFromISO(iso: string): number {
+    const b = new Date(iso);
+    const n = new Date();
+    let age = n.getFullYear() - b.getFullYear();
+    if (n < new Date(n.getFullYear(), b.getMonth(), b.getDate())) age--;
+    return age;
+}
+
+import { toJalaali } from "jalaali-js";
+
+export function isoToJalali(iso?: string | null): string {
+    if (!iso) return "";
+    const [y, m, d] = iso.split("-").map(Number);
+    if (!y || !m || !d) return "";
+    const { jy, jm, jd } = toJalaali(y, m, d);
+    return `${jy}/${String(jm).padStart(2, "0")}/${String(jd).padStart(2, "0")}`;
+}
