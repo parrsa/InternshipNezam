@@ -1,5 +1,6 @@
 export const PUBLIC_ROUTES = [
     '/Resturant-Report',
+    '/users/trainee/verifypaymrnt'
     // اگر مسیرهای دیگری نیاز دارید
 ];
 

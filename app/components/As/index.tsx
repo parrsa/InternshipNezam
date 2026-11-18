@@ -1,4 +1,4 @@
-////  Server Test
+// ////  Server Test
 "use client";
 
 import { useEffect, useState } from "react";
@@ -101,10 +101,10 @@ export default function SessionHandler({ children }: { children: React.ReactNode
 
 // import { useEffect, useState } from "react";
 // import { usePathname } from "next/navigation";
-// import { isPublicRoute } from "@/app/lib/publicRoutes";
-// import { getCookie, setCookie } from "@/app/lib/cookie";
-// export const SESSION_COOKIE_NAME = "user_session_id";
-// export const SESSION_QUERY_KEY = "user_session_id";
+// import { isPublicRoute } from "@/lib/publicRoutes";
+// import { getCookie } from "@/lib/cookie";
+// export const SESSION_COOKIE_NAME = "sessionId";
+// export const SESSION_QUERY_KEY = "sessionId";
 // // Sso testing
 // // export const SSO_BASE = "http://10.0.1.141:9050";
 // // Sso published
@@ -121,15 +121,15 @@ export default function SessionHandler({ children }: { children: React.ReactNode
 // //       return;
 // //     }
 // //     const params = new URLSearchParams(window.location.search);
-// //     const sessionFromQuery = params.get("user_session_id");
+// //     const sessionFromQuery = params.get("sessionId");
 
 // //     if (sessionFromQuery) {
-// //       params.delete("user_session_id");
+// //       params.delete("sessionId");
 // //       const base = window.location.origin + window.location.pathname;
 // //       window.history.replaceState({}, "", base);
 // //     }
 
-// //     const session = getCookie("user_session_id");
+// //     const session = getCookie("sessionId");
 
 // //     if (!session) {
 // //       const returnUrl = encodeURIComponent(window.location.href);
@@ -138,7 +138,7 @@ export default function SessionHandler({ children }: { children: React.ReactNode
 // //       return;
 // //     }
 
-// //     localStorage.setItem("user_session_id", session);
+// //     localStorage.setItem("sessionId", session);
 // //     setReady(true);
 // //   }, [pathname]);
 
@@ -181,15 +181,15 @@ export default function SessionHandler({ children }: { children: React.ReactNode
 //   useEffect(() => {
 //     // این useEffect فقط برای مسیرهای غیرعمومی اجرا می‌شود
 //     const params = new URLSearchParams(window.location.search);
-//     const sessionFromQuery = params.get("user_session_id");
+//     const sessionFromQuery = params.get("sessionId");
 
 //     if (sessionFromQuery) {
-//       params.delete("user_session_id");
+//       params.delete("sessionId");
 //       const base = window.location.origin + window.location.pathname;
 //       window.history.replaceState({}, "", base);
 //     }
 
-//     const session = getCookie("user_session_id");
+//     const session = getCookie("sessionId");
 
 //     if (!session) {
 //       const returnUrl = encodeURIComponent(window.location.href);
@@ -197,7 +197,7 @@ export default function SessionHandler({ children }: { children: React.ReactNode
 //       return;
 //     }
 
-//     localStorage.setItem("user_session_id", session);
+//     localStorage.setItem("sessionId", session);
 //     setReady(true);
 //   }, [pathname]);
 

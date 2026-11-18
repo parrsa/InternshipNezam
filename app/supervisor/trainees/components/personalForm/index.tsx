@@ -4,18 +4,15 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Input } from "@/app/components/ui/input";
 import { useEffect, useMemo, useState } from "react";
-import { getYesterday, isValidISODate, toISODate } from "@/lib/date-utils";
+import { getYesterday, isValidISODate, toISODate, normalizeToISO } from "@/lib/date-utils"; // 🆕 normalizeToISO اضافه شد
 import JalaliDatePicker from "@/lib/jalaliDatePicker";
 
 import LicenseStatus, { type Item, type ProjectRow } from "../licenseStatus";
 import CommitmentAgreement from "../commitmentAgreement";
 import RegistrationCOnditions from "../RegistrationConditions";
 import ResumeUploader, { type ResumeFile } from "../resumeUploader";
-import EducationInfo from "../educationInfo";
-import {
-  TOTAL_CAPACITY_BY_USER_TYPE,
-  type UserType,
-} from "../supervisorConfig";
+
+import { TOTAL_CAPACITY_BY_USER_TYPE, type UserType } from "../supervisorConfig";
 
 import {
   realInfoToFormValues,
@@ -26,16 +23,24 @@ import {
 
 /* ============ Types ============ */
 
+export interface PersonalInfoFormValues {
+  FullName?: string;
+  CompanyName?: string;
+  LicenseNumber?: string;
+  NationalCode?: string;
+  Birthday?: string;
+  Birthplace?: string;
+  PhoneNumber?: string;
+  Address?: string;
+  NezamRegisterCode?: string;
+  LicenseBase?: string;
+  LicenseYear?: string;
+}
+
+export type PersonalInfoInitialData = PersonalInfoFormValues;
+
 export interface PersonalInfoFormSubmitState {
-  formValues: {
-    FullName?: string;
-    CompanyName?: string;
-    LicenseNumber?: string;
-    NationalCode?: string;
-    Birthday?: string; // ISO
-    Birthplace?: string;
-    PhoneNumber?: string;
-  };
+  formValues: PersonalInfoFormValues;
   userType: UserType;
   fields: Item[];
   qualifications: Item[];
@@ -54,22 +59,9 @@ export interface PersonalInfoFormSubmitState {
   projects: ProjectRow[];
 }
 
-/** شکل داده‌ای که mapper کاربر جاری برمی‌گرداند (برای fallback) */
-export interface PersonalInfoInitialData {
-  FullName?: string;
-  CompanyName?: string;
-  LicenseNumber?: string;
-  NationalCode?: string;
-  Birthday?: string;
-  Birthplace?: string;
-  PhoneNumber?: string;
-}
-
 interface PersonalInfoFormProps {
   stepNumber?: string;
-  /** داده اولیه هویتی (مثلاً از GetCurrentUser) - فقط fallback */
   initialData?: PersonalInfoInitialData | null;
-  /** داده کامل سرپرست از بک‌اند (GetInfoTrainee) - اولویت اول */
   backendData?: any | null;
   isSubmitting?: boolean;
   onSubmit?: (state: PersonalInfoFormSubmitState) => void;
@@ -78,6 +70,13 @@ interface PersonalInfoFormProps {
 
 /* ============ Initial values ============ */
 
+const extra = {
+  Address: "",
+  NezamRegisterCode: "",
+  LicenseBase: "",
+  LicenseYear: "",
+};
+
 const user = {
   FullName: "",
   LicenseNumber: "",
@@ -85,6 +84,7 @@ const user = {
   Birthday: "",
   Birthplace: "",
   PhoneNumber: "",
+  ...extra,
 };
 
 const legal = {
@@ -94,6 +94,7 @@ const legal = {
   Birthday: "",
   Birthplace: "",
   PhoneNumber: "",
+  ...extra,
 };
 
 const usersType: { id: number; title: string; type: UserType }[] = [
@@ -124,11 +125,30 @@ const commonShape = {
     .trim()
     .required("شماره تماس الزامی است")
     .matches(/^(09|۰۹)[0-9۰-۹]{9}$/, "شماره تماس معتبر نیست"),
+  Address: Yup.string().trim().required("آدرس الزامی است"),
+  NezamRegisterCode: Yup.string()
+    .trim()
+    .required("شماره عضویت نظام مهندسی الزامی است"),
+  LicenseBase: Yup.string()
+    .trim()
+    .required("پایه پروانه الزامی است")
+    .matches(/^[0-9۰-۹]{1,2}$/, "پایه پروانه معتبر نیست"),
+  LicenseYear: Yup.string()
+    .trim()
+    .required("سال صدور پروانه الزامی است")
+    .matches(/^[0-9۰-۹]{4}$/, "سال باید ۴ رقم باشد"),
 };
 
 const userSchema = Yup.object({
-  FullName: Yup.string().trim().required("نام و نام خانوادگی الزامی است"),
   ...commonShape,
+  FullName: Yup.string()
+    .trim()
+    .required("نام و نام خانوادگی الزامی است")
+    .test(
+      "full-name",
+      "نام و نام خانوادگی را کامل وارد کنید",
+      (v) => (v ?? "").trim().split(/\s+/).filter(Boolean).length >= 2
+    ),
 });
 
 const legalSchema = Yup.object({
@@ -155,7 +175,6 @@ export function PersonalInfoForm({
   const [userType, setUserType] = useState<UserType>("User");
   const yesterday = useMemo(() => getYesterday(), []);
   const isUser = userType === "User";
-  
 
   const [fields, setFields] = useState<Item[]>([]);
   const [qualifications, setQualifications] = useState<Item[]>([]);
@@ -172,7 +191,7 @@ export function PersonalInfoForm({
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [projects, setProjects] = useState<ProjectRow[]>([]);
 
-  /* ---------- Pre-fill از GetInfoTrainee (backendData) ---------- */
+  /* ---------- Pre-fill از backendData ---------- */
   useEffect(() => {
     if (!backendData) return;
 
@@ -194,38 +213,34 @@ export function PersonalInfoForm({
     setMinMonthlyHours(commit.minMonthlyHours);
   }, [backendData]);
 
-  /* ---------- initialValues داینامیک (merge: backend > currentUser) ---------- */
+  /* ---------- initialValues ---------- */
   const dynamicInitial = useMemo(() => {
-    // اگر backendData موجود است، از آن استفاده کن
-    const fromBackend = backendData
-      ? realInfoToFormValues(backendData)
-      : null;
-
-    // داده کاربر جاری (fallback)
+    const fromBackend = backendData ? realInfoToFormValues(backendData) : null;
     const fromUser = initialData ?? null;
 
-    // ادغام: اولویت با backend، سپس currentUser
+    const pick = (k: keyof PersonalInfoFormValues) =>
+      (fromBackend as any)?.[k] || fromUser?.[k] || "";
+
     const mapped = {
-      FullName: fromBackend?.FullName || fromUser?.FullName || "",
-      CompanyName: fromBackend?.CompanyName || fromUser?.CompanyName || "",
-      LicenseNumber:
-        fromBackend?.LicenseNumber || fromUser?.LicenseNumber || "",
-      NationalCode:
-        fromBackend?.NationalCode || fromUser?.NationalCode || "",
-      Birthday: fromBackend?.Birthday || fromUser?.Birthday || "",
-      Birthplace: fromBackend?.Birthplace || fromUser?.Birthplace || "",
-      PhoneNumber: fromBackend?.PhoneNumber || fromUser?.PhoneNumber || "",
+      FullName: pick("FullName"),
+      CompanyName: pick("CompanyName"),
+      LicenseNumber: pick("LicenseNumber"),
+      NationalCode: pick("NationalCode"),
+      Birthday: normalizeToISO(pick("Birthday")), // 🆕 تبدیل مطمئن تاریخ
+      Birthplace: pick("Birthplace"),
+      PhoneNumber: pick("PhoneNumber"),
+      Address: pick("Address"),
+      NezamRegisterCode: pick("NezamRegisterCode"),
+      LicenseBase: pick("LicenseBase"),
+      LicenseYear: pick("LicenseYear"),
     };
 
-    return isUser
-      ? { ...user, ...mapped }
-      : { ...legal, ...mapped };
+    return isUser ? { ...user, ...mapped } : { ...legal, ...mapped };
   }, [backendData, initialData, isUser]);
 
   /* ---------- ظرفیت ---------- */
   const commitment = useMemo(
-    () =>
-      realInfoToCommitment(backendData, TOTAL_CAPACITY_BY_USER_TYPE[userType]),
+    () => realInfoToCommitment(backendData, TOTAL_CAPACITY_BY_USER_TYPE[userType]),
     [backendData, userType]
   );
 
@@ -235,6 +250,7 @@ export function PersonalInfoForm({
       initialValues={dynamicInitial}
       validationSchema={isUser ? userSchema : legalSchema}
       onSubmit={(values) => {
+        console.log("🟢 Formik onSubmit fired", values);
         onSubmit?.({
           formValues: values,
           userType,
@@ -264,6 +280,7 @@ export function PersonalInfoForm({
         setFieldValue,
         setFieldTouched,
         handleSubmit,
+        submitCount,
       }) => {
         const f = (name: string) => ({
           name,
@@ -272,9 +289,17 @@ export function PersonalInfoForm({
           errorMessage: (errors as any)[name] as string | undefined,
         });
 
+        const errorList = Object.values(errors).filter(Boolean) as string[];
+
         return (
           <Form
             onSubmit={handleSubmit}
+            onKeyDown={(e) => {
+              // جلوگیری از ارسال تصادفی با Enter
+              if (e.key === "Enter" && (e.target as HTMLElement).tagName === "INPUT") {
+                e.preventDefault();
+              }
+            }}
             className="w-full flex flex-col justify-center items-center gap-4"
           >
             {/* Card 1: اطلاعات هویتی */}
@@ -302,8 +327,9 @@ export function PersonalInfoForm({
                         key={item.id}
                         type="button"
                         onClick={() => setUserType(item.type)}
-                        className={`w-1/2 h-11 flex justify-center items-center text-center border border-neutral-300 rounded-lg text-xs cursor-pointer p-2 hover:bg-blue-300 transition-all duration-500 hover:text-white ${userType === item.type ? "bg-blue-700 text-white" : ""
-                          }`}
+                        className={`w-1/2 h-11 flex justify-center items-center text-center border border-neutral-300 rounded-lg text-xs cursor-pointer p-2 hover:bg-blue-300 transition-all duration-500 hover:text-white ${
+                          userType === item.type ? "bg-blue-700 text-white" : ""
+                        }`}
                       >
                         <p>{item.title}</p>
                       </button>
@@ -320,7 +346,7 @@ export function PersonalInfoForm({
                           label="نام و نام خانوادگی"
                           variant="default"
                           labelClassName="mb-2 text-xs"
-                          placeholder="مثال: مهندس رضایی"
+                          placeholder="مثال: علی رضایی"
                           inputSize="sm"
                           {...f("FullName")}
                         />
@@ -356,6 +382,7 @@ export function PersonalInfoForm({
                         labelClassName="mb-2 text-xs"
                         placeholder={isUser ? "0123456789" : "01234567890"}
                         inputSize="sm"
+                        inputMode="numeric"
                         {...f("NationalCode")}
                       />
                     </div>
@@ -370,10 +397,7 @@ export function PersonalInfoForm({
                         value={(values as any).Birthday ?? ""}
                         maxDate={yesterday}
                         error={
-                          !!(
-                            (touched as any).Birthday &&
-                            (errors as any).Birthday
-                          )
+                          !!((touched as any).Birthday && (errors as any).Birthday)
                         }
                         errorMessage={
                           (touched as any).Birthday
@@ -399,24 +423,68 @@ export function PersonalInfoForm({
                     </div>
                   </div>
 
-                  <div className="flex justify-start items-start w-full">
+                  <div className="w-full flex flex-col md:flex-row justify-center items-center gap-3">
                     <div className="w-full md:w-1/3">
                       <Input
                         label="شماره تماس"
                         variant="default"
                         labelClassName="mb-2 text-xs"
-                        placeholder="0912345678"
+                        placeholder="09123456789"
                         inputSize="sm"
                         inputMode="numeric"
                         {...f("PhoneNumber")}
                       />
                     </div>
+                    <div className="w-full md:w-1/3">
+                      <Input
+                        label="شماره عضویت نظام مهندسی"
+                        variant="default"
+                        labelClassName="mb-2 text-xs"
+                        placeholder="98765"
+                        inputSize="sm"
+                        inputMode="numeric"
+                        {...f("NezamRegisterCode")}
+                      />
+                    </div>
+                    <div className="w-full md:w-1/3 flex gap-3">
+                      <div className="w-1/2">
+                        <Input
+                          label="پایه پروانه"
+                          variant="default"
+                          labelClassName="mb-2 text-xs"
+                          placeholder="۲"
+                          inputSize="sm"
+                          inputMode="numeric"
+                          {...f("LicenseBase")}
+                        />
+                      </div>
+                      <div className="w-1/2">
+                        <Input
+                          label="سال صدور پروانه"
+                          variant="default"
+                          labelClassName="mb-2 text-xs"
+                          placeholder="۱۴۰۰"
+                          inputSize="sm"
+                          inputMode="numeric"
+                          {...f("LicenseYear")}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="w-full">
+                    <Input
+                      label="آدرس"
+                      variant="default"
+                      labelClassName="mb-2 text-xs"
+                      placeholder="تهران، خیابان ..."
+                      inputSize="sm"
+                      {...f("Address")}
+                    />
                   </div>
                 </div>
               </div>
             </div>
-
-            <EducationInfo userType={userType} />
 
             <LicenseStatus
               userType={userType}
@@ -445,11 +513,23 @@ export function PersonalInfoForm({
               setTraineeCertificate={setTraineeCertificate}
             />
 
+            {submitCount > 0 && errorList.length > 0 && (
+              <div
+                dir="rtl"
+                className="w-full rounded-xl border border-red-300 bg-red-50 p-4 text-xs text-red-800"
+              >
+                <p className="mb-2 font-bold">لطفاً موارد زیر را اصلاح کنید:</p>
+                <ul className="list-disc pr-5 space-y-1">
+                  {errorList.map((msg, i) => (
+                    <li key={i}>{msg}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <CommitmentAgreement
               userType={userType}
-              supervisorName={
-                (values as any).FullName || (values as any).CompanyName
-              }
+              supervisorName={(values as any).FullName || (values as any).CompanyName}
               licenseNumber={(values as any).LicenseNumber}
               displayTotalCapacity={commitment.displayTotalCapacity}
               allocatedCapacity={allocatedCapacity}

@@ -129,7 +129,7 @@ export const USER_MENU: UserMenuItem[] = [
   },
   {
     label: "ثبت‌نام کارآموزی",
-    href: "/users/trainees",
+    href: "/users/trainee",
     icon: UserPlus,
   },
   // {

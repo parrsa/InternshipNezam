@@ -1,6 +1,12 @@
-const ISO_DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})$/;
+import { toGregorian, toJalaali } from "jalaali-js";
 
+const ISO_DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})$/;
 const pad = (n: number) => String(n).padStart(2, "0");
+
+export const toEnglishDigits = (v: string) =>
+    v
+        .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+        .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
 export function toISODate(date: Date): string {
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
@@ -9,10 +15,8 @@ export function toISODate(date: Date): string {
 export function isValidISODate(value: string): boolean {
     const match = ISO_DATE_REGEX.exec(value);
     if (!match) return false;
-
     const [year, month, day] = [Number(match[1]), Number(match[2]), Number(match[3])];
     const date = new Date(Date.UTC(year, month - 1, day));
-
     return (
         date.getUTCFullYear() === year &&
         date.getUTCMonth() === month - 1 &&
@@ -38,14 +42,28 @@ export function getYesterday(): Date {
     return date;
 }
 
-import { toGregorian } from "jalaali-js";
-
 export function jalaliToISO(jalali?: string | null): string {
     if (!jalali) return "";
-    const [jy, jm, jd] = jalali.split("/").map(Number);
+    const cleanJalali = toEnglishDigits(String(jalali)).replace(/-/g, "/");
+    const [jy, jm, jd] = cleanJalali.split("/").map(Number);
     if (!jy || !jm || !jd) return "";
+
+    // اگر سال کمتر از 1000 بود، احتمالا اشتباه خوانده شده است
+    if (jy < 1000) return "";
+
     const { gy, gm, gd } = toGregorian(jy, jm, jd);
-    return `${gy}-${String(gm).padStart(2, "0")}-${String(gd).padStart(2, "0")}`;
+    return `${gy}-${pad(gm)}-${pad(gd)}`;
+}
+
+export function isoToJalali(iso?: string | null): string {
+    if (!iso) return "";
+    const cleanIso = iso.split("T")[0];
+    const [y, m, d] = cleanIso.split("-").map(Number);
+    if (!y || !m || !d) return "";
+
+    // اگر سال میلادی بود
+    const { jy, jm, jd } = toJalaali(y, m, d);
+    return `${jy}/${pad(jm)}/${pad(jd)}`;
 }
 
 export function ageFromISO(iso: string): number {
@@ -56,12 +74,23 @@ export function ageFromISO(iso: string): number {
     return age;
 }
 
-import { toJalaali } from "jalaali-js";
+/**
+ * 🚨 تابع جادویی که هر چیزی رو به ISO میلادی استاندارد تبدیل میکنه
+ */
+export function normalizeToISO(input: unknown): string {
+    if (!input) return "";
+    let s = toEnglishDigits(String(input)).trim().split("T")[0];
+    s = s.replace(/[\/.]/g, "-"); // یکسان سازی جداکننده ها
 
-export function isoToJalali(iso?: string | null): string {
-    if (!iso) return "";
-    const [y, m, d] = iso.split("-").map(Number);
-    if (!y || !m || !d) return "";
-    const { jy, jm, jd } = toJalaali(y, m, d);
-    return `${jy}/${String(jm).padStart(2, "0")}/${String(jd).padStart(2, "0")}`;
+    const m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s);
+    if (!m) return "";
+
+    let [y, mo, d] = [+m[1], +m[2], +m[3]];
+
+    // اگر سال کمتر از ۱۷۰۰ بود، یعنی قطعا تاریخ شمسی است (چون متولد ۱۳۲۴ هستیم)
+    if (y < 1700) {
+        const g = toGregorian(y, mo, d);
+        [y, mo, d] = [g.gy, g.gm, g.gd];
+    }
+    return `${y}-${pad(mo)}-${pad(d)}`;
 }

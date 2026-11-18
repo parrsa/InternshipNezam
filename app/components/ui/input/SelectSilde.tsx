@@ -43,7 +43,7 @@ export function Select({
     const selectedLabel = options.find((option) => option.value === value)?.label;
 
     return (
-        <div ref={containerRef} className={cn("relative flex w-full flex-col gap-1.5", className)}>
+        <div ref={containerRef} className={cn("relative min-w-32 flex w-full flex-col gap-1.5", className)}>
             {label && <span className="text-sm font-medium text-gray-700">{label}</span>}
 
             <button

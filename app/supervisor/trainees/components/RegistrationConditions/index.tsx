@@ -64,6 +64,7 @@ export default function RegistrationCOnditions({
               labelClassName="mb-2 text-xs"
               inputSize="sm"
               inputMode="numeric"
+              isPrice
               value={salary}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setSalary(onlyDigits(e.target.value))

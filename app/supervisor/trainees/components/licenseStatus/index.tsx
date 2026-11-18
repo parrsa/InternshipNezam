@@ -1,16 +1,16 @@
 "use client";
 
-import { Pencil, Plus, Settings, Trash2 } from "lucide-react";
+import { Plus, Settings, Trash2 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { Input, TextArea } from "@/app/components/ui/input";
 import { Button } from "@/app/components/ui/Button";
 import SwitchButton from "@/app/components/ui/Button/switchButton";
-import Table from "@/app/components/ui/Table";
 
 type Option = { label: string; value: string };
 export type Item = { value: string; active: boolean };
 
 export interface ProjectRow {
+    id?: string;
     list: string;
     ProjectName: string;
     role: string;
@@ -34,12 +34,216 @@ const qualificationOptions: Option[] = [
     { label: "اجرا", value: "execution" },
 ];
 
+const projectRoleOptions: Option[] = [
+    { label: "طراح", value: "designer" },
+    { label: "ناظر", value: "supervisor" },
+    { label: "مجری", value: "executor" },
+];
+
+const projectStatusOptions: Option[] = [
+    { label: "در حال انجام", value: "in_progress" },
+    { label: "تمام شده", value: "completed" },
+    { label: "متوقف شده", value: "stopped" },
+];
+
 const labelClassName = "text-2xs font-semibold text-neutral-900";
 
 const toEnglishDigits = (value: string) =>
-    value.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
+    value
+        .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+        .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
-/* ---------- ChipGroup ---------- */
+const makeId = () =>
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `p-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+/* ================================================================
+   ProjectsTable — جدول native با key پایدار
+   ================================================================ */
+
+const cellInputClass =
+    "w-full min-w-16 rounded-md border border-neutral-200 bg-white px-2 py-1.5 text-center text-xs outline-none focus:border-neutral-400";
+const thClass =
+    "whitespace-nowrap px-2 py-3 text-center text-sm font-medium text-neutral-600";
+const tdClass = "px-2 py-2 text-center align-middle";
+
+interface ProjectsTableProps {
+    projects: ProjectRow[];
+    setProjects: (v: ProjectRow[]) => void;
+}
+
+function ProjectsTable({ projects, setProjects }: ProjectsTableProps) {
+    const updateProject = (index: number, patch: Partial<ProjectRow>) => {
+        setProjects(projects.map((p, i) => (i === index ? { ...p, ...patch } : p)));
+    };
+
+    const handleAddProject = () => {
+        setProjects([
+            ...projects,
+            {
+                id: makeId(),
+                list: String(projects.length + 1),
+                ProjectName: "",
+                role: "designer",
+                area: 0,
+                time: 0,
+                year: 0,
+                status: "in_progress",
+            },
+        ]);
+    };
+
+    const handleDeleteProject = (index: number) => {
+        setProjects(
+            projects
+                .filter((_, i) => i !== index)
+                .map((p, i) => ({ ...p, list: String(i + 1) }))
+        );
+    };
+
+    const renderNumber = (
+        row: ProjectRow,
+        index: number,
+        key: "area" | "time" | "year"
+    ) => (
+        <input
+            type="text"
+            inputMode="numeric"
+            className={cellInputClass}
+            value={row[key] ? String(row[key]) : ""}
+            onChange={(e) => {
+                const digits = toEnglishDigits(e.target.value).replace(/\D/g, "");
+                updateProject(index, { [key]: Number(digits) || 0 } as Partial<ProjectRow>);
+            }}
+        />
+    );
+
+    return (
+        <div className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-4 sm:p-5">
+            <div className="mb-4 flex w-full items-center justify-between gap-2">
+                <div className="flex items-center justify-center gap-2">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-input-50 text-2xs font-bold text-input-700">
+                        ۳
+                    </span>
+                    <h3 className="text-s font-bold text-gray-800">پروژه‌های اجرا شده</h3>
+                </div>
+                <Button
+                    type="button"
+                    className="h-8 w-28 text-nowrap text-2xs"
+                    rounded="lg"
+                    color="input"
+                    leftIcon={<Plus />}
+                    onClick={handleAddProject}
+                >
+                    افزودن پروژه
+                </Button>
+            </div>
+
+            <div className="w-full overflow-x-auto">
+                <table className="w-full min-w-[720px] border-collapse">
+                    <thead>
+                        <tr className="border-b border-neutral-200 bg-neutral-50">
+                            <th className={thClass}>ردیف</th>
+                            <th className={thClass}>نام پروژه</th>
+                            <th className={thClass}>نقش</th>
+                            <th className={thClass}>مساحت</th>
+                            <th className={thClass}>زمان (ماه)</th>
+                            <th className={thClass}>سال</th>
+                            <th className={thClass}>وضعیت</th>
+                            <th className={thClass}>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {projects.length === 0 && (
+                            <tr>
+                                <td
+                                    colSpan={8}
+                                    className="py-8 text-center text-xs text-neutral-500"
+                                >
+                                    هنوز پروژه‌ای اضافه نشده است.
+                                </td>
+                            </tr>
+                        )}
+
+                        {projects.map((row, index) => (
+                            <tr
+                                key={row.id ?? `row-${index}`}
+                                className="border-b border-neutral-100 last:border-0"
+                            >
+                                <td className={cn(tdClass, "text-xs")}>{row.list}</td>
+
+                                <td className={tdClass}>
+                                    <input
+                                        type="text"
+                                        className={cellInputClass}
+                                        value={row.ProjectName}
+                                        placeholder="نام پروژه"
+                                        onChange={(e) =>
+                                            updateProject(index, { ProjectName: e.target.value })
+                                        }
+                                    />
+                                </td>
+
+                                <td className={tdClass}>
+                                    <select
+                                        className={cn(cellInputClass, "cursor-pointer")}
+                                        value={row.role}
+                                        onChange={(e) =>
+                                            updateProject(index, { role: e.target.value })
+                                        }
+                                    >
+                                        <option value="">انتخاب</option>
+                                        {projectRoleOptions.map((o) => (
+                                            <option key={o.value} value={o.value}>
+                                                {o.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </td>
+
+                                <td className={tdClass}>{renderNumber(row, index, "area")}</td>
+                                <td className={tdClass}>{renderNumber(row, index, "time")}</td>
+                                <td className={tdClass}>{renderNumber(row, index, "year")}</td>
+
+                                <td className={tdClass}>
+                                    <select
+                                        className={cn(cellInputClass, "cursor-pointer")}
+                                        value={row.status}
+                                        onChange={(e) =>
+                                            updateProject(index, { status: e.target.value })
+                                        }
+                                    >
+                                        {projectStatusOptions.map((o) => (
+                                            <option key={o.value} value={o.value}>
+                                                {o.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </td>
+
+                                <td className={tdClass}>
+                                    <button
+                                        type="button"
+                                        aria-label="حذف پروژه"
+                                        className="cursor-pointer"
+                                        onClick={() => handleDeleteProject(index)}
+                                    >
+                                        <Trash2 size={17} color="red" />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
+/* ================================================================
+   ChipGroup
+   ================================================================ */
 
 function ChipGroup({
     label,
@@ -94,7 +298,9 @@ function ChipGroup({
     );
 }
 
-/* ---------- ActivationRow ---------- */
+/* ================================================================
+   ActivationRow
+   ================================================================ */
 
 function ActivationRow({
     title,
@@ -125,7 +331,9 @@ function ActivationRow({
     );
 }
 
-/* ---------- Props ---------- */
+/* ================================================================
+   LicenseStatus
+   ================================================================ */
 
 interface LicenseStatusProps {
     userType?: "User" | "legal";
@@ -143,8 +351,6 @@ interface LicenseStatusProps {
     projects?: ProjectRow[];
     setProjects?: (v: ProjectRow[]) => void;
 }
-
-/* ---------- Component ---------- */
 
 export default function LicenseStatus({
     stepNumber = "۲",
@@ -173,130 +379,6 @@ export default function LicenseStatus({
 
     const hasSelection = fields.length > 0 || qualifications.length > 0;
 
-    /* ---------- Projects table ---------- */
-
-    const updateProject = (index: number, patch: Partial<ProjectRow>) => {
-        if (!setProjects) return;
-        setProjects(projects.map((p, i) => (i === index ? { ...p, ...patch } : p)));
-    };
-
-    const handleAddProject = () => {
-        if (!setProjects) return;
-        setProjects([
-            ...projects,
-            {
-                list: String(projects.length + 1),
-                ProjectName: "",
-                role: "",
-                area: 0,
-                time: 0,
-                year: 0,
-                status: "در حال انجام",
-            },
-        ]);
-    };
-
-    const handleDeleteProject = (index: number) => {
-        if (!setProjects) return;
-        setProjects(
-            projects
-                .filter((_, i) => i !== index)
-                .map((p, i) => ({ ...p, list: String(i + 1) }))
-        );
-    };
-
-    const cellClass = "w-full text-center bg-transparent outline-none text-xs";
-    const headClass = "text-neutral-600 text-sm text-center";
-
-    const numberCell =
-        (key: "area" | "time" | "year") => (row: ProjectRow, index: number) => (
-            <input
-                type="number"
-                min={0}
-                className={cellClass}
-                value={row[key] || ""}
-                onChange={(e) =>
-                    updateProject(index, {
-                        [key]: Number(toEnglishDigits(e.target.value)) || 0,
-                    } as Partial<ProjectRow>)
-                }
-            />
-        );
-
-    const colTabel = [
-        { key: "list", label: "ردیف", className: headClass, width: "text-center" },
-        {
-            key: "ProjectName",
-            label: "نام پروژه",
-            className: headClass,
-            width: "text-center",
-            render: (row: ProjectRow, index: number) => (
-                <input
-                    className={cellClass}
-                    value={row.ProjectName}
-                    onChange={(e) => updateProject(index, { ProjectName: e.target.value })}
-                    placeholder="نام پروژه"
-                />
-            ),
-        },
-        {
-            key: "role",
-            label: "نقش",
-            className: headClass,
-            width: "text-center",
-            render: (row: ProjectRow, index: number) => (
-                <input
-                    className={cellClass}
-                    value={row.role}
-                    onChange={(e) => updateProject(index, { role: e.target.value })}
-                    placeholder="نقش"
-                />
-            ),
-        },
-        {
-            key: "area",
-            label: "مساحت",
-            className: headClass,
-            width: "text-center",
-            render: numberCell("area"),
-        },
-        {
-            key: "time",
-            label: "زمان (ماه)",
-            className: headClass,
-            width: "text-center",
-            render: numberCell("time"),
-        },
-        {
-            key: "year",
-            label: "سال",
-            className: headClass,
-            width: "text-center",
-            render: numberCell("year"),
-        },
-        { key: "status", label: "وضعیت", className: headClass, width: "text-center" },
-        {
-            key: "Operation",
-            label: "عملیات",
-            className: headClass,
-            width: "text-center",
-            render: (_row: ProjectRow, index: number) => (
-                <div className="flex justify-center items-center gap-4">
-                    <div className="cursor-pointer">
-                        <Pencil size={17} />
-                    </div>
-                    <button
-                        type="button"
-                        className="cursor-pointer"
-                        onClick={() => handleDeleteProject(index)}
-                    >
-                        <Trash2 size={17} color="red" />
-                    </button>
-                </div>
-            ),
-        },
-    ];
-
     return (
         <div
             dir="rtl"
@@ -312,7 +394,6 @@ export default function LicenseStatus({
             </div>
 
             <div className="flex flex-col gap-5">
-                {/* API فقط یک رشته می‌پذیرد */}
                 <ChipGroup
                     label="رشتهٔ فعالیت"
                     options={fieldOptions}
@@ -411,30 +492,9 @@ export default function LicenseStatus({
                     />
                 </div>
 
-                <div className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-4 sm:p-5">
-                    <div className="flex items-center mb-4 gap-2 justify-between w-full">
-                        <div className="flex justify-center items-center gap-2">
-                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-input-50 text-2xs font-bold text-input-700">
-                                ۳
-                            </span>
-                            <h3 className="text-s font-bold text-gray-800">
-                                پروژه‌های اجرا شده
-                            </h3>
-                        </div>
-                        <Button
-                            type="button"
-                            className="w-28 text-nowrap h-8 text-2xs"
-                            rounded="lg"
-                            color="input"
-                            leftIcon={<Plus />}
-                            onClick={handleAddProject}
-                        >
-                            افزودن پروژه
-                        </Button>
-                    </div>
-
-                    <Table minHeight="100px" tableCol={colTabel} tableRow={projects} />
-                </div>
+                {setProjects && (
+                    <ProjectsTable projects={projects} setProjects={setProjects} />
+                )}
             </div>
         </div>
     );

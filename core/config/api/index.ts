@@ -24,12 +24,12 @@ const publicRoutes: string[] = [
 ];
 
 const getSessionId = (): string | null => {
-  const fromCookie = getCookie("session-id");
+  const fromCookie = getCookie("sessionId");
   if (fromCookie) return fromCookie;
 
   if (typeof window !== "undefined") {
     return (
-      localStorage.getItem("session-id") ||
+      localStorage.getItem("sessionId") ||
       localStorage.getItem("sessionId")
     );
   }
@@ -47,7 +47,7 @@ api.interceptors.request.use(
 
     if (!isPublic && sessionId) {
       // طبق curl بک‌اند:
-      config.headers["session-id"] = sessionId;
+      config.headers["sessionId"] = sessionId;
       config.headers["Authorization"] = `Bearer ${sessionId}`;
     }
 

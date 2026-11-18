@@ -30,7 +30,7 @@ export default function ClientLayoutSelector({
    * صفحات عمومی هیچ Layout داشبوردی ندارند.
    */
   if (isPublicRoute(pathname)) {
-    return <>{children}</>;
+    return <UserLayout>{children}</UserLayout>;
   }
 
   /*

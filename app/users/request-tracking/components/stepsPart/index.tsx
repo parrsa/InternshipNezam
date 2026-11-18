@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
     UserPlus,
     CircleCheck,
@@ -8,76 +8,146 @@ import {
     Newspaper,
     Check,
     ArrowLeft,
-} from 'lucide-react'
+} from "lucide-react";
 
-type StepStatus = 'done' | 'current' | 'pending'
+type StepStatus = "done" | "current" | "pending";
 
 interface Step {
-    id: number
-    title: string
-    status: StepStatus
-    icon: React.ElementType
+    id: number;
+    title: string;
+    status: StepStatus;
+    icon: React.ElementType;
 }
 
 interface StepsPartProps {
-    requestCode?: string
-    registeredAt?: string
+    step: number;
+    requestCode?: string;
+    registeredAt?: string;
 }
 
-const steps: Step[] = [
-    { id: 1, title: 'ثبت‌نام در سامانه', status: 'done', icon: UserPlus },
-    { id: 2, title: 'پرداخت حق دوره', status: 'done', icon: Wallet },
-    { id: 3, title: 'انتخاب سرپرست کارآموزی', status: 'current', icon: UserRoundCheck },
-    { id: 4, title: 'ارسال درخواست به سرپرست', status: 'pending', icon: Send },
-    { id: 5, title: 'تأیید سرپرست و ارسال به سازمان', status: 'pending', icon: CircleCheck },
-    { id: 6, title: 'تأیید سازمان و آغاز کارآموزی', status: 'pending', icon: Newspaper },
-]
+// ProgressOrderEnum
+const STEP = {
+    Registration: 0,
+    PaidPrice: 10,
+    SupervisorSelect: 20,
+    SendRequestToSupervisor: 30,
+    ConfirmedBySupervisor: 40,
+    ConfirmedByOrganization: 50,
+    Finished: 60,
+} as const;
 
 const toPersianDigit = (n: number | string) =>
-    n.toString().replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[Number(d)])
+    n.toString().replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)]);
 
 const cardStyle: Record<StepStatus, string> = {
-    done: 'bg-emerald-50 border-emerald-200',
-    current: 'bg-indigo-50 border-2 border-input-800 shadow-sm',
-    pending: 'bg-neutral-50 border-neutral-200',
-}
+    done: "bg-emerald-50 border-emerald-200",
+    current: "bg-indigo-50 border-2 border-input-800 shadow-sm",
+    pending: "bg-neutral-50 border-neutral-200",
+};
 
 const statusText: Record<StepStatus, { label: string; className: string }> = {
-    done: { label: 'انجام شد ✓', className: 'text-emerald-700' },
-    current: { label: 'مرحله فعلی', className: 'text-input-800' },
-    pending: { label: 'در انتظار', className: 'text-neutral-500' },
+    done: { label: "انجام شد ✓", className: "text-emerald-700" },
+    current: { label: "مرحله فعلی", className: "text-input-800" },
+    pending: { label: "در انتظار", className: "text-neutral-500" },
+};
+
+// تعریف مراحل — doneAt = مرحله بعدی (وقتی step به اون رسید، این مرحله done می‌شه)
+const stepDefinitions = [
+    {
+        id: 1,
+        title: "ثبت‌نام در سامانه",
+        icon: UserPlus,
+        doneAt: STEP.PaidPrice,          // 10
+        currentAt: STEP.Registration,    // 0
+    },
+    {
+        id: 2,
+        title: "پرداخت حق دوره",
+        icon: Wallet,
+        doneAt: STEP.SupervisorSelect,   // 20
+        currentAt: STEP.PaidPrice,       // 10
+    },
+    {
+        id: 3,
+        title: "انتخاب سرپرست کارآموزی",
+        icon: UserRoundCheck,
+        doneAt: STEP.SendRequestToSupervisor, // 30
+        currentAt: STEP.SupervisorSelect,     // 20
+    },
+    {
+        id: 4,
+        title: "ارسال درخواست به سرپرست",
+        icon: Send,
+        doneAt: STEP.ConfirmedBySupervisor,      // 40
+        currentAt: STEP.SendRequestToSupervisor, // 30
+    },
+    {
+        id: 5,
+        title: "تأیید سرپرست و ارسال به سازمان",
+        icon: CircleCheck,
+        doneAt: STEP.ConfirmedByOrganization, // 50
+        currentAt: STEP.ConfirmedBySupervisor, // 40
+    },
+    {
+        id: 6,
+        title: "تأیید سازمان و آغاز کارآموزی",
+        icon: Newspaper,
+        doneAt: STEP.Finished,                   // 60
+        currentAt: STEP.ConfirmedByOrganization, // 50
+    },
+];
+
+/**
+ * محاسبه وضعیت هر مرحله:
+ * - step >= doneAt    → done
+ * - step >= currentAt → current
+ * - وگرنه             → pending
+ */
+function computeStatus(
+    step: number,
+    def: (typeof stepDefinitions)[number],
+): StepStatus {
+    if (step >= def.doneAt) return "done";
+    if (step >= def.currentAt) return "current";
+    return "pending";
 }
 
 function StepCircle({ status, id }: { status: StepStatus; id: number }) {
-    if (status === 'done') {
+    if (status === "done") {
         return (
             <div className="size-7 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
                 <Check className="size-4 text-white" strokeWidth={3} />
             </div>
-        )
+        );
     }
-
-    if (status === 'current') {
+    if (status === "current") {
         return (
             <div className="size-7 rounded-full bg-input-800 flex items-center justify-center shrink-0">
                 <span className="text-2xs font-bold text-white">{toPersianDigit(id)}</span>
             </div>
-        )
+        );
     }
-
     return (
         <div className="size-7 rounded-full bg-neutral-300 flex items-center justify-center shrink-0">
             <span className="text-2xs font-bold text-white">{toPersianDigit(id)}</span>
         </div>
-    )
+    );
 }
 
-function StepsPart({
-    requestCode = 'REQ-1404-9452',
-    registeredAt = '1404/04/01',
+export default function StepsPart({
+    step,
+    requestCode = "",
+    registeredAt = "",
 }: StepsPartProps) {
-    const doneCount = steps.filter((s) => s.status === 'done').length
-    const percent = (doneCount / steps.length) * 100
+    const steps: Step[] = stepDefinitions.map((def) => ({
+        id: def.id,
+        title: def.title,
+        icon: def.icon,
+        status: computeStatus(step, def),
+    }));
+
+    const doneCount = steps.filter((s) => s.status === "done").length;
+    const percent = (doneCount / steps.length) * 100;
 
     return (
         <section
@@ -90,8 +160,19 @@ function StepsPart({
                         فرایند تأیید درخواست کارآموزی
                     </h1>
                     <p className="text-2xs text-neutral-600">
-                        کد درخواست: <span dir="ltr">{requestCode}</span> — تاریخ ثبت:{' '}
-                        <span dir="ltr">{toPersianDigit(registeredAt)}</span>
+                        {requestCode && (
+                            <>
+                                کد درخواست:{" "}
+                                <span dir="ltr">{requestCode}</span>
+                                {registeredAt && " — "}
+                            </>
+                        )}
+                        {registeredAt && (
+                            <>
+                                تاریخ ثبت:{" "}
+                                <span dir="ltr">{toPersianDigit(registeredAt)}</span>
+                            </>
+                        )}
                     </p>
                 </div>
 
@@ -115,24 +196,26 @@ function StepsPart({
 
             <div className="mt-8 w-full overflow-x-auto pb-2">
                 <div className="flex flex-row items-center w-max min-w-full justify-between">
-                    {steps.map((step, index) => {
-                        const Icon = step.icon
-                        const isLast = index === steps.length - 1
-                        const status = statusText[step.status]
+                    {steps.map((stepItem, index) => {
+                        const Icon = stepItem.icon;
+                        const isLast = index === steps.length - 1;
+                        const status = statusText[stepItem.status];
 
                         return (
-                            <React.Fragment key={step.id}>
+                            <React.Fragment key={stepItem.id}>
                                 <div
-                                    aria-current={step.status === 'current' ? 'step' : undefined}
-                                    className={`w-38 text-nowrap  rounded-xl border px-3 py-3 flex flex-col items-center text-center gap-2 ${cardStyle[step.status]}`}
+                                    aria-current={
+                                        stepItem.status === "current" ? "step" : undefined
+                                    }
+                                    className={`w-38 text-nowrap rounded-xl border px-3 py-3 flex flex-col items-center text-center gap-2 ${cardStyle[stepItem.status]}`}
                                 >
-                                    <StepCircle status={step.status} id={step.id} />
+                                    <StepCircle status={stepItem.status} id={stepItem.id} />
                                     <Icon
                                         className="size-4 text-neutral-600"
                                         strokeWidth={1.75}
                                     />
                                     <h2 className="text-3xs font-bold text-neutral-900 leading-5">
-                                        {step.title}
+                                        {stepItem.title}
                                     </h2>
                                     <span className={`text-3xs ${status.className}`}>
                                         {status.label}
@@ -147,12 +230,10 @@ function StepsPart({
                                     />
                                 )}
                             </React.Fragment>
-                        )
+                        );
                     })}
                 </div>
             </div>
         </section>
-    )
+    );
 }
-
-export default StepsPart

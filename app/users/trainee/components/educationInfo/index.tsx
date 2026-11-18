@@ -221,6 +221,130 @@
 //     );
 // }"use client";
 
+// import type { ReactNode } from "react";
+// import { useFormikContext } from "formik";
+// import { Select } from "@/app/components/ui/input/SelectSilde";
+// import type { FormValues } from "../formConfig";
+
+// const degreeOptions = [
+//     { label: "کارشناسی", value: "2" },
+//     { label: "کارشناسی ارشد", value: "3" },
+//     { label: "دکتری", value: "4" },
+// ];
+
+// const majorOptions = [
+//     { label: "مهندسی مکانیک", value: "1" },
+//     { label: "مهندسی برق", value: "2" },
+//     { label: "مهندسی معماری", value: "4" },
+//     { label: "مهندسی عمران", value: "5" },
+// ];
+
+// const competenceOptions = [
+//     { label: "نظارت", value: "1" },
+//     { label: "طراحی", value: "2" },
+//     { label: "مجری", value: "3" },
+// ];
+
+// function Field({ label, children }: { label: string; children: ReactNode }) {
+//     return (
+//         <div className="flex w-full flex-col gap-2">
+//             <span className="text-2xs font-semibold text-neutral-900">{label}</span>
+//             {children}
+//         </div>
+//     );
+// }
+
+// function filterOptions(
+//     options: { label: string; value: string }[],
+//     current: string | undefined | null,
+// ): { label: string; value: string }[] {
+//     if (current === null || current === undefined || current === "") return options;
+//     const found = options.find((o) => o.value === String(current));
+//     return found ? [found] : options;
+// }
+
+// function toSelectValue(v: string | undefined | null): string | undefined {
+//     if (v === null || v === undefined || v === "" || v === "0") return undefined;
+//     return v;
+// }
+
+// export default function EducationInfo({ stepNumber = "۲" }: { stepNumber?: string }) {
+//     const { values, setFieldValue } = useFormikContext<FormValues>();
+
+//     const firstCompetence =
+//         Array.isArray(values.competences) && values.competences.length > 0
+//             ? values.competences[0]
+//             : "";
+
+//     return (
+//         <div
+//             dir="rtl"
+//             className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-5 shadow-xs sm:p-7"
+//         >
+//             {/* ── Header ── */}
+//             <div className="mb-8 flex items-center justify-between">
+//                 <div className="flex items-center gap-2">
+//                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#eef0f8] text-xs text-blue-800">
+//                         {stepNumber}
+//                     </span>
+//                     <h3 className="text-s font-semibold text-neutral-900">
+//                         اطلاعات تحصیلی و دوره
+//                     </h3>
+//                 </div>
+
+//                 <span className="rounded-full border border-neutral-300 bg-neutral-100 px-2.5 py-0.5 text-2xs font-medium text-neutral-600">
+//                     الزامی
+//                 </span>
+//             </div>
+
+//             {/* ── Fields ── */}
+//             <div className="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-3">
+//                 <Field label="مقطع تحصیلی">
+//                     <Select
+//                         className="w-full text-nowrap text-xs"
+//                         placeholder="انتخاب مقطع"
+//                         options={filterOptions(degreeOptions, values.degree)}
+//                         value={toSelectValue(values.degree)}
+//                         onChange={(v: string) => setFieldValue("degree", v)}
+//                     />
+//                 </Field>
+
+//                 <Field label="رشته تحصیلی">
+//                     <Select
+//                         className="w-full text-nowrap text-xs"
+//                         placeholder="انتخاب رشته"
+//                         options={filterOptions(majorOptions, values.field)}
+//                         value={toSelectValue(values.field)}
+//                         onChange={(v: string) => setFieldValue("field", v)}
+//                     />
+//                 </Field>
+
+//                 <Field label="صلاحیت مدنظر برای کارآموزی">
+//                     <Select
+//                         className="w-full text-nowrap text-xs"
+//                         placeholder="انتخاب صلاحیت"
+//                         options={filterOptions(competenceOptions, firstCompetence)}
+//                         value={toSelectValue(firstCompetence)}
+//                         onChange={(v: string) => setFieldValue("competences", [v])}
+//                     />
+//                 </Field>
+
+//                 {/* مدت دوره — تمام عرض */}
+//                 <div className="sm:col-span-3">
+//                     <Field label="مدت دوره کارآموزی">
+//                         <div className="flex h-9 w-full items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-4">
+//                             <span className="text-xs font-semibold text-neutral-900">۱ سال</span>
+//                             <span className="text-2xs text-neutral-500">
+//                                 (دوره استاندارد)
+//                             </span>
+//                         </div>
+//                     </Field>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// }
+
 import type { ReactNode } from "react";
 import { useFormikContext } from "formik";
 import { Select } from "@/app/components/ui/input/SelectSilde";
@@ -239,10 +363,12 @@ const majorOptions = [
     { label: "مهندسی عمران", value: "5" },
 ];
 
+// ✅ کامل — مطابق CompetenceEnum
 const competenceOptions = [
-    { label: "نظارت", value: "1" },
-    { label: "طراحی", value: "2" },
-    { label: "مجری", value: "3" },
+    { label: "نظارت", value: "1" },      // Observer
+    { label: "طراحی", value: "2" },      // Designer
+    { label: "مجری", value: "3" },       // Builder
+    { label: "آزمایشگاه", value: "4" },  // Labratory
 ];
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
@@ -268,13 +394,49 @@ function toSelectValue(v: string | undefined | null): string | undefined {
     return v;
 }
 
+// ── MultiSelect برای انتخاب چندانتخابی ──
+function MultiSelect({
+    options,
+    values,
+    onChange,
+}: {
+    options: { label: string; value: string }[];
+    values: string[];
+    onChange: (next: string[]) => void;
+}) {
+    const toggle = (value: string) => {
+        if (values.includes(value)) {
+            onChange(values.filter((v) => v !== value));
+        } else {
+            onChange([...values, value]);
+        }
+    };
+
+    return (
+        <div className="flex min-h-9 flex-wrap items-center gap-2 rounded-lg border border-neutral-200 bg-white p-2">
+            {options.map((opt) => {
+                const selected = values.includes(opt.value);
+                return (
+                    <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => toggle(opt.value)}
+                        aria-pressed={selected}
+                        className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${selected
+                                ? "border-blue-600 bg-blue-50 text-blue-800"
+                                : "border-neutral-200 bg-neutral-50 text-neutral-700 hover:bg-neutral-100"
+                            }`}
+                    >
+                        {opt.label}
+                    </button>
+                );
+            })}
+        </div>
+    );
+}
+
 export default function EducationInfo({ stepNumber = "۲" }: { stepNumber?: string }) {
     const { values, setFieldValue } = useFormikContext<FormValues>();
-
-    const firstCompetence =
-        Array.isArray(values.competences) && values.competences.length > 0
-            ? values.competences[0]
-            : "";
 
     return (
         <div
@@ -319,15 +481,16 @@ export default function EducationInfo({ stepNumber = "۲" }: { stepNumber?: stri
                     />
                 </Field>
 
-                <Field label="صلاحیت مدنظر برای کارآموزی">
-                    <Select
-                        className="w-full text-nowrap text-xs"
-                        placeholder="انتخاب صلاحیت"
-                        options={filterOptions(competenceOptions, firstCompetence)}
-                        value={toSelectValue(firstCompetence)}
-                        onChange={(v: string) => setFieldValue("competences", [v])}
-                    />
-                </Field>
+                {/* صلاحیت — چندانتخابی، تمام عرض */}
+                <div className="sm:col-span-3">
+                    <Field label="صلاحیت مدنظر برای کارآموزی (می‌توانید چند مورد انتخاب کنید)">
+                        <MultiSelect
+                            options={competenceOptions}
+                            values={Array.isArray(values.competences) ? values.competences : []}
+                            onChange={(next) => setFieldValue("competences", next)}
+                        />
+                    </Field>
+                </div>
 
                 {/* مدت دوره — تمام عرض */}
                 <div className="sm:col-span-3">
