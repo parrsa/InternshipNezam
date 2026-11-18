@@ -109,6 +109,17 @@ export const ORGANIZATION_MENU: OrgMenuItem[] = [
     badge: 5,
   },
   {
+    label: "گزارش ماهانه",
+    href: "/organization/monthly-report",
+    icon: FileBarChart,
+    badge: 2,
+  },
+  {
+    label: "گزارش نهایی",
+    href: "/organization/final-report",
+    icon: FileCheck,
+  },
+  {
     label: "گواهی‌ها",
     href: "/organization/certificates",
     icon: Award,
