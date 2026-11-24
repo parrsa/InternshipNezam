@@ -258,10 +258,253 @@
 
 
 
+// "use client";
+
+// import { useMemo, useRef, useState } from "react";
+// import { Download } from "lucide-react";
+// import { cn } from "@/lib/cn";
+// import Table from "@/app/components/ui/Table";
+// import { Input } from "@/app/components/ui/input";
+
+// type TraineeStatus =
+//     | "awaiting_payment"
+//     | "awaiting_supervisor_selection"
+//     | "awaiting_supervisor_approval"
+//     | "awaiting_org_approval";
+
+// interface Trainee {
+//     id: number;
+//     name: string;
+//     supervisor: string | null;
+//     course: string;
+//     hours: number;
+//     status: TraineeStatus;
+// }
+
+// const INITIAL_TRAINEES: Trainee[] = [
+//     { id: 1, name: "علی محمدی", supervisor: "مهندس رضایی", course: "مقررات ملی", hours: 168, status: "awaiting_org_approval" },
+//     { id: 2, name: "زهرا حسینی", supervisor: "مهندس احمدی", course: "مدیریت پیمان", hours: 152, status: "awaiting_supervisor_approval" },
+//     { id: 3, name: "محمد رضایی", supervisor: null, course: "فولاد ساختمانی", hours: 96, status: "awaiting_supervisor_selection" },
+//     { id: 4, name: "فاطمه کریمی", supervisor: null, course: "بتن مسلح", hours: 48, status: "awaiting_payment" },
+//     { id: 5, name: "حسین موسوی", supervisor: "مهندس رضایی", course: "مقررات ملی", hours: 180, status: "awaiting_org_approval" },
+//     { id: 6, name: "سحر احمدی", supervisor: null, course: "مدیریت پیمان", hours: 120, status: "awaiting_payment" },
+// ];
+
+// const STATUS_BADGE: Record<TraineeStatus, { label: string; className: string }> = {
+//     awaiting_payment: {
+//         label: "در انتظار پرداخت",
+//         className: "border-red-300 bg-red-100 text-red-950",
+//     },
+//     awaiting_supervisor_selection: {
+//         label: "در انتظار انتخاب سرپرست",
+//         className: "border-orange-300 bg-orange-100 text-orange-900",
+//     },
+//     awaiting_supervisor_approval: {
+//         label: "در انتظار تایید سرپرست",
+//         className: "border-blue-300 bg-blue-100 text-blue-900",
+//     },
+//     awaiting_org_approval: {
+//         label: "در انتظار تایید سازمان",
+//         className: "border-green-500 bg-primary-100 text-green-950",
+//     },
+// };
+
+// const CELL_CLASSES = {
+//     className: "px-2.5 py-2",
+//     thClassName: "px-2.5 text-s",
+// };
+
+// const hoursFormatter = new Intl.NumberFormat("fa-IR", { useGrouping: false });
+
+// const normalize = (value: string) =>
+//     value.replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
+
+// function useTouchScroll() {
+//     const sliderRef = useRef<HTMLDivElement>(null);
+//     const [isDragging, setIsDragging] = useState(false);
+//     const [startX, setStartX] = useState(0);
+//     const [scrollLeft, setScrollLeft] = useState(0);
+
+//     const startDragging = (e: any) => {
+//         if (!sliderRef.current) return;
+//         setIsDragging(true);
+//         const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
+//         setStartX(pageX - sliderRef.current.offsetLeft);
+//         setScrollLeft(sliderRef.current.scrollLeft);
+//     };
+
+//     const onDragging = (e: any) => {
+//         if (!isDragging || !sliderRef.current) return;
+//         const pageX = "touches" in e ? e.touches[0].pageX : e.pageX;
+//         const x = pageX - sliderRef.current.offsetLeft;
+//         const walk = (x - startX) * 2;
+//         sliderRef.current.scrollLeft = scrollLeft - walk;
+//     };
+
+//     const stopDragging = () => {
+//         setIsDragging(false);
+//     };
+
+//     return { sliderRef, startDragging, onDragging, stopDragging, isDragging };
+// }
+
+// function Trainees() {
+//     const [trainees] = useState<Trainee[]>(INITIAL_TRAINEES);
+//     const [query, setQuery] = useState("");
+
+//     const { sliderRef, startDragging, onDragging, stopDragging, isDragging } =
+//         useTouchScroll();
+
+//     const columns = useMemo(
+//         () => [
+//             {
+//                 key: "name",
+//                 label: "نام",
+//                 width: "w-[22%]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => (
+//                     <div className="flex items-center gap-3">
+//                         <span className="flex size-10 items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-blue-700">
+//                             {row.name.charAt(0)}
+//                         </span>
+//                         <span className="text-s font-bold text-neutral-900">{row.name}</span>
+//                     </div>
+//                 ),
+//             },
+//             {
+//                 key: "supervisor",
+//                 label: "سرپرست",
+//                 width: "w-[20%]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => (
+//                     <span className="text-sm text-neutral-800">
+//                         {row.supervisor ?? "—"}
+//                     </span>
+//                 ),
+//             },
+//             {
+//                 key: "course",
+//                 label: "دوره",
+//                 width: "w-[20%]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => (
+//                     <span className="text-sm text-neutral-800">{row.course}</span>
+//                 ),
+//             },
+//             {
+//                 key: "hours",
+//                 label: "ساعت",
+//                 width: "w-[10%]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => (
+//                     <span className="text-sm text-neutral-800">
+//                         {hoursFormatter.format(row.hours)}
+//                     </span>
+//                 ),
+//             },
+//             {
+//                 key: "status",
+//                 label: "وضعیت",
+//                 width: "w-[28%]",
+//                 ...CELL_CLASSES,
+//                 render: (row: Trainee) => {
+//                     const badge = STATUS_BADGE[row.status];
+//                     return (
+//                         <span
+//                             className={cn(
+//                                 "inline-flex items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-2xs font-medium",
+//                                 badge.className,
+//                             )}
+//                         >
+//                             {badge.label}
+//                         </span>
+//                     );
+//                 },
+//             },
+//         ],
+//         [],
+//     );
+
+//     const rows = useMemo(() => {
+//         const q = normalize(query);
+//         return trainees
+//             .filter((t) => !q || normalize(t.name).includes(q))
+//             .map((t) => ({
+//                 ...t,
+//                 _rowClassName: "transition-colors hover:bg-neutral-50",
+//             }));
+//     }, [trainees, query]);
+
+//     return (
+//         <div dir="rtl" className="flex w-full flex-col gap-5 sm:px-5 p-2">
+//             <div className="flex items-center justify-between gap-4">
+//                 <Input
+//                     variant="default"
+//                     color="input"
+//                     className="mt-2 w-1/3 border-none bg-neutral-50 placeholder:text-neutral-500 placeholder:text-sm"
+//                     inputSize="sm"
+//                     type="text"
+//                     value={query}
+//                     onChange={(e) => setQuery(e.target.value)}
+//                     placeholder="جستجوی کارآموز..."
+//                     aria-label="جستجوی کارآموز"
+//                 />
+
+//                 <button
+//                     type="button"
+//                     className="flex h-8 font-semibold justify-center cursor-pointer items-center text-nowrap gap-2 rounded-lg border border-neutral-200 bg-white px-3 text-s text-neutral-900 shadow-sm transition-colors hover:bg-neutral-50"
+//                 >
+//                     <Download className="size-4.5" aria-hidden />
+//                     <span>خروجی Excel</span>
+//                 </button>
+//             </div>
+
+//             <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white pb-5.5 pt-6 shadow-sm">
+//                 <div
+//                     ref={sliderRef}
+//                     onMouseDown={startDragging}
+//                     onMouseMove={onDragging}
+//                     onMouseUp={stopDragging}
+//                     onMouseLeave={stopDragging}
+//                     onTouchStart={startDragging}
+//                     onTouchMove={onDragging}
+//                     onTouchEnd={stopDragging}
+//                     className={cn(
+//                         "w-full overflow-x-auto select-none",
+//                         isDragging ? "cursor-grabbing" : "cursor-grab lg:cursor-auto",
+//                         "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+//                     )}
+//                 >
+//                     <div className="min-w-225 lg:min-w-0">
+//                         <Table
+//                             tableRow={rows}
+//                             tableCol={columns}
+//                             HeaderPY="py-[18px]"
+//                             fixed
+//                         />
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// }
+
+// export default Trainees;
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { Download } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import { cn } from "@/lib/cn";
 import Table from "@/app/components/ui/Table";
 import { Input } from "@/app/components/ui/input";
@@ -277,17 +520,21 @@ interface Trainee {
     name: string;
     supervisor: string | null;
     course: string;
-    hours: number;
+    durationHours: number;
+    startDate: string; // ISO: YYYY-MM-DD
+    endDate: string | null; // ISO: YYYY-MM-DD
     status: TraineeStatus;
+    isActive: boolean;
+    certificateUrl: string | null;
 }
 
 const INITIAL_TRAINEES: Trainee[] = [
-    { id: 1, name: "علی محمدی", supervisor: "مهندس رضایی", course: "مقررات ملی", hours: 168, status: "awaiting_org_approval" },
-    { id: 2, name: "زهرا حسینی", supervisor: "مهندس احمدی", course: "مدیریت پیمان", hours: 152, status: "awaiting_supervisor_approval" },
-    { id: 3, name: "محمد رضایی", supervisor: null, course: "فولاد ساختمانی", hours: 96, status: "awaiting_supervisor_selection" },
-    { id: 4, name: "فاطمه کریمی", supervisor: null, course: "بتن مسلح", hours: 48, status: "awaiting_payment" },
-    { id: 5, name: "حسین موسوی", supervisor: "مهندس رضایی", course: "مقررات ملی", hours: 180, status: "awaiting_org_approval" },
-    { id: 6, name: "سحر احمدی", supervisor: null, course: "مدیریت پیمان", hours: 120, status: "awaiting_payment" },
+    { id: 1, name: "علی محمدی", supervisor: "مهندس رضایی", course: "مقررات ملی", durationHours: 168, startDate: "2025-03-21", endDate: "2025-09-21", status: "awaiting_org_approval", isActive: true, certificateUrl: "/certs/1.pdf" },
+    { id: 2, name: "زهرا حسینی", supervisor: "مهندس احمدی", course: "مدیریت پیمان", durationHours: 152, startDate: "2025-04-10", endDate: "2025-10-10", status: "awaiting_supervisor_approval", isActive: true, certificateUrl: null },
+    { id: 3, name: "محمد رضایی", supervisor: null, course: "فولاد ساختمانی", durationHours: 96, startDate: "2025-05-01", endDate: null, status: "awaiting_supervisor_selection", isActive: false, certificateUrl: null },
+    { id: 4, name: "فاطمه کریمی", supervisor: null, course: "بتن مسلح", durationHours: 48, startDate: "2025-06-15", endDate: null, status: "awaiting_payment", isActive: true, certificateUrl: null },
+    { id: 5, name: "حسین موسوی", supervisor: "مهندس رضایی", course: "مقررات ملی", durationHours: 180, startDate: "2025-02-05", endDate: "2025-08-05", status: "awaiting_org_approval", isActive: true, certificateUrl: "/certs/5.pdf" },
+    { id: 6, name: "سحر احمدی", supervisor: null, course: "مدیریت پیمان", durationHours: 120, startDate: "2025-07-01", endDate: null, status: "awaiting_payment", isActive: false, certificateUrl: null },
 ];
 
 const STATUS_BADGE: Record<TraineeStatus, { label: string; className: string }> = {
@@ -315,6 +562,17 @@ const CELL_CLASSES = {
 };
 
 const hoursFormatter = new Intl.NumberFormat("fa-IR", { useGrouping: false });
+
+// fa-IR به صورت پیش‌فرض از تقویم شمسی استفاده می‌کند
+const dateFormatter = new Intl.DateTimeFormat("fa-IR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "UTC",
+});
+
+const formatDate = (value: string | null) =>
+    value ? dateFormatter.format(new Date(value)) : "—";
 
 const normalize = (value: string) =>
     value.replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
@@ -349,22 +607,29 @@ function useTouchScroll() {
 }
 
 function Trainees() {
-    const [trainees] = useState<Trainee[]>(INITIAL_TRAINEES);
+    const [trainees, setTrainees] = useState<Trainee[]>(INITIAL_TRAINEES);
     const [query, setQuery] = useState("");
 
     const { sliderRef, startDragging, onDragging, stopDragging, isDragging } =
         useTouchScroll();
 
+    const toggleActive = (id: number) => {
+        setTrainees((prev) =>
+            prev.map((t) => (t.id === id ? { ...t, isActive: !t.isActive } : t)),
+        );
+        // TODO: فراخوانی API برای ذخیره وضعیت فعال/غیرفعال
+    };
+
     const columns = useMemo(
         () => [
             {
                 key: "name",
-                label: "نام",
-                width: "w-[22%]",
+                label: "نام کارآموز",
+                width: "w-[17%]",
                 ...CELL_CLASSES,
                 render: (row: Trainee) => (
                     <div className="flex items-center gap-3">
-                        <span className="flex size-10 items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-blue-700">
+                        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-blue-700">
                             {row.name.charAt(0)}
                         </span>
                         <span className="text-s font-bold text-neutral-900">{row.name}</span>
@@ -373,8 +638,8 @@ function Trainees() {
             },
             {
                 key: "supervisor",
-                label: "سرپرست",
-                width: "w-[20%]",
+                label: "نام سرپرست",
+                width: "w-[13%]",
                 ...CELL_CLASSES,
                 render: (row: Trainee) => (
                     <span className="text-sm text-neutral-800">
@@ -384,28 +649,50 @@ function Trainees() {
             },
             {
                 key: "course",
-                label: "دوره",
-                width: "w-[20%]",
+                label: "نام دوره",
+                width: "w-[13%]",
                 ...CELL_CLASSES,
                 render: (row: Trainee) => (
                     <span className="text-sm text-neutral-800">{row.course}</span>
                 ),
             },
             {
-                key: "hours",
-                label: "ساعت",
+                key: "duration",
+                label: "مدت دوره",
+                width: "w-[9%]",
+                ...CELL_CLASSES,
+                render: (row: Trainee) => (
+                    <span className="text-sm text-neutral-800">
+                        {hoursFormatter.format(row.durationHours)} ساعت
+                    </span>
+                ),
+            },
+            {
+                key: "startDate",
+                label: "تاریخ شروع",
                 width: "w-[10%]",
                 ...CELL_CLASSES,
                 render: (row: Trainee) => (
                     <span className="text-sm text-neutral-800">
-                        {hoursFormatter.format(row.hours)}
+                        {formatDate(row.startDate)}
+                    </span>
+                ),
+            },
+            {
+                key: "endDate",
+                label: "تاریخ پایان",
+                width: "w-[10%]",
+                ...CELL_CLASSES,
+                render: (row: Trainee) => (
+                    <span className="text-sm text-neutral-800">
+                        {formatDate(row.endDate)}
                     </span>
                 ),
             },
             {
                 key: "status",
                 label: "وضعیت",
-                width: "w-[28%]",
+                width: "w-[17%]",
                 ...CELL_CLASSES,
                 render: (row: Trainee) => {
                     const badge = STATUS_BADGE[row.status];
@@ -421,6 +708,60 @@ function Trainees() {
                     );
                 },
             },
+            {
+                key: "actions",
+                label: "عملیات",
+                width: "w-[11%]",
+                ...CELL_CLASSES,
+                render: (row: Trainee) => (
+                    <div className="flex items-center gap-3">
+                        {/* کلید فعال / غیرفعال */}
+                        <button
+                            type="button"
+                            dir="ltr"
+                            role="switch"
+                            aria-checked={row.isActive}
+                            aria-label={row.isActive ? "غیرفعال‌سازی کارآموز" : "فعال‌سازی کارآموز"}
+                            title={row.isActive ? "فعال" : "غیرفعال"}
+                            onClick={() => toggleActive(row.id)}
+                            className={cn(
+                                "relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors",
+                                row.isActive ? "bg-green-500" : "bg-neutral-300",
+                            )}
+                        >
+                            <span
+                                className={cn(
+                                    "inline-block size-4 rounded-full bg-white shadow transition-transform",
+                                    row.isActive ? "translate-x-4.5" : "translate-x-0.5",
+                                )}
+                            />
+                        </button>
+
+                        {/* فایل گواهی کارآموز */}
+                        {row.certificateUrl ? (
+                            <a
+                                href={row.certificateUrl}
+                                download
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="دانلود گواهی"
+                                aria-label="دانلود گواهی کارآموز"
+                                className="flex size-8 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 transition-colors hover:bg-neutral-50"
+                            >
+                                <FileText className="size-4.5" aria-hidden />
+                            </a>
+                        ) : (
+                            <span
+                                title="گواهی موجود نیست"
+                                aria-label="گواهی موجود نیست"
+                                className="flex size-8 cursor-not-allowed items-center justify-center rounded-lg border border-neutral-100 bg-neutral-50 text-neutral-300"
+                            >
+                                <FileText className="size-4.5" aria-hidden />
+                            </span>
+                        )}
+                    </div>
+                ),
+            },
         ],
         [],
     );
@@ -431,7 +772,10 @@ function Trainees() {
             .filter((t) => !q || normalize(t.name).includes(q))
             .map((t) => ({
                 ...t,
-                _rowClassName: "transition-colors hover:bg-neutral-50",
+                _rowClassName: cn(
+                    "transition-colors hover:bg-neutral-50",
+                    !t.isActive && "opacity-60",
+                ),
             }));
     }, [trainees, query]);
 
@@ -475,7 +819,7 @@ function Trainees() {
                         "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
                     )}
                 >
-                    <div className="min-w-225 lg:min-w-0">
+                    <div className="min-w-300 lg:min-w-0">
                         <Table
                             tableRow={rows}
                             tableCol={columns}
