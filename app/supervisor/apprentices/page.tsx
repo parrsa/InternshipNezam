@@ -8,11 +8,11 @@ import { useEffect } from "react"
 const HandelStatus = (status: any) => {
     switch (status) {
         case "active":
-            return <div className="bg-green-100 w-fit text-green-800 px-2 py-1 text-2xs border border-green-300 rounded-full">فعال</div>;
+            return <div className="bg-green-100 w-fit text-green-800 px-2 py-1 text-2xs border border-green-300 rounded-full">شروع دوره کارآموزی </div>;
         case "inProgress":
-            return <div className="bg-amber-100 w-fit text-amber-800 px-2 py-1 text-2xs border border-amber-300 rounded-full">در حال انجام</div>;
+            return <div className="bg-amber-100 w-fit text-amber-800 px-2 py-1 text-2xs border border-amber-300 rounded-full"> در انتظار تایید سازمان</div>;
         case "completed":
-            return <div className="bg-neutral-100 w-fit text-neutral-600 px-2 py-1 text-2xs border border-neutral-300 rounded-full">تکمیل شده</div>;
+            return <div className="bg-neutral-100 w-fit text-neutral-600 px-2 py-1 text-2xs border border-neutral-300 rounded-full"> پایان دوره کارآموزی  </div>;
     }
 }
 

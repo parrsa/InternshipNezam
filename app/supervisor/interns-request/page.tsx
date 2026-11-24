@@ -185,17 +185,17 @@ export default function InternsRequest() {
                 </div>
             )
         },
-        {
-            key: "presence",
-            label: "حضور در توجیهی",
-            className: "text-neutral-600 text-sm text-center",
-            width: "text-center",
-            render: (row: any) => (
-                <div className="w-full flex justify-center items-center">
-                    {HandelPresence(row.presence)}
-                </div>
-            )
-        },
+        // {
+        //     key: "presence",
+        //     label: "حضور در توجیهی",
+        //     className: "text-neutral-600 text-sm text-center",
+        //     width: "text-center",
+        //     render: (row: any) => (
+        //         <div className="w-full flex justify-center items-center">
+        //             {HandelPresence(row.presence)}
+        //         </div>
+        //     )
+        // },
         {
             key: "Date",
             label: "تاریخ",

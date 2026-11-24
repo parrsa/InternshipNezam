@@ -62,47 +62,66 @@ export default function UserPanelSidebar() {
             </div>
 
             <nav className="flex-1 overflow-y-auto no-scrollbar p-2 flex flex-col gap-1">
-                {USER_MENU.map((item) => {
-                    const active = isActivePath(pathname, item.href);
-                    const Icon = item.icon;
+                <nav className="flex-1 overflow-y-auto no-scrollbar p-2 flex flex-col gap-1">
+                    {USER_MENU.map((item) => {
+                        const Icon = item.icon;
 
-                    return (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className={`flex items-center justify-between gap-2 rounded-xl px-2 py-2.5  font-medium text-s transition-colors ${active
-                                ? "bg-blue-800 py-2.5 text-white text-s"
-                                : "text-neutral-900  hover:bg-input-100"
-                                }`}
-                        >
-                            <span className="flex items-center gap-2.5">
-                                <Icon size={18} />
-                                {item.label}
-                            </span>
+                        if (item.disabled) {
+                            return (
+                                <div
+                                    key={item.href}
+                                    aria-disabled="true"
+                                    title="این بخش به زودی فعال می‌شود"
+                                    className="flex items-center justify-between gap-2 rounded-xl px-2 py-2.5 font-medium text-s text-neutral-400 opacity-60 cursor-not-allowed select-none"
+                                >
+                                    <span className="flex items-center gap-2.5">
+                                        <Icon size={18} />
+                                        {item.label}
+                                    </span>
+                                </div>
+                            );
+                        }
 
-                            {!!item.badge && (
-                                <span
-                                    className={`text-2xs w-5 h-5 rounded-full flex items-center justify-center ${active
-                                        ? "bg-white/20 text-white"
-                                        : "bg-orange-100 text-orange-600"
-                                        }`}
-                                >
-                                    {item.badge}
+                        const active = isActivePath(pathname, item.href);
+
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`flex items-center justify-between gap-2 rounded-xl px-2 py-2.5  font-medium text-s transition-colors ${active
+                                    ? "bg-blue-800 py-2.5 text-white text-s"
+                                    : "text-neutral-900  hover:bg-input-100"
+                                    }`}
+                            >
+                                <span className="flex items-center gap-2.5">
+                                    <Icon size={18} />
+                                    {item.label}
                                 </span>
-                            )}
-                            {!!item.tag && (
-                                <span
-                                    className={`text-3xs w-9 h-5 rounded-full flex items-center justify-center ${active
-                                        ? "bg-white/20 text-white"
-                                        : "bg-input-100 border-indigo-200 border text-input-800"
-                                        }`}
-                                >
-                                    {item.tag}
-                                </span>
-                            )}
-                        </Link>
-                    );
-                })}
+
+                                {!!item.badge && (
+                                    <span
+                                        className={`text-2xs w-5 h-5 rounded-full flex items-center justify-center ${active
+                                            ? "bg-white/20 text-white"
+                                            : "bg-orange-100 text-orange-600"
+                                            }`}
+                                    >
+                                        {item.badge}
+                                    </span>
+                                )}
+                                {!!item.tag && (
+                                    <span
+                                        className={`text-3xs w-9 h-5 rounded-full flex items-center justify-center ${active
+                                            ? "bg-white/20 text-white"
+                                            : "bg-input-100 border-indigo-200 border text-input-800"
+                                            }`}
+                                    >
+                                        {item.tag}
+                                    </span>
+                                )}
+                            </Link>
+                        );
+                    })}
+                </nav>
             </nav>
         </aside>
     );

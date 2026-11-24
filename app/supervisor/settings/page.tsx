@@ -1,60 +1,32 @@
 'use client'
 
 import { Input } from "@/app/components/ui/input"
-import SwitchButton from "@/app/components/ui/Button/switchButton"
 import { useHeaderAction } from "@/core/provider/HeaderActionProvider/HeaderAction"
 import { Form, Formik } from "formik"
 import { useEffect } from "react"
 
 const infoData = [
-    {
-        id: 1,
-        title: "ظرفیت کل",
-        number: 3
-    },
-    {
-        id: 2,
-        title: "تخصیص یافته",
-        number: 9
-    },
-    {
-        id: 3,
-        title: "باقی‌مانده",
-        number: 1
-    },
-    {
-        id: 4,
-        title: "نیمسال آینده",
-        number: 1
-    },
+    { id: 1, title: "ظرفیت کل", number: 3 },
+    { id: 2, title: "تخصیص یافته", number: 9 },
+    { id: 3, title: "باقی‌مانده", number: 1 },
+    { id: 4, title: "نیمسال آینده", number: 1 },
 ]
 
-const autoAcceptData = [
-    {
-        id: "auto-accept-high-score",
-        title: "پذیرش خودکار درخواست‌های دارای امتیاز بالا",
-        description: "با فعال‌سازی، سامانه خودکار عمل می‌کند",
-        defaultChecked: true
-    },
-    {
-        id: "notify-intern-after-approval",
-        title: "اعلان به کارآموز پس از تأیید",
-        description: "با فعال‌سازی، سامانه خودکار عمل می‌کند",
-        defaultChecked: true
-    },
-    {
-        id: "warn-after-deadline",
-        title: "اخطار پس از پایان مهلت درخواست",
-        description: "با فعال‌سازی، سامانه خودکار عمل می‌کند",
-        defaultChecked: false
-    },
-    {
-        id: "share-capacity-with-organization",
-        title: "اشتراک‌گذاری ظرفیت با سازمان",
-        description: "با فعال‌سازی، سامانه خودکار عمل می‌کند",
-        defaultChecked: true
-    },
-]
+interface SettingsFormValues {
+    currentSemester: string
+    assignedInterns: string
+    maximumHours: string
+    minimumHours: string
+}
+
+const initialValues: SettingsFormValues = {
+    currentSemester: "5",
+    assignedInterns: "61",
+    maximumHours: "304",
+    minimumHours: "603",
+}
+
+const labelClass = "block mb-2 text-s font-bold text-neutral-900"
 
 export default function Settings() {
     const { setAction } = useHeaderAction()
@@ -74,7 +46,7 @@ export default function Settings() {
     return (
         <div className="p-4">
             <div className="w-full grid grid-cols-2 sm:grid-cols-4 grid-rows-[150px] gap-4">
-                {infoData.map((item: any) => (
+                {infoData.map((item) => (
                     <div key={item.id} className="w-full h-full bg-white rounded-2xl shadow-lg border border-neutral-300 flex justify-center items-start p-4 gap-2 flex-col ">
                         <p className="text-neutral-500 font-medium text-xs">{item.title}</p>
                         <p className="text-black font-bold text-xl">{item.number}</p>
@@ -82,83 +54,97 @@ export default function Settings() {
                 ))}
             </div>
 
-            <div className="w-full p-8 bg-white border border-neutral-300 mt-4 rounded-xl shadow-lg flex justify-center items-center gap-8 flex-col">
+            <div className="w-full p-8 bg-white border border-neutral-300 mt-4 rounded-3xl shadow-lg flex flex-col gap-8">
                 <div className="w-full text-right font-bold text-black text-sm">
                     <p>تنظیمات ظرفیت پذیرش</p>
                 </div>
+
                 <Formik
-                    initialValues={{
-                        currentSemester: "",
-                        nextSemester: "",
-                        maximumHours: "",
-                        minimumHours: ""
+                    initialValues={initialValues}
+                    onSubmit={(values) => {
+                        console.log(values)
                     }}
-                    onSubmit={(value) => {
-                        console.log(value)
-                    }}>
-                    {({ values, setFieldValue, errors }) => (
-                        <Form className="w-full grid grid-cols-1 sm:grid-cols-2 gap-8">
+                >
+                    {({ values, handleChange }) => (
+                        <Form dir="rtl" className="w-full grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
                             <div>
+                                <label htmlFor="currentSemester" className={labelClass}>
+                                    ظرفیت نیمسال جاری
+                                </label>
                                 <Input
-                                    variant="floating"
-                                    label="ظرفیت نیمسال جاری"
+                                    id="currentSemester"
+                                    name="currentSemester"
+                                    variant="default"
+                                    color="input"
                                     type="tel"
                                     inputMode="numeric"
                                     inputSize="sm"
-                                    className="text-right" />
+                                    value={values.currentSemester}
+                                    disabled
+                                    readOnly
+                                    className="bg-neutral-100 text-neutral-500 cursor-not-allowed text-right"
+                                />
+                                <p className="mt-1.5 text-2xs text-neutral-500">
+                                    تعیین‌شده توسط سازمان — برای اشخاص حقیقی ۵ و حقوقی ۲۰ نفر
+                                </p>
                             </div>
+
                             <div>
+                                <label htmlFor="assignedInterns" className={labelClass}>
+                                    کارآموز تخصیص یافته
+                                </label>
                                 <Input
-                                    variant="floating"
-                                    label="ظرفیت نیمسال آینده"
-                                    type="tel"
+                                    id="assignedInterns"
+                                    name="assignedInterns"
+                                    variant="default"
+                                    color="input"
+                                    type="number"
                                     inputMode="numeric"
                                     inputSize="sm"
-                                    className="text-right " />
+                                    value={values.assignedInterns}
+                                    onChange={handleChange}
+                                    className="text-right"
+                                />
                             </div>
+
                             <div>
+                                <label htmlFor="maximumHours" className={labelClass}>
+                                    حداکثر ساعت هفتگی
+                                </label>
                                 <Input
-                                    variant="floating"
-                                    label="حداکثر ساعت هفتگی"
-                                    type="tel"
+                                    id="maximumHours"
+                                    name="maximumHours"
+                                    variant="default"
+                                    color="input"
+                                    type="number"
                                     inputMode="numeric"
                                     inputSize="sm"
-                                    className="text-right" />
+                                    value={values.maximumHours}
+                                    onChange={handleChange}
+                                    className="text-right"
+                                />
                             </div>
+
                             <div>
+                                <label htmlFor="minimumHours" className={labelClass}>
+                                    حداقل ساعت لازم
+                                </label>
                                 <Input
-                                    variant="floating"
-                                    label="حداقل ساعت لازم"
-                                    type="tel"
+                                    id="minimumHours"
+                                    name="minimumHours"
+                                    variant="default"
+                                    color="input"
+                                    type="number"
                                     inputMode="numeric"
                                     inputSize="sm"
-                                    className="text-right" />
+                                    value={values.minimumHours}
+                                    onChange={handleChange}
+                                    className="text-right"
+                                />
                             </div>
                         </Form>
                     )}
                 </Formik>
-            </div>
-
-            <div className="w-full p-8 bg-white border border-neutral-300 mt-4 rounded-xl shadow-xl flex flex-col gap-4">
-                <div className="w-full text-right font-bold text-black text-sm">
-                    <p>تنظیمات پذیرش خودکار</p>
-                </div>
-                <div className="w-full flex flex-col">
-                    {autoAcceptData.map((item) => (
-                        <div
-                            key={item.id}
-                            className="w-full flex items-center justify-between py-4 border-b border-neutral-200 last:border-b-0">
-                            <div className="flex flex-col gap-1 text-right">
-                                <p className="text-black font-bold text-sm">{item.title}</p>
-                                <p className="text-neutral-500 font-medium text-xs">{item.description}</p>
-                            </div>
-                            <SwitchButton
-                                id={item.id}
-                                firstValueCheck={item.defaultChecked}
-                            />
-                        </div>
-                    ))}
-                </div>
             </div>
         </div>
     )
