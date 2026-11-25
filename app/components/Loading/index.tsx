@@ -5,7 +5,7 @@ function Loading() {
             <div className="relative z-10 flex flex-col items-center">
                 <div className="w-20 h-20 border-4 border-t-transparent border-white/40 rounded-full animate-spin mb-6"></div>
                 <h1 className="text-2xl font-bold">سازمان نظام مهندسی تهران</h1>
-                <p className="text-sm text-white/80 mt-2">در حال بارگذاری سامانه رزرو غذا...</p>
+                <p className="text-sm text-white/80 mt-2">در حال بارگذاری سامانه کارآمووزی...</p>
             </div>
         </div>
     );

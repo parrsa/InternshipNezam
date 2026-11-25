@@ -1,113 +1,104 @@
-const EMPTY_GUID = "00000000-0000-0000-0000-000000000000";
+// src/app/supervisor/hook/index.ts
+import type { Item } from "../components/licenseStatus";
+import { TOTAL_CAPACITY_BY_USER_TYPE, type UserType } from "../supervisorConfig";
 
-type Item = { value: string; active: boolean };
-
-// ⚠️ مقدارهای عددی رو با enum واقعی بک‌اند چک کن (حدسی‌ان)
-export const FIELD_CODE: Record<string, number> = {
-  civil: 1,
-  architecture: 2,
-  electrical: 3,
-  mechanical: 4,
-  surveying: 5,
+/* ============================================================
+   تبدیل تاریخ شمسی "1328/01/01" به ISO میلادی
+   ============================================================ */
+const persianToISO = (val: string | null | undefined): string => {
+  if (!val) return "";
+  const m = String(val).match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+  if (!m) return "";
+  const [, y, mo, d] = m;
+  const year = Number(y);
+  // اگر قبلاً ISO میلادی بود
+  if (year > 1900) {
+    return `${y}-${mo.padStart(2, "0")}-${d.padStart(2, "0")}`;
+  }
+  // تبدیل شمسی به میلادی (تقریبی برای DatePicker)
+  const gy = year + 621;
+  return `${gy}-${String(Number(mo)).padStart(2, "0")}-${String(Number(d)).padStart(2, "0")}`;
 };
 
-export const COMPETENCE_CODE: Record<string, number> = {
-  design: 1,
-  supervision: 2,
-  execution: 3,
+/* ============================================================
+   ISO میلادی → شمسی "YYYY/MM/DD"
+   ============================================================ */
+const isoToPersian = (iso: string | null | undefined): string => {
+  if (!iso) return "";
+  const m = String(iso).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (!m) return "";
+  const [, y, mo, d] = m;
+  const gy = Number(y);
+  if (gy < 1900) return iso; // قبلاً شمسی بود
+  const jy = gy - 621;
+  return `${jy}/${String(Number(mo)).padStart(2, "0")}/${String(Number(d)).padStart(2, "0")}`;
 };
 
-const invert = (m: Record<string, number>) =>
-  Object.fromEntries(Object.entries(m).map(([k, v]) => [v, k])) as Record<number, string>;
-
-const FIELD_BY_CODE = invert(FIELD_CODE);
-const COMPETENCE_BY_CODE = invert(COMPETENCE_CODE);
-
-const toEnglishDigits = (value: string) =>
-  value
-    .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
-    .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
-
-const toNumber = (v: string | number | null | undefined) =>
-  Number(toEnglishDigits(String(v ?? "")).replace(/\D/g, "")) || 0;
-
-const toDigits = (v?: string) => toEnglishDigits((v ?? "").trim());
-
-const str = (v: unknown) =>
-  v === null || v === undefined || v === 0 ? "" : String(v);
-
-const splitFullName = (full?: string) => {
-  const parts = (full ?? "").trim().split(/\s+/).filter(Boolean);
-  if (parts.length <= 1) return { firstName: parts[0] ?? "", lastName: "" };
-  return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
-};
-
-/* ================= backend → form ================= */
-
-export function realInfoToFormValues(b?: any | null) {
-  if (!b) return null;
+/* ============================================================
+   نگاشت داده بک‌اند → مقادیر فرم
+   ============================================================ */
+export const realInfoToFormValues = (data: any) => {
+  const firstName = data?.firstName ?? "";
+  const lastName = data?.lastName ?? "";
   return {
-    FullName: `${b.firstName ?? ""} ${b.lastName ?? ""}`.trim(),
+    FullName: `${firstName} ${lastName}`.trim(),
     CompanyName: "",
-    LicenseNumber: str(b.licenseNumber),
-    NationalCode: str(b.nationalCode),
-    Birthday: str(b.birthDate).slice(0, 10),
-    Birthplace: str(b.birthPlace),
-    PhoneNumber: str(b.phoneNumber),
-    Address: str(b.address),
-    NezamRegisterCode: str(b.nezamRegisterCode),
-    LicenseBase: str(b.licenseBase),
-    LicenseYear: str(b.licenseYear),
+    LicenseNumber: data?.licenseNumber ?? "",
+    NationalCode: data?.nationalCode ?? "",
+    Birthday: persianToISO(data?.birthDate),
+    Birthplace: data?.birthPlace ?? "",
+    PhoneNumber: data?.phoneNumber ?? "",
+    Address: data?.address ?? "",
+    NezamRegisterCode: data?.nezamRegisterCode ?? "",
+    LicenseBase: data?.licenseBase != null ? String(data.licenseBase) : "",
+    LicenseYear: data?.licenseYear ? String(data.licenseYear) : "",
   };
-}
+};
 
-export function realInfoToLicenseStatus(b?: any | null): {
-  fields: Item[];
-  qualifications: Item[];
-  experienceYears: string;
-  activeProjects: string;
-  summary: string;
-} {
-  const fieldValue = b?.field ? FIELD_BY_CODE[b.field] : undefined;
+export const realInfoToLicenseStatus = (data: any) => {
+  const field =
+    data?.field != null && data.field > 0
+      ? [{ value: String(data.field), active: true }]
+      : [];
+  const quals = Array.isArray(data?.competenceList)
+    ? data.competenceList.map((c: number) => ({ value: String(c), active: true }))
+    : [];
+
   return {
-    fields: fieldValue ? [{ value: fieldValue, active: true }] : [],
-    qualifications: ((b?.competenceList ?? []) as number[])
-      .map((c) => COMPETENCE_BY_CODE[c])
-      .filter(Boolean)
-      .map((value) => ({ value, active: true })),
-    experienceYears: str(b?.workExperience),
-    activeProjects: str(b?.activeProjectCount),
-    summary: str(b?.experienceSummery),
+    fields: field as Item[],
+    qualifications: quals as Item[],
+    experienceYears: data?.workExperience ? String(data.workExperience) : "",
+    activeProjects: data?.activeProjectCount
+      ? String(data.activeProjectCount)
+      : "",
+    summary: data?.experienceSummery ?? "",
   };
-}
+};
 
-export function realInfoToRegistrationConditions(b?: any | null): {
-  salary: string;
-  insurance: "social" | "none";
-  weeklyHours: string;
-  traineeCertificate: boolean;
-} {
+export const realInfoToRegistrationConditions = (data: any) => ({
+  salary: data?.traineSalary ? String(data.traineSalary) : "",
+  insurance: (data?.traineInsurnce ? "social" : "none") as "social" | "none",
+  weeklyHours: data?.traineHoursByWeek ? String(data.traineHoursByWeek) : "",
+  traineeCertificate: !!data?.traineCertificate,
+});
+
+export const realInfoToCommitment = (data: any, totalCapacity = 0) => {
+  const backendAcceptance = data?.acceptanceCapacity ?? 0;
+  const displayTotalCapacity = backendAcceptance > 0 ? backendAcceptance : totalCapacity;
   return {
-    salary: str(b?.traineSalary),
-    insurance: b?.traineInsurnce ? "social" : "none",
-    weeklyHours: str(b?.traineHoursByWeek),
-    traineeCertificate: !!b?.traineCertificate,
+    allocatedCapacity: data?.assignedCapacity
+      ? String(data.assignedCapacity)
+      : "",
+    minMonthlyHours: data?.minHoursByMonth ? String(data.minHoursByMonth) : "",
+    displayTotalCapacity,
+    payloadTotalCapacity: displayTotalCapacity,
   };
-}
+};
 
-export function realInfoToCommitment(b?: any | null, totalCapacity?: number) {
-  const total = (totalCapacity ?? b?.acceptanceCapacity ?? 0) as number;
-  return {
-    allocatedCapacity: str(b?.assignedCapacity),
-    minMonthlyHours: str(b?.minHoursByMonth),
-    payloadTotalCapacity: total,
-    displayTotalCapacity: total,
-  };
-}
-
-/* ================= form → backend ================= */
-
-interface BuildInput {
+/* ============================================================
+   ساخت Payload نهایی برای POST /api/Supervisor/RealRegistration
+   ============================================================ */
+export interface BuildPayloadParams {
   formValues: {
     FullName?: string;
     CompanyName?: string;
@@ -133,48 +124,72 @@ interface BuildInput {
   allocatedCapacity: string;
   minMonthlyHours: string;
   traineeCertificate: boolean;
-  backend?: any | null;
+  backend: any | null;
 }
 
-export function buildSupervisorRealPayload(input: BuildInput) {
-  const { formValues: v, backend } = input;
-  const { firstName, lastName } = splitFullName(v.FullName);
+export function buildSupervisorRealPayload(params: BuildPayloadParams) {
+  const { formValues, fields, qualifications, backend } = params;
+
+  const fullName = (formValues.FullName ?? "").trim();
+  const [firstName, ...rest] = fullName.split(/\s+/);
+  const lastName = rest.join(" ");
+
+  // فقط آیتم‌های فعال ارسال می‌شوند
+  const activeFields = fields.filter((f) => f.active);
+  const activeQuals = qualifications.filter((q) => q.active);
 
   return {
     fldMemberId: backend?.fldMemberId ?? 0,
-    memberId: backend?.memberId ?? EMPTY_GUID,
+    memberId: backend?.memberId ?? "00000000-0000-0000-0000-000000000000",
     id: backend?.id ?? 0,
-
-    firstName,
-    lastName,
-    nationalCode: toDigits(v.NationalCode),
-    licenseNumber: toDigits(v.LicenseNumber),
-    phoneNumber: toDigits(v.PhoneNumber),
-    birthDate: v.Birthday ?? "",
-    birthPlace: (v.Birthplace ?? "").trim(),
-    nezamRegisterCode: toDigits(v.NezamRegisterCode),
-    address: (v.Address ?? "").trim(),
-
-    field: FIELD_CODE[input.fields[0]?.value ?? ""] ?? 0,
-    competenceList: input.qualifications
-      .map((q) => COMPETENCE_CODE[q.value])
-      .filter((c): c is number => typeof c === "number"),
-    licenseBase: toNumber(v.LicenseBase),
-    licenseYear: toNumber(v.LicenseYear),
-
-    workExperience: toNumber(input.experienceYears),
-    activeProjectCount: toNumber(input.activeProjects),
-    experienceSummery: input.summary.trim(),
-
-    traineSalary: toNumber(input.salary),
-    traineInsurnce: input.insurance === "social",
-    traineHoursByWeek: toNumber(input.weeklyHours),
-    traineCertificate: input.traineeCertificate,
-
-    acceptanceCapacity: input.payloadTotalCapacity,
-    assignedCapacity: toNumber(input.allocatedCapacity),
-    minHoursByMonth: toNumber(input.minMonthlyHours),
-
-    userId: backend?.userId ?? EMPTY_GUID,
+    firstName: firstName || "",
+    lastName: lastName || "",
+    nationalCode: formValues.NationalCode ?? "",
+    licenseNumber: formValues.LicenseNumber ?? "",
+    phoneNumber: formValues.PhoneNumber ?? "",
+    birthDate: isoToPersian(formValues.Birthday),
+    birthPlace: formValues.Birthplace ?? "",
+    nezamRegisterCode: formValues.NezamRegisterCode ?? "",
+    address: formValues.Address ?? "",
+    competenceList: activeQuals
+      .map((q) => Number(q.value))
+      .filter((n) => !Number.isNaN(n) && n > 0),
+    field: activeFields[0] ? Number(activeFields[0].value) : 0,
+    licenseBase: Number(formValues.LicenseBase) || 0,
+    workExperience: Number(params.experienceYears) || 0,
+    activeProjectCount: Number(params.activeProjects) || 0,
+    licenseYear: Number(formValues.LicenseYear) || 0,
+    experienceSummery: params.summary || "",
+    traineSalary: Number(params.salary) || 0,
+    traineInsurnce: params.insurance === "social",
+    traineHoursByWeek: Number(params.weeklyHours) || 0,
+    traineCertificate: params.traineeCertificate,
+    acceptanceCapacity: params.payloadTotalCapacity,
+    assignedCapacity: Number(params.allocatedCapacity) || 0,
+    minHoursByMonth: Number(params.minMonthlyHours) || 0,
+    userId: backend?.userId ?? "00000000-0000-0000-0000-000000000000",
   };
+}
+
+/* ============================================================
+   اعتبارسنجی قبل از ارسال (برای جلوگیری از خطای 500)
+   ============================================================ */
+export function validateBeforeSubmit(
+  payload: ReturnType<typeof buildSupervisorRealPayload>
+): string | null {
+  if (!payload.firstName) return "نام الزامی است";
+  if (!payload.lastName) return "نام خانوادگی الزامی است";
+  if (!payload.nationalCode) return "کد ملی الزامی است";
+  if (!payload.licenseNumber) return "شماره پروانه الزامی است";
+  if (payload.workExperience <= 0) return "سابقه کار باید بزرگتر از ۰ باشد";
+  if (payload.field <= 0) return "رشته فعالیت الزامی است";
+  if (payload.licenseBase <= 0) return "پایه پروانه الزامی است";
+  if (payload.licenseYear <= 0) return "سال صدور پروانه الزامی است";
+  if (payload.competenceList.length === 0) return "حداقل یک صلاحیت انتخاب کنید";
+  if (payload.traineSalary <= 0) return "حقوق ماهانه الزامی است";
+  if (payload.traineHoursByWeek <= 0) return "ساعات حضور هفتگی الزامی است";
+  if (payload.acceptanceCapacity <= 0) return "ظرفیت پذیرش الزامی است";
+  if (payload.assignedCapacity <= 0) return "ظرفیت تخصیص یافته الزامی است";
+  if (payload.minHoursByMonth <= 0) return "حداقل ساعت ماهانه الزامی است";
+  return null;
 }

@@ -24,7 +24,7 @@ export interface SupervisorResume {
 }
 
 interface SupervisorProfileModalProps {
-    supervisor: Supervisor;
+    supervisor: Supervisor | any;
     isOpen: boolean;
     active: boolean;
     onClose: () => void;
@@ -135,10 +135,10 @@ export function SupervisorProfileModal({
             <div className="mt-2 flex  gap-4">
                 <StatCard label="امتیاز">
                     <Star size={17} className="text-amber-500" />
-                    <span>{fa(s.score)}</span>
+                    <span>{fa(s?.score)}</span>
                 </StatCard>
                 <StatCard label="سابقه">
-                    <span>{fa(s.experience)} سال</span>
+                    <span>{fa(s?.experience)} سال</span>
                 </StatCard>
                 <StatCard label="ظرفیت">
                     <span dir="ltr">

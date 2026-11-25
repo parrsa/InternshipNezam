@@ -19,7 +19,7 @@ export const getCookie = (name: string) => {
 export const SESSION_COOKIE_NAME = "sessionId";
 export const SESSION_QUERY_KEY = "sessionId";
 // Sso testing
-export const SSO_BASE = "http://10.0.1.141:9051";
+export const SSO_BASE = "http://10.0.1.138:9050";
 // Sso published
 // export const SSO_BASE = "https://sso.tceo.ir";
 export const SSO_LOGIN = `${SSO_BASE}/account/login`;

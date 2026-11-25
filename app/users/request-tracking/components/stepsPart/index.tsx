@@ -195,7 +195,7 @@ export default function StepsPart({
             </div>
 
             <div className="mt-8 w-full overflow-x-auto pb-2">
-                <div className="flex flex-row items-center w-max min-w-full justify-between">
+                <div className="flex flex-row items-center min-w-full justify-between">
                     {steps.map((stepItem, index) => {
                         const Icon = stepItem.icon;
                         const isLast = index === steps.length - 1;

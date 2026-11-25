@@ -13,7 +13,7 @@ const toEnglishDigits = (value: string) =>
 
 const onlyDigits = (value: string) => toEnglishDigits(value).replace(/\D/g, "");
 
-interface RegistrationCOnditionsProps {
+interface RegistrationConditionsProps {
   salary: string;
   setSalary: (v: string) => void;
   insurance: "social" | "none";
@@ -25,7 +25,7 @@ interface RegistrationCOnditionsProps {
   stepNumber?: string;
 }
 
-export default function RegistrationCOnditions({
+export default function RegistrationConditions({
   salary,
   setSalary,
   insurance,
@@ -35,7 +35,7 @@ export default function RegistrationCOnditions({
   traineeCertificate,
   setTraineeCertificate,
   stepNumber = "۴",
-}: RegistrationCOnditionsProps) {
+}: RegistrationConditionsProps) {
   return (
     <div
       dir="rtl"

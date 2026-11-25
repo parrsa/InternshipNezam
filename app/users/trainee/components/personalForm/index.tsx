@@ -9,7 +9,7 @@ import type { FormValues } from "../formConfig";
 const labelClassName = "text-2xs font-semibold text-neutral-900";
 const inputClassName = "mt-2 placeholder:text-neutral-600 placeholder:text-xs";
 
-export function PersonalInfoForm({ stepNumber = "۱" }: { stepNumber?: string }) {
+export function PersonalInfoForm({ stepNumber = "۱", backendData, isSubmitting ,onSubmit}: { stepNumber?: string, backendData?: any, isSubmitting?: any, onSubmit?: any }) {
     const yesterday = getYesterday();
     const { errors, touched, values, getFieldProps, setFieldValue, setFieldTouched } =
         useFormikContext<FormValues>();

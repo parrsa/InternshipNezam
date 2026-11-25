@@ -114,3 +114,88 @@ export const useVerifyPaymentTrainee = () => {
         },
     });
 };
+
+// core/services/Trainee/mutate.ts
+export const useGetPaymentToken = () => {
+    return useMutation({
+        mutationFn: ({ traineeId, competences }: {
+            traineeId: number;
+            competences: number[];
+        }) => PaymentTrainee(traineeId, competences),
+
+        onError: (error: any) => {
+            const msg =
+                error?.response?.data?.message ||
+                error?.message ||
+                "خطا در ارتباط با درگاه پرداخت";
+            toastify("error", msg);
+        },
+    });
+};
+
+// core/utils/redirectToShaparak.ts
+export function redirectToShaparak(accessToken: string, terminalId: number | string) {
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "https://sepehr.shaparak.ir:8080/Pay";
+    form.style.display = "none";
+
+    const fields: Record<string, string> = {
+        TerminalID: String(terminalId),
+        token: accessToken,
+        getMethod: "1",
+    };
+
+    Object.entries(fields).forEach(([name, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+
+
+import { SelectSupervisor } from "./api";
+import { KeyGetSupervisorsForSelect } from "./key";
+
+export const useSelectSupervisor = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data: { supervisorId: number; description: string }) =>
+            SelectSupervisor(data),
+
+        onSuccess: (response: any) => {
+            // بک‌اند حتی در خطای منطقی هم HTTP 200 با isSuccess: false برمی‌گردونه
+            if (response?.isSuccess) {
+                toastify(
+                    "success",
+                    response.message || "سرپرست با موفقیت انتخاب شد"
+                );
+
+                // لیست سرپرستان رو رفرش کن (چون ظرفیت ممکنه تغییر کنه)
+                queryClient.invalidateQueries({
+                    queryKey: ["GetSupervisorsForSelect"],
+                });
+            } else {
+                toastify(
+                    "error",
+                    response?.message || "خطا در انتخاب سرپرست"
+                );
+            }
+        },
+
+        onError: (error: any) => {
+            const msg =
+                error?.response?.data?.message ||
+                error?.message ||
+                "خطا در ارتباط با سرور";
+            toastify("error", msg);
+        },
+    });
+};

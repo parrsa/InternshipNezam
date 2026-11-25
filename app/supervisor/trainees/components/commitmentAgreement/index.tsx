@@ -2,7 +2,6 @@
 
 import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/input";
-import { cn } from "@/lib/cn";
 import { useEffect, useState } from "react";
 import type { UserType } from "../supervisorConfig";
 
@@ -18,7 +17,6 @@ interface CommitmentAgreementProps {
   setMinMonthlyHours: (v: string) => void;
   isSubmitting?: boolean;
   onSubmit?: () => void;
-  onSaveDraft?: () => void;
 }
 
 const toEnglishDigits = (value: string) =>
@@ -37,11 +35,9 @@ export function CommitmentAgreement({
   setMinMonthlyHours,
   isSubmitting = false,
   onSubmit,
-  onSaveDraft,
 }: CommitmentAgreementProps) {
   const [accepted, setAccepted] = useState(false);
 
-  /* مقدار تخصیص‌یافته (حتی بعد از لود بک‌اند) به سقف ظرفیت محدود می‌شود */
   useEffect(() => {
     if (allocatedCapacity === "") return;
     const clamped = Math.min(Number(allocatedCapacity) || 0, displayTotalCapacity);
@@ -178,19 +174,6 @@ export function CommitmentAgreement({
             }
           >
             {isSubmitting ? "در حال ارسال..." : "ارسال درخواست ثبت‌نام سرپرستی"}
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className={cn(
-              "text-xs font-semibold border-neutral-300 bg-[#f7f9f4aa] text-neutral-900 w-full md:w-auto"
-            )}
-            rounded="lg"
-            onClick={onSaveDraft}
-          >
-            ذخیره پیش‌نویس
           </Button>
         </div>
       </div>

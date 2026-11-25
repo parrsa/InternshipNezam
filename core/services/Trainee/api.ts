@@ -72,3 +72,39 @@ export const VerifyPaymentTrainee = async (data: {
         throw err;
     }
 };
+
+export const SelectSupervisor = async (data: {
+    supervisorId: number;
+    description: string;
+}) => {
+    try {
+        const res = await api.post("Trainee/SelectSupervisor", data);
+        return res.data;
+    } catch (err: any) {
+        console.error("Failed to post Trainee/SelectSupervisor:", {
+            status: err?.response?.status,
+            data: err?.response?.data,
+            message: err?.message,
+        });
+        throw err;
+    }
+};
+
+export const GetSupervisorsForSelect = async (data: {
+    pageIndex: number;
+    take: number;
+    nationalCode: string;
+    licenseNumber: string;
+}) => {
+    try {
+        const res = await api.post("Trainee/GetSupervisorsForSelect", data);
+        return res.data;
+    } catch (err: any) {
+        console.error("Failed to post Trainee/GetSupervisorsForSelect:", {
+            status: err?.response?.status,
+            data: err?.response?.data,
+            message: err?.message,
+        });
+        throw err;
+    }
+};
